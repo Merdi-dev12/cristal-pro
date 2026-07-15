@@ -1,0 +1,60 @@
+<div
+  class="fixed inset-0 z-[100] flex items-center justify-center bg-rheo-dark/40 p-4 backdrop-blur-sm"
+  (click)="onBackdropClick($event)"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+>
+  <div
+    class="relative w-full max-w-md animate-[fadeIn_0.25s_ease] rounded-rheo-xl bg-rheo-surface p-8 shadow-2xl"
+  >
+    <button
+      type="button"
+      class="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-rheo-bg text-rheo-muted transition-colors hover:bg-rheo-border hover:text-rheo-dark"
+      (click)="onClose()"
+      aria-label="Fermer"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <div
+      class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-rheo bg-rheo-accent/20"
+    >
+      <svg class="h-7 w-7 text-rheo-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+        />
+      </svg>
+    </div>
+
+    <h2 id="modal-title" class="text-center text-xl font-bold text-rheo-dark">
+      Contenu réservé aux abonnés
+    </h2>
+    <p class="mt-3 text-center text-sm leading-relaxed text-rheo-muted">
+      La fiche complète du bien (photos supplémentaires, localisation précise, coordonnées du
+      propriétaire ou de l'agence, prise de contact…) est accessible uniquement aux membres
+      abonnés de RHEODYCE.
+    </p>
+
+    <div class="mt-6 flex flex-col gap-3">
+      <button
+        type="button"
+        class="w-full rounded-full bg-rheo-accent py-3.5 text-sm font-semibold text-rheo-dark transition-colors hover:bg-rheo-accent-hover"
+        (click)="onSubscribe()"
+      >
+        S'abonner maintenant
+      </button>
+      <button
+        type="button"
+        class="w-full rounded-full border border-rheo-border py-3.5 text-sm font-medium text-rheo-muted transition-colors hover:border-rheo-dark hover:text-rheo-dark"
+        (click)="onClose()"
+      >
+        Continuer en mode aperçu
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,65 @@
-/* You can add global styles to this file, and also import other style files */
-
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import 'tailwindcss';
+
+@theme {
+  --color-rheo-bg: #f5f7f4;
+  --color-rheo-surface: #ffffff;
+  --color-rheo-accent: #c5e84a;
+  --color-rheo-accent-hover: #b5d83a;
+  --color-rheo-dark: #1a1a1a;
+  --color-rheo-muted: #6b7280;
+  --color-rheo-border: #e8ebe6;
+  --color-rheo-glass: rgb(255 255 255 / 0.72);
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
+
+  --radius-rheo-sm: 1rem;
+  --radius-rheo: 1.5rem;
+  --radius-rheo-lg: 2rem;
+  --radius-rheo-xl: 2.5rem;
+  --radius-rheo-2xl: 3rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-rheo-bg);
+  color: var(--color-rheo-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 999px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

@@ -1,0 +1,68 @@
+<article
+  class="group cursor-pointer overflow-hidden rounded-rheo-xl bg-rheo-surface shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)]"
+  (click)="onViewDetails()"
+  (keydown.enter)="onViewDetails()"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="'Voir ' + property().title"
+>
+  <!-- Image -->
+  <div class="relative aspect-[4/3] overflow-hidden">
+    <div
+      class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+      [style.background-image]="
+        'linear-gradient(180deg, rgba(15,23,42,0.1), rgba(15,23,42,0.7)), url(' + property().imageUrl + ')'
+      "
+      [style.background-size]="'cover'"
+      [style.background-position]="'center'"
+    ></div>
+    <div class="absolute inset-x-4 top-4 flex items-center justify-between gap-3">
+      <span
+        class="rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-900"
+      >
+        {{ typeLabel(property().type) }}
+      </span>
+      <span
+        class="rounded-full bg-black/60 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white"
+      >
+        {{ property().category }}
+      </span>
+    </div>
+    <div class="absolute bottom-4 left-4 right-4">
+      <p class="text-sm font-semibold text-white drop-shadow-lg">{{ property().price }}</p>
+    </div>
+  </div>
+
+  <!-- Meta -->
+  <div class="flex items-center gap-4 px-5 pt-4 text-xs text-rheo-muted">
+    <span class="flex items-center gap-1.5">
+      <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"
+        />
+      </svg>
+      {{ property().bedrooms }} ch.
+    </span>
+    <span class="flex items-center gap-1.5">
+      <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11"
+        />
+      </svg>
+      {{ property().bathrooms }} sdb
+    </span>
+  </div>
+
+  <!-- Content -->
+  <div class="px-5 pb-5 pt-2">
+    <h3 class="text-base font-semibold leading-snug text-rheo-dark">{{ property().title }}</h3>
+    <p class="mt-1.5 text-sm text-rheo-muted">
+      <span class="font-medium text-rheo-dark">{{ property().price }}</span>
+      — {{ property().location }}
+    </p>
+  </div>
+</article>
