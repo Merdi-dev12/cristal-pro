@@ -13,12 +13,12 @@
           </p>
         </div>
 
-        <div class="rounded-[22px] border border-rheo-border bg-white p-1.5">
+        <div class="w-full rounded-[24px] border border-[#d7e0ed] bg-white p-2 sm:w-auto">
           <div class="grid gap-1.5 sm:grid-cols-3">
             <button
               type="button"
-              class="rounded-[16px] px-5 py-3 text-sm font-semibold transition"
-              [class]="selectedType() === 'all' ? 'bg-black text-white' : 'bg-white text-rheo-muted hover:bg-rheo-bg hover:text-rheo-dark'"
+              class="rounded-[16px] px-5 py-2.5 text-sm font-semibold transition"
+              [class]="selectedType() === 'all' ? 'bg-[#111711] text-white' : 'bg-transparent text-rheo-muted hover:bg-rheo-bg hover:text-rheo-dark'"
               (click)="selectedType.set('all')"
             >
               Tous
@@ -26,8 +26,8 @@
             @for (chip of chips; track chip.type) {
               <button
                 type="button"
-                class="rounded-[16px] px-5 py-3 text-sm font-semibold transition"
-                [class]="selectedType() === chip.type ? 'bg-black text-white' : 'bg-white text-rheo-muted hover:bg-rheo-bg hover:text-rheo-dark'"
+                class="rounded-[16px] px-5 py-2.5 text-sm font-semibold transition"
+                [class]="selectedType() === chip.type ? 'bg-[#111711] text-white' : 'bg-transparent text-rheo-muted hover:bg-rheo-bg hover:text-rheo-dark'"
                 (click)="selectedType.set(chip.type)"
               >
                 {{ chip.label }}
