@@ -1,5 +1,8 @@
-<app-header></app-header>
+<app-header *ngIf="showChrome"></app-header>
 
 <main class="w-full">
   <router-outlet></router-outlet>
 </main>
+
+<app-footer *ngIf="showChrome"></app-footer>
+

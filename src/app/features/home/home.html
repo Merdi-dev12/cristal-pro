@@ -1,13 +1,119 @@
 <app-hero></app-hero>
 
-<main class="bg-slate-50 py-16">
-  <!-- On passe de max-w-7xl (1280px) à max-w-[1440px] pour élargir la zone, -->
-  <!-- et on réduit légèrement les paddings horizontaux (px-3 sm:px-4 lg:px-5) -->
-  <div class="mx-auto max-w-[1440px] px-3 sm:px-4 lg:px-5">
-    <h2 class="text-3xl font-bold text-slate-900 mb-8">Nos annonces récentes</h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Tes cartes d'annonces -->
+<main class="bg-rheo-bg">
+  <section class="border-b border-rheo-border bg-white">
+    <div class="mx-auto grid max-w-7xl grid-cols-2 gap-px px-4 py-8 sm:grid-cols-4 sm:px-6 lg:px-8">
+      @for (stat of data.stats; track stat.label) {
+        <div class="px-3 py-4 text-center sm:border-r sm:border-rheo-border last:border-r-0">
+          <p class="text-3xl font-semibold tracking-tight text-rheo-dark sm:text-4xl">{{ stat.value }}</p>
+          <p class="mt-1 text-xs text-rheo-muted">{{ stat.label }}</p>
+        </div>
+      }
     </div>
-  </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.22em] text-rheo-muted">Biens vérifiés</p>
+        <h2 class="mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-rheo-dark sm:text-5xl">
+          Explorez des propriétés avec la bonne information dès le départ.
+        </h2>
+      </div>
+      <p class="max-w-xl text-sm leading-7 text-rheo-muted lg:justify-self-end">
+        Chaque annonce est pensée pour éviter les zones floues : prix lisible, localisation, état du bien,
+        photos, typologie et niveau de vérification. Les données sont fake pour l’instant, prêtes à être
+        remplacées par l’API.
+      </p>
+    </div>
+
+    <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+      @for (property of featuredProperties(); track property.id) {
+        <app-property-card [property]="property" (viewDetails)="onViewDetails($event)" />
+      }
+    </div>
+
+    <div class="mt-8 flex justify-center">
+      <a routerLink="/annonces" class="rounded-full bg-black px-7 py-3 text-sm font-semibold text-white transition hover:bg-black/90">
+        Explorer toutes les annonces
+      </a>
+    </div>
+  </section>
+
+  <section class="bg-white py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.22em] text-rheo-muted">Services</p>
+          <h2 class="mt-3 text-4xl font-semibold tracking-tight text-rheo-dark">Plus qu’un listing immobilier.</h2>
+          <p class="mt-4 text-sm leading-7 text-rheo-muted">
+            RHEODYCE couvre le parcours complet : chercher, sécuriser, entretenir, améliorer et protéger
+            votre transaction.
+          </p>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          @for (service of data.services; track service.id) {
+            <article class="rounded-[24px] border border-rheo-border bg-rheo-bg p-5 transition hover:-translate-y-1 hover:bg-white hover:shadow-[0_18px_60px_rgba(14,20,16,0.08)]">
+              <div class="flex items-center justify-between gap-4">
+                <span class="text-xs font-semibold uppercase tracking-[0.18em] text-rheo-muted">{{ service.eyebrow }}</span>
+                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-black text-sm text-white">{{ service.icon }}</span>
+              </div>
+              <h3 class="mt-6 text-xl font-semibold text-rheo-dark">{{ service.title }}</h3>
+              <p class="mt-3 text-sm leading-6 text-rheo-muted">{{ service.description }}</p>
+            </article>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-7xl gap-8 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8">
+    <div class="overflow-hidden rounded-[32px] bg-black text-white shadow-2xl">
+      <img src="/assets/hero_img.png" alt="Maison moderne entourée de verdure" class="h-72 w-full object-cover opacity-90" />
+      <div class="p-8">
+        <p class="text-sm font-semibold uppercase tracking-[0.22em] text-white/55">Méthode</p>
+        <h2 class="mt-3 text-3xl font-semibold tracking-tight">Un parcours simple, même quand le dossier est sensible.</h2>
+      </div>
+    </div>
+
+    <div class="grid gap-4">
+      @for (item of data.process; track item.step) {
+        <article class="rounded-[24px] border border-rheo-border bg-white p-6">
+          <div class="flex gap-5">
+            <span class="text-2xl font-semibold text-rheo-dark">{{ item.step }}</span>
+            <div>
+              <h3 class="text-xl font-semibold text-rheo-dark">{{ item.title }}</h3>
+              <p class="mt-2 text-sm leading-6 text-rheo-muted">{{ item.description }}</p>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="bg-white py-16">
+    <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.22em] text-rheo-muted">FAQ</p>
+        <h2 class="mt-3 text-4xl font-semibold tracking-tight text-rheo-dark">Les questions qui évitent les mauvaises surprises.</h2>
+        <a routerLink="/faq" class="mt-6 inline-flex rounded-full bg-rheo-accent px-6 py-3 text-sm font-semibold text-rheo-dark transition hover:bg-rheo-accent-hover">
+          Voir toute la FAQ
+        </a>
+      </div>
+
+      <div class="grid gap-3">
+        @for (faq of data.faqs.slice(0, 3); track faq.question) {
+          <details class="rounded-[22px] border border-rheo-border bg-rheo-bg p-5 open:bg-white">
+            <summary class="cursor-pointer list-none text-lg font-semibold text-rheo-dark">{{ faq.question }}</summary>
+            <p class="mt-3 text-sm leading-6 text-rheo-muted">{{ faq.answer }}</p>
+          </details>
+        }
+      </div>
+    </div>
+  </section>
 </main>
+
+@if (showSubscriberModal()) {
+  <app-subscriber-modal (close)="onCloseModal()" (subscribe)="onSubscribeModal()" />
+}

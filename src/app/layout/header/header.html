@@ -1,23 +1,29 @@
-<header 
-  [class]="'fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 ' + 
-  (isScrolled() 
-    ? 'bg-black/45 py-3 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-md border-b border-white/10' 
-    : 'bg-transparent py-5')"
+<header
+  [class]="'fixed left-0 right-0 top-0 z-50 w-full transition-all duration-500 ' +
+    ((isHome() && !isScrolled())
+      ? 'bg-transparent py-5'
+      : isScrolled()
+        ? 'border-b border-white/10 bg-black/55 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.28)] backdrop-blur-md'
+        : 'border-b border-rheo-border bg-white/90 py-3 shadow-[0_10px_35px_rgba(14,20,16,0.06)] backdrop-blur-md')"
 >
   <div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-    
-    <!-- Logo -->
     <a routerLink="/" class="flex shrink-0 items-center gap-2">
-      <span class="text-2xl font-extrabold tracking-tight text-white transition-transform duration-300 hover:scale-105">
+      <span
+        class="text-xl font-semibold tracking-tight transition-transform duration-300 hover:scale-105"
+        [class]="(isHome() && !isScrolled()) || isScrolled() ? 'text-white' : 'text-rheo-dark'"
+      >
         RHEODYCE
       </span>
     </a>
 
-    <!-- Navigation Principale -->
-    <nav [class]="'hidden lg:flex items-center transition-all duration-500 ' + 
-      (isScrolled() 
-        ? 'bg-transparent px-0 py-0 border-none shadow-none' 
-        : 'rounded-full border border-white/10 bg-white/10 px-1.5 py-1.5 shadow-[0_4px_30px_rgba(0,0,0,0.03)] backdrop-blur-md')"
+    <nav
+      [class]="'hidden items-center transition-all duration-500 lg:flex ' +
+        ((isHome() && !isScrolled())
+          ? 'rounded-full border border-white/10 bg-white/10 px-1.5 py-1.5 shadow-[0_4px_30px_rgba(0,0,0,0.03)] backdrop-blur-md'
+          : isScrolled()
+            ? 'rounded-full border border-white/10 bg-white/10 px-1.5 py-1.5 shadow-none backdrop-blur-md'
+            : 'rounded-full border border-rheo-border bg-rheo-bg px-1.5 py-1.5 shadow-none')"
+      aria-label="Navigation principale"
     >
       <ul class="flex items-center gap-1">
         @for (link of navLinks(); track link.path) {
@@ -26,7 +32,10 @@
               [routerLink]="link.path"
               routerLinkActive="bg-white !text-black font-semibold shadow-sm"
               [routerLinkActiveOptions]="{ exact: link.path === '/' }"
-              class="rounded-full px-4 py-1.5 text-sm font-medium text-white/90 transition-all duration-300 ease-out hover:bg-white/10 hover:text-white"
+              class="rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-out"
+              [class]="(isHome() && !isScrolled()) || isScrolled()
+                ? 'text-white/90 hover:bg-white/10 hover:text-white'
+                : 'text-rheo-muted hover:bg-white hover:text-rheo-dark'"
             >
               {{ link.label }}
             </a>
@@ -35,24 +44,22 @@
       </ul>
     </nav>
 
-    <!-- Boutons d'Action (Authentification) -->
     <div class="flex items-center gap-3">
-      <!-- Bouton Se Connecter Épuré -->
       <a
         routerLink="/connexion"
-        class="rounded-full border border-white/15 bg-transparent px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-white/10 hover:border-white/30 active:scale-95"
+        class="hidden rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 active:scale-95 sm:inline-flex"
+        [class]="(isHome() && !isScrolled()) || isScrolled()
+          ? 'border-white/15 bg-transparent text-white hover:border-white/30 hover:bg-white/10'
+          : 'border-rheo-border bg-white text-rheo-dark hover:border-black/20'"
       >
         Se connecter
       </a>
-      
-      <!-- Bouton S'inscrire -->
       <a
         routerLink="/inscription"
-        class="rounded-full bg-[#b2f37e] px-5 py-2.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-[#a1e26d] hover:shadow-[0_0_20px_rgba(178,243,126,0.25)] active:scale-95"
+        class="rounded-full bg-rheo-accent px-5 py-2.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-rheo-accent-hover hover:shadow-[0_0_20px_rgba(197,232,74,0.25)] active:scale-95"
       >
         S'inscrire
       </a>
     </div>
-
   </div>
 </header>

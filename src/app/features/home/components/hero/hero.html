@@ -1,17 +1,13 @@
-<!-- Section principale en noire pure (bg-black au lieu de bg-slate-900) -->
-<section class="relative min-h-screen w-full flex flex-col justify-end pb-12 bg-black shadow-2xl">
-  
-  <!-- Arrière-plan avec voile noir pur pour un mariage idéal avec le header transparent/glassmorphic -->
+<section class="relative flex min-h-screen w-full flex-col justify-end overflow-visible bg-black pb-10 shadow-2xl">
   <div class="absolute inset-0 z-0 overflow-hidden">
-    <div 
-      class="h-full w-full bg-cover bg-center transition-all duration-700 scale-105"
-      [style.background-image]="'linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.9) 100%), url(' + heroBackgroundUrl + ')'"
+    <div
+      class="h-full w-full scale-105 bg-cover bg-center transition-all duration-700"
+      [style.background-image]="'linear-gradient(180deg, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.2) 48%, rgba(0,0,0,0.92) 100%), url(' + heroBackgroundUrl + ')'"
     ></div>
   </div>
 
-  <div class="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col justify-end pt-32">
-    
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end lg:gap-12 pb-8">
+  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-end px-4 pt-32 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 gap-6 pb-8 lg:grid-cols-12 lg:items-end lg:gap-12">
       <div class="lg:col-span-8">
         <div class="mb-5 flex flex-wrap gap-2">
           @for (tag of heroTags; track tag) {
@@ -21,228 +17,118 @@
               class="rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200"
               [class]="
                 activeTag() === tag
-                  ? 'bg-white text-slate-950 border border-slate-200 shadow-sm'
-                  : 'border border-white/20 bg-white/10 text-white hover:bg-white/20 hover:text-white'
+                  ? 'border border-slate-200 bg-white text-slate-950 shadow-sm'
+                  : 'border border-white/20 bg-white/10 text-white hover:bg-white/20'
               "
             >
               {{ tag }}
             </button>
           }
         </div>
-        
-        <h1 class="text-4xl font-light leading-[1.15] tracking-tight text-white sm:text-6xl lg:text-[72px] min-h-[110px] sm:min-h-[160px] lg:min-h-[200px]">
+
+        <h1 class="min-h-[156px] text-4xl font-light leading-[1.08] tracking-tight text-white sm:text-6xl lg:min-h-[174px] lg:text-[72px]">
           Construisez votre avenir,<br />
-          <span class="font-semibold text-[#b2f37e] border-r-2 border-[#b2f37e] pr-1 animate-pulse-cursor">
+          <span class="border-r-2 border-rheo-accent pr-1 font-semibold text-rheo-accent">
             {{ typedText() }}
           </span>
         </h1>
       </div>
-      
+
       <div class="lg:col-span-4 lg:pb-2">
-        <p class="text-sm leading-relaxed text-white/80 sm:text-base">
-          RHEODYCE réinvente la confiance immobilière en RDC. Accédez à des annonces certifiées contre la fraude, une maintenance qualifiée et un accompagnement juridique sur-mesure.
+        <p class="max-w-md text-sm leading-relaxed text-white/82 sm:text-base">
+          RHEODYCE centralise des annonces immobilières vérifiées en RDC, avec des services de maintenance,
+          décoration et assistance juridique pour sécuriser chaque étape.
         </p>
       </div>
     </div>
 
-    <div class="w-full rounded-[28px] bg-white px-6 py-6 sm:px-8 sm:py-7 lg:px-9 shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
-      
-      <h3 class="text-lg sm:text-xl font-bold text-slate-900 mb-4">Trouvez votre prochain chez-vous</h3>
-      
+    <div class="w-full rounded-[28px] bg-white px-5 py-6 shadow-[0_20px_50px_rgba(0,0,0,0.4)] sm:px-8 sm:py-7 lg:px-9">
+      <h3 class="mb-4 text-xl font-bold text-slate-950">Trouvez le meilleur bien</h3>
+
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        
-        <!-- Je recherche -->
         <div class="relative flex flex-col gap-1.5">
-          <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Je recherche</label>
-          <div class="relative">
-            <button
-              type="button"
-              (click)="toggleTypeDropdown($event)"
-              class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm font-semibold text-[#071d49] transition text-left outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5"
-            >
-              <span>{{ selectedType() }}</span>
-              <svg
-                class="size-4 text-[#8b98ad] transition-transform duration-200"
-                [class.rotate-180]="isTypeOpen()"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-
-            @if (isTypeOpen()) {
-              <ul class="absolute z-30 mt-2 max-h-60 w-full overflow-y-auto rounded-[12px] border border-slate-100 bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)] outline-none">
-                @for (type of searchTypes; track type) {
-                  <li
-                    (click)="selectType(type)"
-                    class="flex cursor-pointer items-center justify-between rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100 hover:text-slate-955"
-                    [class.bg-slate-100]="selectedType() === type"
-                    [class.text-slate-955]="selectedType() === type"
-                  >
-                    <span>{{ type }}</span>
-                    @if (selectedType() === type) {
-                      <span class="h-1.5 w-1.5 rounded-full bg-slate-950"></span>
-                    }
-                  </li>
-                }
-              </ul>
-            }
-          </div>
+          <label class="text-xs font-bold uppercase tracking-wide text-slate-500">Je recherche</label>
+          <button type="button" (click)="toggleTypeDropdown($event)" class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5">
+            <span>{{ selectedType() }}</span>
+            <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="isTypeOpen()" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          @if (isTypeOpen()) {
+            <ul class="absolute top-full z-[80] mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+              @for (type of searchTypes; track type) {
+                <li (click)="selectType(type)" class="cursor-pointer rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100">{{ type }}</li>
+              }
+            </ul>
+          }
         </div>
 
-        <!-- Budget max -->
         <div class="relative flex flex-col gap-1.5">
-          <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Budget max (USD)</label>
-          <div class="relative">
-            <button
-              type="button"
-              (click)="toggleBudgetDropdown($event)"
-              class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm font-semibold text-[#071d49] transition text-left outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5"
-            >
-              <span>{{ selectedBudget() }}</span>
-              <svg
-                class="size-4 text-[#8b98ad] transition-transform duration-200"
-                [class.rotate-180]="isBudgetOpen()"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-
-            @if (isBudgetOpen()) {
-              <ul class="absolute z-30 mt-2 max-h-60 w-full overflow-y-auto rounded-[12px] border border-slate-100 bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)] outline-none">
-                @for (budget of budgets; track budget) {
-                  <li
-                    (click)="selectBudget(budget)"
-                    class="flex cursor-pointer items-center justify-between rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100 hover:text-slate-955"
-                    [class.bg-slate-100]="selectedBudget() === budget"
-                    [class.text-slate-955]="selectedBudget() === budget"
-                  >
-                    <span>{{ budget }}</span>
-                    @if (selectedBudget() === budget) {
-                      <span class="h-1.5 w-1.5 rounded-full bg-slate-950"></span>
-                    }
-                  </li>
-                }
-              </ul>
-            }
-          </div>
+          <label class="text-xs font-bold uppercase tracking-wide text-slate-500">Budget max</label>
+          <button type="button" (click)="toggleBudgetDropdown($event)" class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5">
+            <span>{{ selectedBudget() }}</span>
+            <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="isBudgetOpen()" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          @if (isBudgetOpen()) {
+            <ul class="absolute top-full z-[80] mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+              @for (budget of budgets; track budget) {
+                <li (click)="selectBudget(budget)" class="cursor-pointer rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100">{{ budget }}</li>
+              }
+            </ul>
+          }
         </div>
 
-        <!-- Localisation -->
         <div class="relative flex flex-col gap-1.5">
-          <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Localisation</label>
-          <div class="relative">
-            <button
-              type="button"
-              (click)="toggleLocationDropdown($event)"
-              class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm font-semibold text-[#071d49] transition text-left outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5"
-            >
-              <span>{{ selectedLocation() }}</span>
-              <svg
-                class="size-4 text-[#8b98ad] transition-transform duration-200"
-                [class.rotate-180]="isLocationOpen()"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-
-            @if (isLocationOpen()) {
-              <ul class="absolute z-30 mt-2 max-h-60 w-full overflow-y-auto rounded-[12px] border border-slate-100 bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)] outline-none">
-                @for (loc of locations; track loc) {
-                  <li
-                    (click)="selectLocation(loc)"
-                    class="flex cursor-pointer items-center justify-between rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100 hover:text-slate-955"
-                    [class.bg-slate-100]="selectedLocation() === loc"
-                    [class.text-slate-955]="selectedLocation() === loc"
-                  >
-                    <span>{{ loc }}</span>
-                    @if (selectedLocation() === loc) {
-                      <span class="h-1.5 w-1.5 rounded-full bg-slate-950"></span>
-                    }
-                  </li>
-                }
-              </ul>
-            }
-          </div>
+          <label class="text-xs font-bold uppercase tracking-wide text-slate-500">Localisation</label>
+          <button type="button" (click)="toggleLocationDropdown($event)" class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5">
+            <span>{{ selectedLocation() }}</span>
+            <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="isLocationOpen()" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          @if (isLocationOpen()) {
+            <ul class="absolute top-full z-[80] mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+              @for (loc of locations; track loc) {
+                <li (click)="selectLocation(loc)" class="cursor-pointer rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100">{{ loc }}</li>
+              }
+            </ul>
+          }
         </div>
 
-        <!-- Nombre de chambres -->
         <div class="relative flex flex-col gap-1.5">
-          <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre de chambres</label>
-          <div class="relative">
-            <button
-              type="button"
-              (click)="toggleRoomsDropdown($event)"
-              class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm font-semibold text-[#071d49] transition text-left outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5"
-            >
-              <span>{{ selectedRooms() }}</span>
-              <svg
-                class="size-4 text-[#8b98ad] transition-transform duration-200"
-                [class.rotate-180]="isRoomsOpen()"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-
-            @if (isRoomsOpen()) {
-              <ul class="absolute z-30 mt-2 max-h-60 w-full overflow-y-auto rounded-[12px] border border-slate-100 bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)] outline-none">
-                @for (room of rooms; track room) {
-                  <li
-                    (click)="selectRooms(room)"
-                    class="flex cursor-pointer items-center justify-between rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100 hover:text-slate-955"
-                    [class.bg-slate-100]="selectedRooms() === room"
-                    [class.text-slate-955]="selectedRooms() === room"
-                  >
-                    <span>{{ room }}</span>
-                    @if (selectedRooms() === room) {
-                      <span class="h-1.5 w-1.5 rounded-full bg-slate-950"></span>
-                    }
-                  </li>
-                }
-              </ul>
-            }
-          </div>
+          <label class="text-xs font-bold uppercase tracking-wide text-slate-500">Chambres</label>
+          <button type="button" (click)="toggleRoomsDropdown($event)" class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5">
+            <span>{{ selectedRooms() }}</span>
+            <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="isRoomsOpen()" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          @if (isRoomsOpen()) {
+            <ul class="absolute top-full z-[80] mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+              @for (room of rooms; track room) {
+                <li (click)="selectRooms(room)" class="cursor-pointer rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100">{{ room }}</li>
+              }
+            </ul>
+          }
         </div>
-
       </div>
 
-      <div class="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-1">
+      <div class="mt-6 flex flex-col gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
         <div class="flex flex-wrap items-center gap-2">
-          <span class="text-xs font-bold text-slate-900 mr-1">Filtres rapides :</span>
+          <span class="mr-1 text-xs font-bold text-slate-900">Filtres :</span>
           @for (chip of filterChips; track chip) {
-            <button
-              type="button"
-              class="rounded-full border border-slate-200 px-4 py-1.5 text-xs font-medium text-slate-500 transition-all hover:border-slate-400 hover:text-slate-900"
-            >
+            <button type="button" class="rounded-full border border-slate-200 px-4 py-1.5 text-xs font-medium text-slate-500 transition-all hover:border-slate-400 hover:text-slate-900">
               {{ chip }}
             </button>
           }
         </div>
-        
-        <button
-          type="button"
-          class="rounded-full bg-slate-950 px-7 py-3 text-sm font-semibold text-white shadow-lg transition-all active:scale-95 hover:bg-slate-900"
-        >
-          Rechercher des biens
+
+        <button type="button" class="rounded-full bg-slate-950 px-7 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:bg-slate-900 active:scale-95">
+          Rechercher
         </button>
       </div>
-
     </div>
   </div>
 </section>
-
-<style>
-  @keyframes blink {
-    50% { border-color: transparent; }
-  }
-  .animate-pulse-cursor {
-    animation: blink 0.75s step-end infinite;
-  }
-</style>

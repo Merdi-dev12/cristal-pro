@@ -2,10 +2,18 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
+import { AuthService } from './core/services/auth.service';
+import { HeaderStateService } from './core/services/header-state';
+import { RheodyceDataService } from './core/services/rheodyce-data.service';
+import { Scroll } from './core/services/scroll';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes)
+    provideRouter(routes),
+    AuthService,
+    HeaderStateService,
+    RheodyceDataService,
+    Scroll,
   ]
 };

@@ -1,14 +1,20 @@
 export type PropertyType = 'vente' | 'location';
-export type PropertyCategory = 'maison' | 'appartement' | 'residence';
+export type PropertyCategory = 'maison' | 'appartement' | 'residence' | 'terrain';
 
 export interface Property {
   id: string;
   title: string;
-  price: string;
+  price: number;
+  priceSuffix?: string;
   location: string;
+  address: string;
   bedrooms: number;
   bathrooms: number;
+  surface: number;
   type: PropertyType;
   category: PropertyCategory;
   imageUrl: string;
+  featured?: boolean;
+  verified?: boolean;
+  description: string;
 }

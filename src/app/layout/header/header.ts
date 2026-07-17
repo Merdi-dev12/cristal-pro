@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Scroll } from '../../core/services/scroll'; 
-
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { filter } from 'rxjs';
+import { Scroll } from '../../core/services/scroll';
 
 interface NavLink {
   path: string;
@@ -12,17 +12,30 @@ interface NavLink {
   selector: 'app-header',
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
-  templateUrl: './header.html'
+  templateUrl: './header.html',
 })
 export class Header {
+  private readonly router = inject(Router);
   private readonly scrollService = inject(Scroll);
   protected readonly isScrolled = this.scrollService.isScrolled;
+  protected readonly isHome = signal(this.isHomeUrl(this.router.url));
 
   protected readonly navLinks = signal<NavLink[]>([
     { path: '/', label: 'Accueil' },
-    { path: '/about', label: 'A propos' },
     { path: '/annonces', label: 'Annonces' },
+    { path: '/location-vente', label: 'Location & Vente' },
     { path: '/services', label: 'Services' },
-    { path: '/tarifs', label: 'Tarifs' }
+    { path: '/faq', label: 'FAQ' },
+    { path: '/contact', label: 'Contact' },
   ]);
+
+  constructor() {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
+      this.isHome.set(this.isHomeUrl(event.urlAfterRedirects));
+    });
+  }
+
+  private isHomeUrl(url: string): boolean {
+    return url.split('?')[0] === '/';
+  }
 }

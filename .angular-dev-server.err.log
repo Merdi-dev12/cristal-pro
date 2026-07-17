@@ -1,0 +1,959 @@
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module './features/auth/login' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:10:26:
+[37m      10 │ import { LoginPage } from [32m'./features/auth/login'[37m;
+         ╵                           [32m~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../core/services/auth.service' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:5:28:
+[37m      5 │ import { AuthService } from [32m'../../core/services/auth.service'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:70:4:
+[37m      70 │     [32mthis.auth[37m.setSubscriber(true);
+         ╵     [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "./features/auth/login"[0m
+
+    src/app/app.routes.ts:9:26:
+[37m      9 │ import { LoginPage } from [32m'./features/auth/login'[37m;
+        ╵                           [32m~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module './features/auth/login' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:10:26:
+[37m      10 │ import { LoginPage } from [32m'./features/auth/login'[37m;
+         ╵                           [32m~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module './features/auth/register' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:11:29:
+[37m      11 │ import { RegisterPage } from [32m'./features/auth/register'[37m;
+         ╵                              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../core/services/auth.service' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:5:28:
+[37m      5 │ import { AuthService } from [32m'../../core/services/auth.service'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:70:4:
+[37m      70 │     [32mthis.auth[37m.setSubscriber(true);
+         ╵     [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../core/services/auth.service' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:5:28:
+[37m      5 │ import { AuthService } from [32m'../../core/services/auth.service'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:75:4:
+[37m      75 │     [32mthis.auth[37m.setSubscriber(true);
+         ╵     [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "./features/auth/login"[0m
+
+    src/app/app.routes.ts:9:26:
+[37m      9 │ import { LoginPage } from [32m'./features/auth/login'[37m;
+        ╵                           [32m~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "./features/auth/register"[0m
+
+    src/app/app.routes.ts:10:29:
+[37m      10 │ import { RegisterPage } from [32m'./features/auth/register'[37m;
+         ╵                              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module './features/auth/register' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:11:29:
+[37m      11 │ import { RegisterPage } from [32m'./features/auth/register'[37m;
+         ╵                              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../core/services/auth.service' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:5:28:
+[37m      5 │ import { AuthService } from [32m'../../core/services/auth.service'[37m;
+        ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:75:4:
+[37m      75 │     [32mthis.auth[37m.setSubscriber(true);
+         ╵     [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "./features/auth/register"[0m
+
+    src/app/app.routes.ts:10:29:
+[37m      10 │ import { RegisterPage } from [32m'./features/auth/register'[37m;
+         ╵                              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: template must be a string
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:11:11:
+[37m      11 │   template:[32m[37m ,
+         ╵            [32m^[0m
+
+  Unknown reference.
+
+    src/app/features/auth/login/login.ts:11:11:
+[37m      11 │   template:[32m[37m ,
+         ╵            [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:11:12:
+[37m      11 │   template: [32m,[37m
+         ╵             [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mUnexpected ","[0m
+
+    src/app/features/auth/login/login.ts:23:18:
+[37m      23 │         template: [32m,[37m
+         ╵                   [32m^[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"./features/auth/register/register"' has no exported member 'RegisterPage'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:11:9:
+[37m      11 │ import { [32mRegisterPage[37m } from './features/auth/register/register';
+         ╵          [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1160: Unterminated template literal.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:28:0:
+[37m      28 │ [32m[37m
+         ╵ [32m^[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of RegisterPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/register/register.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of LoginPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:10:39:
+[37m      10 │   imports: [CommonModule, FormsModule, [32mRouterLink[37m],
+         ╵                                        [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: PropertyCard is not used within the template of AnnoncesPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../pipes/pipe' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/components/property-card/property-card.ts:3:53:
+[37m      3 │ ...t { CategoryLabelPipe, PropertyPricePipe } from [32m'../../pipes/pipe'[37m;
+        ╵                                                    [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/components/property-card/property-card.ts:7:12:
+[37m      7 │   imports: [[32mCategoryLabelPipe[37m, PropertyPricePipe],
+        ╵             [32m~~~~~~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/shared/components/property-card/property-card.ts:7:12:
+[37m      7 │   imports: [[32mCategoryLabelPipe[37m, PropertyPricePipe],
+        ╵             [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/components/property-card/property-card.ts:7:31:
+[37m      7 │   imports: [CategoryLabelPipe, [32mPropertyPricePipe[37m],
+        ╵                                [32m~~~~~~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/shared/components/property-card/property-card.ts:7:31:
+[37m      7 │   imports: [CategoryLabelPipe, [32mPropertyPricePipe[37m],
+        ╵                                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../pipes/pipe"[0m
+
+    src/app/shared/components/property-card/property-card.ts:3:53:
+[37m      3 │ ...t { CategoryLabelPipe, PropertyPricePipe } from [32m'../../pipes/pipe'[37m;
+        ╵                                                    [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../pipes/pipe' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/components/property-card/property-card.ts:3:53:
+[37m      3 │ ...t { CategoryLabelPipe, PropertyPricePipe } from [32m'../../pipes/pipe'[37m;
+        ╵                                                    [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/components/property-card/property-card.ts:7:12:
+[37m      7 │   imports: [[32mCategoryLabelPipe[37m, PropertyPricePipe],
+        ╵             [32m~~~~~~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/shared/components/property-card/property-card.ts:7:12:
+[37m      7 │   imports: [[32mCategoryLabelPipe[37m, PropertyPricePipe],
+        ╵             [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/components/property-card/property-card.ts:7:31:
+[37m      7 │   imports: [CategoryLabelPipe, [32mPropertyPricePipe[37m],
+        ╵                                [32m~~~~~~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/shared/components/property-card/property-card.ts:7:31:
+[37m      7 │   imports: [CategoryLabelPipe, [32mPropertyPricePipe[37m],
+        ╵                                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../pipes/pipe"[0m
+
+    src/app/shared/components/property-card/property-card.ts:3:53:
+[37m      3 │ ...t { CategoryLabelPipe, PropertyPricePipe } from [32m'../../pipes/pipe'[37m;
+        ╵                                                    [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../shared/components/property-card/property-card' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:4:29:
+[37m      4 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../shared/components/property-card/property-card' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/home/home.ts:6:29:
+[37m      6 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/home/home.ts:14:44:
+[37m      14 │ ...: [CommonModule, RouterLink, Hero, [32mPropertyCard[37m, SubscriberModal],
+         ╵                                       [32m~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/features/home/home.ts:14:44:
+[37m      14 │ ...: [CommonModule, RouterLink, Hero, [32mPropertyCard[37m, SubscriberModal],
+         ╵                                       [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../shared/components/property-card/property-card"[0m
+
+    src/app/features/annonces/annonces.ts:5:29:
+[37m      5 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../shared/components/property-card/property-card"[0m
+
+    src/app/features/home/home.ts:7:29:
+[37m      7 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../shared/components/property-card/property-card' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:4:29:
+[37m      4 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../shared/components/property-card/property-card' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/home/home.ts:6:29:
+[37m      6 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/home/home.ts:14:44:
+[37m      14 │ ...: [CommonModule, RouterLink, Hero, [32mPropertyCard[37m, SubscriberModal],
+         ╵                                       [32m~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/features/home/home.ts:14:44:
+[37m      14 │ ...: [CommonModule, RouterLink, Hero, [32mPropertyCard[37m, SubscriberModal],
+         ╵                                       [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../shared/components/property-card/property-card"[0m
+
+    src/app/features/annonces/annonces.ts:5:29:
+[37m      5 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../shared/components/property-card/property-card"[0m
+
+    src/app/features/home/home.ts:7:29:
+[37m      7 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../shared/components/property-card/property-card' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:4:29:
+[37m      4 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../shared/components/property-card/property-card' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/home/home.ts:6:29:
+[37m      6 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/home/home.ts:14:44:
+[37m      14 │ ...: [CommonModule, RouterLink, Hero, [32mPropertyCard[37m, SubscriberModal],
+         ╵                                       [32m~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/features/home/home.ts:14:44:
+[37m      14 │ ...: [CommonModule, RouterLink, Hero, [32mPropertyCard[37m, SubscriberModal],
+         ╵                                       [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../shared/components/property-card/property-card"[0m
+
+    src/app/features/annonces/annonces.ts:5:29:
+[37m      5 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../shared/components/property-card/property-card"[0m
+
+    src/app/features/home/home.ts:7:29:
+[37m      7 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../shared/components/property-card/property-card' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:4:29:
+[37m      4 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/features/annonces/annonces.ts:10:26:
+[37m      10 │   imports: [CommonModule, [32mPropertyCard[37m],
+         ╵                           [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../shared/components/property-card/property-card' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/home/home.ts:6:29:
+[37m      6 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1010: 'imports' must be an array of components, directives, pipes, or NgModules.
+  Value could not be determined statically.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/home/home.ts:14:44:
+[37m      14 │ ...: [CommonModule, RouterLink, Hero, [32mPropertyCard[37m, SubscriberModal],
+         ╵                                       [32m~~~~~~~~~~~~[0m
+
+  Unknown reference.
+
+    src/app/features/home/home.ts:14:44:
+[37m      14 │ ...: [CommonModule, RouterLink, Hero, [32mPropertyCard[37m, SubscriberModal],
+         ╵                                       [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../shared/components/property-card/property-card"[0m
+
+    src/app/features/annonces/annonces.ts:5:29:
+[37m      5 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../shared/components/property-card/property-card"[0m
+
+    src/app/features/home/home.ts:7:29:
+[37m      7 │ ...yCard } from [32m'../../shared/components/property-card/property-card'[37m;
+        ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG2008: Could not find template file './login.html'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:11:15:
+[37m      11 │   templateUrl: [32m"./login.html"[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG2008: Could not find template file './login.html'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:11:15:
+[37m      11 │   templateUrl: [32m"./login.html"[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG2008: Could not find template file './login.html'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/auth/login/login.ts:11:15:
+[37m      11 │   templateUrl: [32m"./login.html"[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+

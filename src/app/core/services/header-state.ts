@@ -1,8 +1,6 @@
-import { Injectable, signal, HostListener } from '@angular/core';
+import { Service, signal } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class HeaderStateService {
   public readonly isScrolled = signal(false);
 

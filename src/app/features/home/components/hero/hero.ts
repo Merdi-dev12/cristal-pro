@@ -1,4 +1,4 @@
-import { Component, signal, OnInit, OnDestroy, WritableSignal, HostListener, ElementRef } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, WritableSignal, signal } from '@angular/core';
 
 @Component({
   selector: 'app-hero',
@@ -7,42 +7,34 @@ import { Component, signal, OnInit, OnDestroy, WritableSignal, HostListener, Ele
   templateUrl: './hero.html',
 })
 export class Hero implements OnInit, OnDestroy {
-  protected readonly heroTags = ['Maisons', 'Appartements', 'Terrains'];
-  protected readonly filterChips = ['Kinshasa', 'Lubumbashi', 'Goma', 'Kongo Central'];
+  protected readonly heroTags = ['Maison', 'Appartement', 'Résidentiel'];
+  protected readonly filterChips = ['Kinshasa', 'Maison', 'Résidentiel', 'Appartement'];
   protected readonly activeTag = signal(this.heroTags[0]);
-  protected readonly heroBackgroundUrl = 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1600&q=80';
+  protected readonly heroBackgroundUrl = '/assets/hero_img_1.jpg';
 
-  // --- Choix possibles dans les dropdowns ---
-  protected readonly searchTypes = ['Une Location', 'Un Achat / Vente'];
-  protected readonly budgets = ['Tous les budgets', 'Moins de 500 $ / mois', '500 $ — 1 500 $ / mois', 'Plus de 100 000 $ (Achat)'];
-  protected readonly locations = ['Partout en RDC', 'Gombe (Kinshasa)', 'Ngaliema (Kinshasa)', 'Lubumbashi', 'Goma'];
+  protected readonly searchTypes = ['Location', 'Achat / Vente', 'Investissement'];
+  protected readonly budgets = ['Tous les budgets', 'Moins de 800 $ / mois', '800 $ à 2 000 $ / mois', 'Plus de 100 000 $'];
+  protected readonly locations = ['Partout en RDC', 'Gombe, Kinshasa', 'Ngaliema, Kinshasa', 'Lubumbashi', 'Goma'];
   protected readonly rooms = ['Indifférent', '1 à 2 chambres', '3 chambres', '4 chambres ou plus'];
 
-  // --- Signaux des valeurs sélectionnées ---
   protected readonly selectedType = signal(this.searchTypes[0]);
   protected readonly selectedBudget = signal(this.budgets[0]);
   protected readonly selectedLocation = signal(this.locations[0]);
   protected readonly selectedRooms = signal(this.rooms[0]);
 
-  // --- Signaux d'état d'ouverture des Dropdowns ---
   protected readonly isTypeOpen = signal(false);
   protected readonly isBudgetOpen = signal(false);
   protected readonly isLocationOpen = signal(false);
   protected readonly isRoomsOpen = signal(false);
 
-  // --- Configuration de l'effet d'écriture ---
-  private readonly wordsToType = [
-    'un bien immobilier à la fois.',
-    'un foyer sécurisé en RDC.',
-    'un investissement d\'avenir.'
-  ];
+  private readonly wordsToType = ['un bien vérifié.', 'un foyer sécurisé.', 'un investissement durable.'];
   protected readonly typedText: WritableSignal<string> = signal('');
   private wordIndex = 0;
   private charIndex = 0;
   private isDeleting = false;
-  private typingTimeout: any;
+  private typingTimeout: ReturnType<typeof setTimeout> | undefined;
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private readonly elementRef: ElementRef<HTMLElement>) {}
 
   ngOnInit(): void {
     this.handleTyping();
@@ -54,10 +46,9 @@ export class Hero implements OnInit, OnDestroy {
     }
   }
 
-  // Fermeture automatique des dropdowns si clic en dehors
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event): void {
-    if (!this.elementRef.nativeElement.contains(event.target)) {
+    if (!this.elementRef.nativeElement.contains(event.target as Node)) {
       this.closeAllDropdowns();
     }
   }
@@ -70,31 +61,19 @@ export class Hero implements OnInit, OnDestroy {
   }
 
   protected toggleTypeDropdown(event: Event): void {
-    event.stopPropagation();
-    const state = this.isTypeOpen();
-    this.closeAllDropdowns();
-    this.isTypeOpen.set(!state);
+    this.toggleDropdown(event, this.isTypeOpen);
   }
 
   protected toggleBudgetDropdown(event: Event): void {
-    event.stopPropagation();
-    const state = this.isBudgetOpen();
-    this.closeAllDropdowns();
-    this.isBudgetOpen.set(!state);
+    this.toggleDropdown(event, this.isBudgetOpen);
   }
 
   protected toggleLocationDropdown(event: Event): void {
-    event.stopPropagation();
-    const state = this.isLocationOpen();
-    this.closeAllDropdowns();
-    this.isLocationOpen.set(!state);
+    this.toggleDropdown(event, this.isLocationOpen);
   }
 
   protected toggleRoomsDropdown(event: Event): void {
-    event.stopPropagation();
-    const state = this.isRoomsOpen();
-    this.closeAllDropdowns();
-    this.isRoomsOpen.set(!state);
+    this.toggleDropdown(event, this.isRoomsOpen);
   }
 
   protected selectType(value: string): void {
@@ -117,9 +96,20 @@ export class Hero implements OnInit, OnDestroy {
     this.isRoomsOpen.set(false);
   }
 
+  protected selectTag(tag: string): void {
+    this.activeTag.set(tag);
+  }
+
+  private toggleDropdown(event: Event, target: WritableSignal<boolean>): void {
+    event.stopPropagation();
+    const state = target();
+    this.closeAllDropdowns();
+    target.set(!state);
+  }
+
   private handleTyping(): void {
     const currentWord = this.wordsToType[this.wordIndex];
-    
+
     if (this.isDeleting) {
       this.typedText.set(currentWord.substring(0, this.charIndex - 1));
       this.charIndex--;
@@ -128,21 +118,17 @@ export class Hero implements OnInit, OnDestroy {
       this.charIndex++;
     }
 
-    let typingSpeed = this.isDeleting ? 40 : 80;
+    let typingSpeed = this.isDeleting ? 38 : 70;
 
     if (!this.isDeleting && this.charIndex === currentWord.length) {
-      typingSpeed = 2000;
+      typingSpeed = 1800;
       this.isDeleting = true;
     } else if (this.isDeleting && this.charIndex === 0) {
       this.isDeleting = false;
       this.wordIndex = (this.wordIndex + 1) % this.wordsToType.length;
-      typingSpeed = 500;
+      typingSpeed = 420;
     }
 
     this.typingTimeout = setTimeout(() => this.handleTyping(), typingSpeed);
-  }
-
-  protected selectTag(tag: string): void {
-    this.activeTag.set(tag);
   }
 }
