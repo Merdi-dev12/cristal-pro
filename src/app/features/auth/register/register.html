@@ -1,6 +1,6 @@
-<section class="flex min-h-screen bg-white">
-  <div class="flex w-full flex-col justify-center px-8 py-12 sm:px-12 lg:w-1/2 lg:px-16 xl:px-24">
-    <div class="mx-auto w-full max-w-sm">
+<section class="grid h-screen overflow-hidden bg-white lg:grid-cols-2">
+  <div class="h-screen overflow-y-auto px-8 py-12 sm:px-12 lg:px-16 xl:px-24">
+    <div class="mx-auto flex min-h-full w-full max-w-sm flex-col justify-center">
       <a routerLink="/" class="group mb-10 inline-flex items-center gap-2 text-sm font-medium text-rheo-muted transition-colors hover:text-rheo-dark">
         <svg class="h-4 w-4 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M19 12H5m0 0 6-6m-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -21,9 +21,15 @@
       }
 
       <form class="space-y-5" (ngSubmit)="onRegister()">
-        <div class="relative">
-          <input id="name" type="text" placeholder=" " class="peer w-full rounded-xl border border-[#cfd6cc] bg-transparent px-4 py-3.5 text-sm text-rheo-dark transition-all outline-none hover:border-[#aeb8aa] focus:border-rheo-dark" [class.border-red-500]="error()" [(ngModel)]="name" name="name" />
-          <label for="name" class="pointer-events-none absolute left-3.5 top-1/2 origin-left -translate-y-1/2 bg-white px-1 text-sm text-rheo-muted transition-all duration-200 peer-focus:top-0 peer-focus:text-[11px] peer-focus:font-bold peer-focus:text-rheo-dark peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:text-rheo-dark">Nom complet</label>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="relative">
+            <input id="lastName" type="text" placeholder=" " class="peer w-full rounded-xl border border-[#cfd6cc] bg-transparent px-4 py-3.5 text-sm text-rheo-dark transition-all outline-none hover:border-[#aeb8aa] focus:border-rheo-dark" [class.border-red-500]="error()" [(ngModel)]="lastName" name="lastName" />
+            <label for="lastName" class="pointer-events-none absolute left-3.5 top-1/2 origin-left -translate-y-1/2 bg-white px-1 text-sm text-rheo-muted transition-all duration-200 peer-focus:top-0 peer-focus:text-[11px] peer-focus:font-bold peer-focus:text-rheo-dark peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:text-rheo-dark">Nom</label>
+          </div>
+          <div class="relative">
+            <input id="firstName" type="text" placeholder=" " class="peer w-full rounded-xl border border-[#cfd6cc] bg-transparent px-4 py-3.5 text-sm text-rheo-dark transition-all outline-none hover:border-[#aeb8aa] focus:border-rheo-dark" [class.border-red-500]="error()" [(ngModel)]="firstName" name="firstName" />
+            <label for="firstName" class="pointer-events-none absolute left-3.5 top-1/2 origin-left -translate-y-1/2 bg-white px-1 text-sm text-rheo-muted transition-all duration-200 peer-focus:top-0 peer-focus:text-[11px] peer-focus:font-bold peer-focus:text-rheo-dark peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:text-rheo-dark">Prénom</label>
+          </div>
         </div>
 
         <div class="relative">
@@ -80,7 +86,7 @@
     </div>
   </div>
 
-  <div class="relative hidden overflow-hidden bg-black lg:block lg:w-1/2">
+  <div class="relative hidden h-screen overflow-hidden bg-black lg:block">
     <img src="/assets/hero_img.png" alt="" class="absolute inset-0 h-full w-full scale-105 object-cover opacity-90" />
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(197,232,74,0.22),transparent_28%),linear-gradient(135deg,rgba(0,0,0,0.62),rgba(0,0,0,0.05)_48%,rgba(0,0,0,0.38))]"></div>
     <div class="absolute left-10 top-10 rounded-full border border-white/15 bg-white/10 px-5 py-2 text-sm font-semibold text-white backdrop-blur-md">RHEODYCE</div>

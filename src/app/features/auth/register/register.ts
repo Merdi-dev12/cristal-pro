@@ -13,7 +13,8 @@ import { AuthService } from '../../../core/services/auth.service';
 export class RegisterPage {
   private readonly auth = inject(AuthService);
 
-  name = '';
+  firstName = '';
+  lastName = '';
   email = '';
   password = '';
   passwordConfirm = '';
@@ -26,7 +27,7 @@ export class RegisterPage {
   }
 
   protected onRegister(): void {
-    if (!this.name.trim() || !this.email.trim() || !this.password.trim() || !this.passwordConfirm.trim()) {
+    if (!this.firstName.trim() || !this.lastName.trim() || !this.email.trim() || !this.password.trim() || !this.passwordConfirm.trim()) {
       this.error.set('Veuillez remplir tous les champs.');
       return;
     }

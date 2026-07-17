@@ -11,15 +11,17 @@ import { Component } from '@angular/core';
         <div class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <div>
             <p class="text-sm font-semibold uppercase tracking-[0.22em] text-rheo-muted">Contact</p>
-            <h1 class="mt-3 text-5xl font-semibold tracking-tight text-rheo-dark">Parlez-nous de votre projet immobilier.</h1>
-            <p class="mt-5 text-sm leading-7 text-rheo-muted">
-              Formulaire fake pour l’instant. On garde une structure propre pour brancher l’API ensuite :
-              identité, besoin, ville, canal de contact.
+            <h1 class="mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-rheo-dark sm:text-5xl">
+              Parlez-nous de votre projet immobilier.
+            </h1>
+            <p class="mt-5 max-w-xl text-sm leading-7 text-rheo-muted">
+              Partagez votre besoin, votre ville et le meilleur canal pour vous joindre. La structure du
+              formulaire est prête pour la connexion à l’API.
             </p>
 
-            <div class="mt-8 rounded-[28px] bg-black p-7 text-white">
+            <div class="mt-8 rounded-[28px] bg-[#111711] p-7 text-white">
               <p class="text-sm font-semibold uppercase tracking-[0.18em] text-white/55">Coordonnées</p>
-              <div class="mt-5 space-y-3 text-sm text-white/78">
+              <div class="mt-5 space-y-3 text-sm text-white">
                 <p>Kinshasa, République démocratique du Congo</p>
                 <p>+243 000 000 000</p>
                 <p>contact&#64;rheodyce.com</p>
@@ -27,7 +29,7 @@ import { Component } from '@angular/core';
             </div>
           </div>
 
-          <form class="rounded-[30px] border border-rheo-border bg-white p-6 shadow-[0_18px_70px_rgba(14,20,16,0.08)] sm:p-8">
+          <form class="rounded-[30px] border border-rheo-border bg-white p-6 sm:p-8">
             <div class="grid gap-5 sm:grid-cols-2">
               <div class="grid gap-2">
                 <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Nom</label>
@@ -57,7 +59,7 @@ import { Component } from '@angular/core';
               <textarea rows="6" class="rounded-2xl border border-rheo-border bg-white px-4 py-3 text-sm outline-none transition focus:border-rheo-accent focus:ring-4 focus:ring-rheo-accent/20" placeholder="Décrivez votre demande..."></textarea>
             </div>
 
-            <button type="button" class="mt-6 h-12 w-full rounded-full bg-rheo-accent px-6 text-sm font-semibold text-rheo-dark transition hover:bg-rheo-accent-hover">
+            <button type="button" class="mt-6 h-12 w-full rounded-[18px] bg-rheo-accent px-6 text-sm font-semibold text-rheo-dark transition hover:bg-rheo-accent-hover">
               Envoyer la demande
             </button>
           </form>

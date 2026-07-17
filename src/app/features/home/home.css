@@ -1,0 +1,84 @@
+.services-scroll {
+  height: 340vh;
+  position: relative;
+  view-timeline-name: --services-scroll;
+  view-timeline-axis: block;
+}
+
+.services-sticky {
+  height: 100vh;
+  overflow: hidden;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.services-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.services-track {
+  display: flex;
+  gap: 28px;
+  padding-left: max(1rem, calc((100vw - 80rem) / 2 + 1rem));
+  padding-right: max(1rem, calc((100vw - 80rem) / 2 + 1rem));
+  width: max-content;
+  animation: services-pan linear both;
+  animation-timeline: --services-scroll;
+  animation-range: entry 8% exit 88%;
+}
+
+.service-card {
+  position: relative;
+  overflow: hidden;
+  width: min(78vw, 568px);
+  height: min(46vh, 320px);
+  border-radius: 22px;
+  background: #111711;
+  padding: clamp(20px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.service-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  height: 4px;
+  background: var(--color-rheo-accent);
+}
+
+@keyframes services-pan {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% + 100vw));
+  }
+}
+
+@supports not (animation-timeline: --services-scroll) {
+  .services-scroll {
+    height: auto;
+    padding: 5rem 0;
+  }
+
+  .services-sticky {
+    height: auto;
+    position: relative;
+  }
+
+  .services-viewport {
+    overflow-x: auto;
+  }
+
+  .services-track {
+    animation: none;
+  }
+}

@@ -13,6 +13,7 @@ import { Hero } from './components/hero/hero';
   standalone: true,
   imports: [CommonModule, RouterLink, Hero, PropertyCard, SubscriberModal],
   templateUrl: './home.html',
+  styleUrl: './home.css',
 })
 export class Home {
   private readonly auth = inject(AuthService);
@@ -20,7 +21,19 @@ export class Home {
 
   readonly showSubscriberModal = signal(false);
   readonly isSubscriber = computed(() => this.auth.isSubscriber());
-  protected readonly featuredProperties = computed(() => this.data.featuredProperties);
+  protected readonly homeProperties = computed<Property[]>(() =>
+    Array.from({ length: 16 }, (_, index) => {
+      const property = this.data.properties[index % this.data.properties.length];
+      return {
+        ...property,
+        id: `${property.id}-home-${index + 1}`,
+      };
+    }),
+  );
+
+  protected serviceImage(index: number): string {
+    return index % 2 === 0 ? '/assets/hero_img.png' : '/assets/hero_img_1.jpg';
+  }
 
   protected onViewDetails(_property: Property): void {
     if (this.isSubscriber()) {
