@@ -20,44 +20,44 @@ import { Component } from '@angular/core';
             </p>
 
             <div class="mt-8 grid gap-4">
-              <article class="grid min-h-[96px] grid-cols-[48px_1fr] items-center gap-4 rounded-r-[20px] rounded-l-[8px] border border-[#d7e0ed] border-l-[4px] border-l-[#071d49] bg-white px-4 py-4 sm:grid-cols-[58px_1fr] sm:px-5">
-                <div class="flex h-11 w-11 items-center justify-center self-center rounded-full bg-[#eff4ff] text-[#071d49]">
-                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <article class="grid min-h-[78px] grid-cols-[42px_1fr] items-center gap-3 rounded-r-[18px] rounded-l-[8px] border border-[#d7e0ed] border-l-[4px] border-l-[#071d49] bg-white px-4 py-3 sm:grid-cols-[48px_1fr]">
+                <div class="flex h-10 w-10 items-center justify-center self-center rounded-full bg-[#eff4ff] text-[#071d49]">
+                  <svg class="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M12 21s7-5.3 7-12a7 7 0 1 0-14 0c0 6.7 7 12 7 12Z" stroke="currentColor" stroke-width="1.8" />
                     <path d="M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="1.8" />
                   </svg>
                 </div>
                 <div class="min-w-0">
                   <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#8b98ad]">Adresse</p>
-                  <p class="mt-1 text-base font-semibold leading-snug text-[#071d49]">Kinshasa, République démocratique du Congo</p>
-                  <p class="mt-1 text-sm text-[#7c89a3]">Bureau principal RHEODYCE</p>
+                  <p class="mt-0.5 text-[15px] font-semibold leading-snug text-[#071d49]">Kinshasa, République démocratique du Congo</p>
+                  <p class="mt-0.5 text-xs text-[#7c89a3]">Bureau principal RHEODYCE</p>
                 </div>
               </article>
 
-              <article class="grid min-h-[96px] grid-cols-[48px_1fr] items-center gap-4 rounded-r-[20px] rounded-l-[8px] border border-[#d7e0ed] border-l-[4px] border-l-[#071d49] bg-white px-4 py-4 sm:grid-cols-[58px_1fr] sm:px-5">
-                <div class="flex h-11 w-11 items-center justify-center self-center rounded-full bg-[#eff4ff] text-[#071d49]">
-                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <article class="grid min-h-[78px] grid-cols-[42px_1fr] items-center gap-3 rounded-r-[18px] rounded-l-[8px] border border-[#d7e0ed] border-l-[4px] border-l-[#071d49] bg-white px-4 py-3 sm:grid-cols-[48px_1fr]">
+                <div class="flex h-10 w-10 items-center justify-center self-center rounded-full bg-[#eff4ff] text-[#071d49]">
+                  <svg class="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M7 4h3l1.5 4-2 1.2a11 11 0 0 0 5.3 5.3l1.2-2L20 14v3a3 3 0 0 1-3 3A13 13 0 0 1 4 7a3 3 0 0 1 3-3Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
                 <div class="min-w-0">
                   <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#8b98ad]">Téléphone</p>
-                  <p class="mt-1 text-base font-semibold leading-snug text-[#071d49]">+243 000 000 000</p>
-                  <p class="mt-1 text-sm text-[#7c89a3]">Disponible du lundi au samedi</p>
+                  <p class="mt-0.5 text-[15px] font-semibold leading-snug text-[#071d49]">+243 000 000 000</p>
+                  <p class="mt-0.5 text-xs text-[#7c89a3]">Disponible du lundi au samedi</p>
                 </div>
               </article>
 
-              <article class="grid min-h-[96px] grid-cols-[48px_1fr] items-center gap-4 rounded-r-[20px] rounded-l-[8px] border border-[#d7e0ed] border-l-[4px] border-l-[#071d49] bg-white px-4 py-4 sm:grid-cols-[58px_1fr] sm:px-5">
-                <div class="flex h-11 w-11 items-center justify-center self-center rounded-full bg-[#eff4ff] text-[#071d49]">
-                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <article class="grid min-h-[78px] grid-cols-[42px_1fr] items-center gap-3 rounded-r-[18px] rounded-l-[8px] border border-[#d7e0ed] border-l-[4px] border-l-[#071d49] bg-white px-4 py-3 sm:grid-cols-[48px_1fr]">
+                <div class="flex h-10 w-10 items-center justify-center self-center rounded-full bg-[#eff4ff] text-[#071d49]">
+                  <svg class="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
                     <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
                 <div class="min-w-0">
                   <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#8b98ad]">Email</p>
-                  <p class="mt-1 break-words text-base font-semibold leading-snug text-[#071d49]">contact&#64;rheodyce.com</p>
-                  <p class="mt-1 text-sm text-[#7c89a3]">Réponse sous 24h ouvrées</p>
+                  <p class="mt-0.5 break-words text-[15px] font-semibold leading-snug text-[#071d49]">contact&#64;rheodyce.com</p>
+                  <p class="mt-0.5 text-xs text-[#7c89a3]">Réponse sous 24h ouvrées</p>
                 </div>
               </article>
             </div>

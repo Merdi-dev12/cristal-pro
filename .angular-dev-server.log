@@ -254,3 +254,15 @@ styles.css          | styles        |  72.61 kB |
 Application bundle generation complete. [2.594 seconds] - 2026-07-17T17:22:29.905Z
 
 Page reload sent to client(s).
+> Changes detected. Rebuilding...
+√ Changes detected. Rebuilding...
+Initial chunk files | Names         |  Raw size
+main.js             | main          | 252.59 kB | 
+styles.css          | styles        |  73.11 kB | 
+
+                    | Initial total | 325.69 kB
+
+Application bundle generation complete. [7.244 seconds] - 2026-07-17T17:41:48.653Z
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
