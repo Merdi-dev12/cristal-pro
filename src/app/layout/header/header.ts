@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { Scroll } from '../../core/services/scroll';
@@ -24,6 +24,23 @@ export class Header {
   protected readonly isAdmin = this.auth.isAdmin;
   protected readonly isHome = signal(this.isHomeUrl(this.router.url));
   protected readonly isMenuOpen = signal(false);
+  protected readonly isProfileMenuOpen = signal(false);
+  protected readonly profileImageUrl = computed(() => {
+    const metadata = this.auth.session()?.user.user_metadata;
+    const avatarUrl = metadata?.['avatar_url'] ?? metadata?.['picture'];
+    return typeof avatarUrl === 'string' ? avatarUrl : '';
+  });
+  protected readonly userInitials = computed(() => {
+    const name = this.auth.session()?.user.user_metadata?.['full_name'];
+    const email = this.auth.userEmail();
+    const label = typeof name === 'string' && name.trim() ? name : email;
+    return label
+      .split(/[\s@._-]+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('') || 'U';
+  });
 
   protected readonly navLinks = signal<NavLink[]>([
     { path: '/', label: 'Accueil' },
@@ -39,10 +56,12 @@ export class Header {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
       this.isHome.set(this.isHomeUrl(event.urlAfterRedirects));
       this.isMenuOpen.set(false);
+      this.isProfileMenuOpen.set(false);
     });
   }
 
   protected toggleMenu(): void {
+    this.isProfileMenuOpen.set(false);
     this.isMenuOpen.update((isOpen) => !isOpen);
   }
 
@@ -50,7 +69,14 @@ export class Header {
     this.isMenuOpen.set(false);
   }
 
+  protected toggleProfileMenu(): void {
+    this.isMenuOpen.set(false);
+    this.isProfileMenuOpen.update((isOpen) => !isOpen);
+  }
+
   protected async signOut(): Promise<void> {
+    this.isProfileMenuOpen.set(false);
+    this.isMenuOpen.set(false);
     await this.auth.signOut();
     await this.router.navigateByUrl('/connexion');
   }

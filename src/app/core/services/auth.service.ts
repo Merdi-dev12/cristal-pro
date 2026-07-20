@@ -78,18 +78,21 @@ export class AuthService {
   }
 
   private setSession(session: Session | null): void {
+    const previousUserId = this.session()?.user.id;
+    const nextUserId = session?.user.id;
     this.session.set(session);
-    if (!session) this.profile.set(null);
+    if (!session || previousUserId !== nextUserId) this.profile.set(null);
   }
 
   private async loadProfile(userId: string): Promise<void> {
+    this.profile.set(null);
     const { data } = await this.supabase
       .from('profiles')
       .select('role, is_subscriber')
       .eq('id', userId)
       .maybeSingle();
 
-    if (!data) return;
+    if (!data || this.session()?.user.id !== userId) return;
     this.profile.set(data as AuthProfile);
   }
 }

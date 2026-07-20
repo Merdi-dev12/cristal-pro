@@ -79,6 +79,16 @@ interface AdminNavItem {
             <div class="flex items-center gap-3"><span class="hidden rounded-full border border-[#dfe3dc] bg-white px-4 py-2 text-xs text-rheo-muted sm:inline-flex">Données sécurisées</span><span class="flex size-10 items-center justify-center rounded-full bg-rheo-accent text-sm font-bold">ER</span></div>
           </header>
           <div class="px-4 py-7 sm:px-8 sm:py-9 lg:px-10"><router-outlet></router-outlet></div>
+          @if (admin.loadError()) {
+            <div class="mx-4 mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 sm:mx-8 lg:mx-10">
+              <p class="font-semibold">Les données admin n’ont pas pu être chargées.</p>
+              <p class="mt-1 break-words">{{ admin.loadError() }}</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <button type="button" class="rounded-lg bg-red-800 px-3 py-2 text-xs font-semibold text-white" (click)="reload()">Réessayer</button>
+                <button type="button" class="rounded-lg border border-red-300 px-3 py-2 text-xs font-semibold" (click)="signOut()">Se déconnecter</button>
+              </div>
+            </div>
+          }
         </main>
       </div>
     </div>
@@ -109,5 +119,9 @@ export class AdminLayoutPage {
   protected async signOut(): Promise<void> {
     await this.auth.signOut();
     await this.router.navigateByUrl('/connexion');
+  }
+
+  protected async reload(): Promise<void> {
+    await this.admin.load();
   }
 }

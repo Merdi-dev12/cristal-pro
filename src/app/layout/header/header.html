@@ -48,13 +48,37 @@
         >
           Mes demandes
         </a>
-        <button
-          type="button"
-          class="hidden rounded-full border border-white/15 bg-transparent px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:border-white/30 hover:bg-white/10 active:scale-95 sm:inline-flex"
-          (click)="signOut()"
-        >
-          Se déconnecter
-        </button>
+        <div class="relative">
+          <button
+            type="button"
+            class="flex size-11 items-center justify-center overflow-hidden rounded-full border-2 border-white/40 bg-white/15 text-sm font-semibold text-white transition-all hover:border-white hover:bg-white/25 active:scale-95"
+            [attr.aria-expanded]="isProfileMenuOpen()"
+            aria-controls="profile-menu"
+            [attr.aria-label]="isProfileMenuOpen() ? 'Fermer le menu du profil' : 'Ouvrir le menu du profil'"
+            (click)="toggleProfileMenu()"
+          >
+            @if (profileImageUrl()) {
+              <img [src]="profileImageUrl()" alt="Photo de profil" class="size-full object-cover" />
+            } @else {
+              <span>{{ userInitials() }}</span>
+            }
+          </button>
+
+          @if (isProfileMenuOpen()) {
+            <div
+              id="profile-menu"
+              class="absolute right-0 top-full mt-3 min-w-48 rounded-2xl border border-white/10 bg-black/90 p-2 shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-md"
+            >
+              <button
+                type="button"
+                class="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                (click)="signOut()"
+              >
+                Se déconnecter
+              </button>
+            </div>
+          }
+        </div>
       } @else {
         <a
           routerLink="/connexion"
@@ -130,15 +154,6 @@
               >
                 Mes demandes
               </a>
-            </li>
-            <li>
-              <button
-                type="button"
-                class="block w-full rounded-2xl px-4 py-3 text-left text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-                (click)="signOut()"
-              >
-                Se déconnecter
-              </button>
             </li>
           } @else {
             <li>
