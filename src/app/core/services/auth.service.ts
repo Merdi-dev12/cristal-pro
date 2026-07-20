@@ -40,14 +40,41 @@ export class AuthService {
     this.setSession(data.session);
   }
 
-  async signUp(email: string, password: string, firstName: string, lastName: string): Promise<void> {
+  /**
+   * Retourne `needsConfirmation: true` quand Supabase Auth exige une confirmation par email
+   * avant d'ouvrir une session (aucune erreur n'est levée dans ce cas, l'inscription a réussi).
+   */
+  async signUp(email: string, password: string, fullName: string): Promise<{ needsConfirmation: boolean }> {
     const { data, error } = await this.supabase.auth.signUp({
-      email: email.trim(),
+      email,
       password,
-      options: { data: { first_name: firstName.trim(), last_name: lastName.trim() } },
+      options: { data: { full_name: fullName } },
     });
-    if (error) throw new Error(error.message || 'Impossible de créer le compte.');
+    if (error) throw error;
+
     if (!data.session) {
+      return { needsConfirmation: true };
+    }
+
+    await this.markProfileSubscriber();
+    return { needsConfirmation: false };
+  }
+
+    private async markProfileSubscriber(): Promise<void> {
+    const { data } = await this.supabase.auth.getUser();
+    const user = data.user;
+    if (!user) return;
+
+    await this.supabase
+      .from('profiles')
+      .update({ is_subscriber: true, subscribed_at: new Date().toISOString() })
+      .eq('id', user.id);
+
+    this.setSubscriber(true);
+  }
+
+    const body = await this.parseResponse(response, 'Impossible de créer le compte.');
+    if (!body['access_token']) {
       throw new Error('Compte créé. Vérifiez votre adresse email avant de vous connecter.');
     }
     this.setSession(data.session);

@@ -19,6 +19,11 @@
           {{ error() }}
         </div>
       }
+      @if (info()) {
+        <div class="mb-5 rounded-xl border border-rheo-accent/40 bg-rheo-accent/15 px-4 py-3 text-sm text-rheo-dark">
+          {{ info() }}
+        </div>
+      }
 
       <form class="space-y-5" (ngSubmit)="onRegister()">
         <div class="grid grid-cols-2 gap-3">

@@ -38,8 +38,13 @@ export class LoginPage {
       await this.auth.signIn(this.email, this.password);
       const redirect = this.route.snapshot.queryParamMap.get('redirect') || '/';
       await this.router.navigateByUrl(redirect.startsWith('/') ? redirect : '/');
-    } catch (error) {
-      this.error.set(error instanceof Error ? error.message : 'Connexion impossible.');
+    } catch (error) (err) {
+      const message = err instanceof Error ? err.message.toLowerCase() : '';
+      this.error.set(
+        message.includes('email not confirmed')
+          ? 'Confirmez votre adresse email (lien envoyé lors de votre inscription) avant de vous connecter.'
+          : error instanceof Error ? error.message : 'Connexion impossible.',
+      );
     } finally {
       this.loading.set(false);
     }
