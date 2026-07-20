@@ -49,4 +49,12 @@ export class LoginPage {
       this.loading.set(false);
     }
   }
+
+  protected async onGoogleSignIn(): Promise<void> {
+    try {
+      await this.auth.signInWithGoogle();
+    } catch {
+      this.error.set('Connexion Google impossible. Réessayez.');
+    }
+  }
 }
