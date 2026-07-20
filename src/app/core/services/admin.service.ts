@@ -11,6 +11,7 @@ import { RequestStatus, ServiceType } from '../../shared/models/service-request.
 export class AdminService {
   private readonly supabase = inject(SupabaseClientService).client;
   private hasLoaded = false;
+  private loadedForUserId: string | null = null;
 
   readonly users = signal<AdminUser[]>([]);
   readonly properties = signal<AdminProperty[]>([]);
@@ -18,6 +19,7 @@ export class AdminService {
   readonly serviceRequests = signal<AdminServiceRequestView[]>([]);
   readonly submissions = signal<PropertySubmission[]>([]);
   readonly isLoading = signal(false);
+  readonly loadError = signal('');
   readonly actionMessage = signal('');
   readonly stats = computed<AdminDashboardStats>(() => ({
     properties: this.properties().length, users: this.users().length,
@@ -31,7 +33,12 @@ export class AdminService {
   readonly recentServiceRequests = computed(() => this.serviceRequests().slice(0, 4));
 
   async load(): Promise<void> {
-    if (this.hasLoaded) return;
+    const userId = (await this.supabase.auth.getUser()).data.user?.id ?? null;
+    if (!userId) return;
+    if (this.hasLoaded && this.loadedForUserId === userId) return;
+    this.hasLoaded = false;
+    this.loadedForUserId = null;
+    this.loadError.set('');
     this.isLoading.set(true);
     try {
       const [profileRows, propertyRows, serviceRows, visitRows, submissionRows, privateRows] = await Promise.all([
@@ -44,8 +51,16 @@ export class AdminService {
       this.serviceRequests.set(serviceRows.map(mapServiceRequest));
       this.visits.set(visitRows.map((row) => mapVisit(row, this.users(), this.properties())));
       this.submissions.set(submissionRows.map(mapSubmission));
+      this.loadedForUserId = userId;
+    } catch (error) {
+      this.users.set([]);
+      this.properties.set([]);
+      this.serviceRequests.set([]);
+      this.visits.set([]);
+      this.submissions.set([]);
+      this.loadError.set(error instanceof Error ? error.message : 'Impossible de charger les données administratives.');
     } finally {
-      this.hasLoaded = true;
+      this.hasLoaded = this.loadedForUserId === userId;
       this.isLoading.set(false);
     }
   }
