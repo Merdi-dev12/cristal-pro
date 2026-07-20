@@ -18,12 +18,12 @@ interface SupabaseSession {
 
 @Service()
 export class AuthService {
-  private readonly SESSION_KEY = 'rheodyce:supabase-session';
   private readonly KEY = 'rheodyce:isSubscriber';
   private readonly supabase = inject(SupabaseClientService).client;
 
-  readonly session = signal<SupabaseSession | null>(this.readSession());
+  readonly session = signal<Session | null>(null);
   readonly isAuthenticated = computed(() => Boolean(this.session()?.access_token));
+  readonly hasSession = this.isAuthenticated;
   readonly hasSession = this.isAuthenticated;
   readonly isAdmin = computed(() => this.session()?.user.app_metadata?.['role'] === 'admin');
   readonly isSubscriber = signal<boolean>(Boolean(this.session()?.access_token) || this.read());
@@ -103,7 +103,7 @@ export class AuthService {
       .eq('id', userId);
   }
 
-  private read(): boolean {
+  private readLegacySubscriber(): boolean {
     try {
       return localStorage.getItem(this.KEY) === '1';
     } catch {

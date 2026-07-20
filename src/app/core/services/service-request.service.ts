@@ -24,7 +24,7 @@ export class ServiceRequestService {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      this.requests.set((data ?? []).map((row) => this.mapFromRow(row)));
+      this.requests.set((data ?? []).map((row: Record<string, unknown>) => this.mapFromRow(row)));
     } catch {
       this.error.set('Impossible de charger vos demandes pour le moment.');
     } finally {
@@ -43,7 +43,7 @@ export class ServiceRequestService {
       .maybeSingle();
 
     if (error || !data) return null;
-    return this.mapFromRow(data);
+    return this.mapFromRow(data as Record<string, unknown>);
   }
 
   canCancel(request: ServiceRequest): boolean {

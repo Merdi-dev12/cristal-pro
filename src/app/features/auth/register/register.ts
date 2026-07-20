@@ -9,6 +9,7 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './register.html',
+  templateUrl: './register.html',
 })
 export class RegisterPage {
   private readonly auth = inject(AuthService);

@@ -18,6 +18,7 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
       }),
     ),
+    provideAppInitializer(() => inject(AuthService).init()),
     provideAppInitializer(() => inject(RheodyceDataService).load()),
     AuthService,
     HeaderStateService,
