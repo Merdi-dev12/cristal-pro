@@ -1,39 +1,22 @@
-import { Service, computed, signal } from '@angular/core';
-import { SUPABASE_CONFIG } from '../config/supabase.config';
-
-interface SupabaseUser {
-  id: string;
-  email?: string;
-  user_metadata?: Record<string, unknown>;
-  app_metadata?: Record<string, unknown>;
-}
-
-interface SupabaseSession {
-  access_token: string;
-  refresh_token?: string;
-  expires_at?: number;
-  user: SupabaseUser;
-}
+import { Service, computed, inject, signal } from '@angular/core';
+import type { Session } from '@supabase/supabase-js';
+import { SupabaseClientService } from './supabase-client';
 
 @Service()
 export class AuthService {
-  private readonly SESSION_KEY = 'rheodyce:supabase-session';
   private readonly KEY = 'rheodyce:isSubscriber';
   private readonly supabase = inject(SupabaseClientService).client;
 
-  readonly session = signal<SupabaseSession | null>(this.readSession());
+  readonly session = signal<Session | null>(null);
   readonly isAuthenticated = computed(() => Boolean(this.session()?.access_token));
+  readonly hasSession = this.isAuthenticated;
   readonly isAdmin = computed(() => this.session()?.user.app_metadata?.['role'] === 'admin');
-  readonly isSubscriber = signal<boolean>(Boolean(this.session()?.access_token) || this.read());
+  readonly isSubscriber = signal<boolean>(this.readLegacySubscriber());
 
-  constructor() {
-    this.supabase.auth.getSession().then(({ data }) => {
-      this.hasSession.set(!!data.session);
-    });
-
-    this.supabase.auth.onAuthStateChange((_event, session) => {
-      this.hasSession.set(!!session);
-    });
+  async init(): Promise<void> {
+    const { data } = await this.supabase.auth.getSession();
+    this.setSession(data.session);
+    this.supabase.auth.onAuthStateChange((_event, session) => this.setSession(session));
   }
 
   setSubscriber(value: boolean): void {
@@ -50,54 +33,33 @@ export class AuthService {
   }
 
   async signIn(email: string, password: string): Promise<void> {
-    const response = await fetch(`${SUPABASE_CONFIG.url}/auth/v1/token?grant_type=password`, {
-      method: 'POST',
-      headers: this.authHeaders(),
-      body: JSON.stringify({ email: email.trim(), password }),
-    });
-    await this.saveResponse(response, 'Identifiants invalides ou compte non confirmé.');
+    const { data, error } = await this.supabase.auth.signInWithPassword({ email: email.trim(), password });
+    if (error || !data.session) {
+      throw new Error(error?.message || 'Identifiants invalides ou compte non confirmé.');
+    }
+    this.setSession(data.session);
   }
 
   async signUp(email: string, password: string, firstName: string, lastName: string): Promise<void> {
-    const response = await fetch(`${SUPABASE_CONFIG.url}/auth/v1/signup`, {
-      method: 'POST',
-      headers: this.authHeaders(),
-      body: JSON.stringify({
-        email: email.trim(),
-        password,
-        data: { first_name: firstName.trim(), last_name: lastName.trim() },
-      }),
+    const { data, error } = await this.supabase.auth.signUp({
+      email: email.trim(),
+      password,
+      options: { data: { first_name: firstName.trim(), last_name: lastName.trim() } },
     });
-
-    private async markProfileSubscriber(): Promise<void> {
-    const { data } = await this.supabase.auth.getUser();
-    const user = data.user;
-    if (!user) return;
-
-    await this.supabase
-      .from('profiles')
-      .update({ is_subscriber: true, subscribed_at: new Date().toISOString() })
-      .eq('id', user.id);
-
-    this.setSubscriber(true);
-  }
-
-    const body = await this.parseResponse(response, 'Impossible de créer le compte.');
-    if (!body['access_token']) {
+    if (error) throw new Error(error.message || 'Impossible de créer le compte.');
+    if (!data.session) {
       throw new Error('Compte créé. Vérifiez votre adresse email avant de vous connecter.');
     }
-
-    this.storeSession(body as unknown as SupabaseSession);
+    this.setSession(data.session);
   }
 
-  signOut(): void {
-    localStorage.removeItem(this.SESSION_KEY);
+  async signOut(): Promise<void> {
+    await this.supabase.auth.signOut();
     localStorage.removeItem(this.KEY);
-    this.session.set(null);
-    this.isSubscriber.set(false);
+    this.setSession(null);
   }
 
-  private read(): boolean {
+  private readLegacySubscriber(): boolean {
     try {
       return localStorage.getItem(this.KEY) === '1';
     } catch {
@@ -105,41 +67,8 @@ export class AuthService {
     }
   }
 
-  private readSession(): SupabaseSession | null {
-    try {
-      const raw = localStorage.getItem(this.SESSION_KEY);
-      return raw ? (JSON.parse(raw) as SupabaseSession) : null;
-    } catch {
-      return null;
-    }
-  }
-
-  private authHeaders(): HeadersInit {
-    return {
-      apikey: SUPABASE_CONFIG.publishableKey,
-      'Content-Type': 'application/json',
-    };
-  }
-
-  private async saveResponse(response: Response, fallback: string): Promise<void> {
-    const body = await this.parseResponse(response, fallback);
-    if (!body['access_token']) {
-      throw new Error(fallback);
-    }
-    this.storeSession(body as unknown as SupabaseSession);
-  }
-
-  private async parseResponse(response: Response, fallback: string): Promise<Record<string, unknown>> {
-    const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
-    if (!response.ok) {
-      throw new Error(typeof body['msg'] === 'string' ? body['msg'] : typeof body['error_description'] === 'string' ? body['error_description'] : fallback);
-    }
-    return body;
-  }
-
-  private storeSession(session: SupabaseSession): void {
-    localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
+  private setSession(session: Session | null): void {
     this.session.set(session);
-    this.setSubscriber(true);
+    this.isSubscriber.set(Boolean(session));
   }
 }

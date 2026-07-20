@@ -8,7 +8,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-register',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: "./register.html",
+  templateUrl: './register.html',
 })
 export class RegisterPage {
   private readonly auth = inject(AuthService);
@@ -28,8 +28,13 @@ export class RegisterPage {
   }
 
   protected async onRegister(): Promise<void> {
-  protected async onRegister(): Promise<void> {
-    if (!this.firstName.trim() || !this.lastName.trim() || !this.email.trim() || !this.password.trim() || !this.passwordConfirm.trim()) {
+    if (
+      !this.firstName.trim() ||
+      !this.lastName.trim() ||
+      !this.email.trim() ||
+      !this.password.trim() ||
+      !this.passwordConfirm.trim()
+    ) {
       this.error.set('Veuillez remplir tous les champs.');
       return;
     }
@@ -49,7 +54,6 @@ export class RegisterPage {
       this.error.set(error instanceof Error ? error.message : 'Inscription impossible.');
     } finally {
       this.loading.set(false);
-    }
     }
   }
 }

@@ -34,22 +34,22 @@ export class RheodyceDataService {
     if (error || !data) return;
 
     this.properties.push(
-      ...data.map((row): Property => ({
-        id: row['id'],
-        title: row['title'],
+      ...data.map((row: Record<string, unknown>): Property => ({
+        id: String(row['id'] ?? ''),
+        title: String(row['title'] ?? ''),
         price: Number(row['price']),
-        priceSuffix: row['price_suffix'] ?? undefined,
-        location: row['location'],
-        address: row['address'],
-        bedrooms: row['bedrooms'],
-        bathrooms: row['bathrooms'],
+        priceSuffix: row['price_suffix'] == null ? undefined : String(row['price_suffix']),
+        location: String(row['location'] ?? ''),
+        address: String(row['address'] ?? ''),
+        bedrooms: Number(row['bedrooms'] ?? 0),
+        bathrooms: Number(row['bathrooms'] ?? 0),
         surface: Number(row['surface']),
-        type: row['type'],
-        category: row['category'],
-        imageUrl: row['image_url'],
-        featured: row['featured'] ?? undefined,
-        verified: row['verified'] ?? undefined,
-        description: row['description'],
+        type: row['type'] as Property['type'],
+        category: row['category'] as Property['category'],
+        imageUrl: String(row['image_url'] ?? ''),
+        featured: Boolean(row['featured']),
+        verified: Boolean(row['verified']),
+        description: String(row['description'] ?? ''),
       })),
     );
   }
@@ -61,7 +61,7 @@ export class RheodyceDataService {
       .order('display_order', { ascending: true });
 
     if (error || !data) return;
-    this.stats.push(...data.map((row): StatItem => ({ value: row['value'], label: row['label'] })));
+    this.stats.push(...data.map((row: Record<string, unknown>): StatItem => ({ value: String(row['value'] ?? ''), label: String(row['label'] ?? '') })));
   }
 
   private async loadServices(): Promise<void> {
@@ -70,17 +70,27 @@ export class RheodyceDataService {
       .select('slug, title, eyebrow, description, icon, cta')
       .order('display_order', { ascending: true });
 
-    if (error || !data) return;
-    this.services.push(
-      ...data.map((row): ServiceOffer => ({
-        id: row['slug'],
-        title: row['title'],
-        eyebrow: row['eyebrow'],
-        description: row['description'],
-        icon: row['icon'],
-        cta: row['cta'],
-      })),
-    );
+    const offers = data?.map((row: Record<string, unknown>): ServiceOffer => ({
+        id: String(row['slug'] ?? ''),
+        title: String(row['title'] ?? ''),
+        eyebrow: String(row['eyebrow'] ?? ''),
+        description: String(row['description'] ?? ''),
+        icon: String(row['icon'] ?? ''),
+        cta: String(row['cta'] ?? ''),
+      })) ?? [];
+
+    if (!offers.some((offer) => offer.id === 'demenagement')) {
+      offers.push({
+        id: 'demenagement',
+        title: 'Déménagement',
+        eyebrow: 'Logistique',
+        description: 'Préparez votre transfert avec un itinéraire estimé, le volume à transporter et l’affectation d’un partenaire.',
+        icon: '↗',
+        cta: 'Préparer mon déménagement',
+      });
+    }
+
+    this.services.push(...offers);
   }
 
   private async loadProcess(): Promise<void> {
@@ -91,7 +101,7 @@ export class RheodyceDataService {
 
     if (error || !data) return;
     this.process.push(
-      ...data.map((row): ProcessStep => ({ step: row['step'], title: row['title'], description: row['description'] })),
+      ...data.map((row: Record<string, unknown>): ProcessStep => ({ step: String(row['step'] ?? ''), title: String(row['title'] ?? ''), description: String(row['description'] ?? '') })),
     );
   }
 
@@ -102,7 +112,7 @@ export class RheodyceDataService {
       .order('display_order', { ascending: true });
 
     if (error || !data) return;
-    this.faqs.push(...data.map((row): FaqItem => ({ question: row['question'], answer: row['answer'] })));
+    this.faqs.push(...data.map((row: Record<string, unknown>): FaqItem => ({ question: String(row['question'] ?? ''), answer: String(row['answer'] ?? '') })));
   }
 
   private async loadTestimonials(): Promise<void> {
@@ -113,7 +123,7 @@ export class RheodyceDataService {
 
     if (error || !data) return;
     this.testimonials.push(
-      ...data.map((row): Testimonial => ({ name: row['name'], role: row['role'], quote: row['quote'] })),
+      ...data.map((row: Record<string, unknown>): Testimonial => ({ name: String(row['name'] ?? ''), role: String(row['role'] ?? ''), quote: String(row['quote'] ?? '') })),
     );
   }
 
