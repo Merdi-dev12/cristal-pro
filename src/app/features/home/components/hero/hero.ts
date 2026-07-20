@@ -1,4 +1,7 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, WritableSignal, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, WritableSignal, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { PropertySearchService } from '../../../../core/services/property-search.service';
+import { PropertyCategory } from '../../../../shared/models/property.model';
 
 @Component({
   selector: 'app-hero',
@@ -7,6 +10,9 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, WritableSignal,
   templateUrl: './hero.html',
 })
 export class Hero implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly propertySearch = inject(PropertySearchService);
+
   protected readonly heroTags = ['Maison', 'Appartement', 'Résidentiel'];
   protected readonly filterChips = ['Kinshasa', 'Gombe', 'Ngaliema', 'Limete'];
   protected readonly activeTag = signal(this.heroTags[0]);
@@ -126,11 +132,51 @@ export class Hero implements OnInit, OnDestroy {
     this.activeTag.set(tag);
   }
 
+  protected selectQuickLocation(location: string): void {
+    this.selectedLocation.set(location);
+  }
+
+  protected onSearch(): void {
+    const filters = {
+      ...this.propertySearch.defaultFilters,
+      type: this.selectedType() === 'Location' ? 'location' as const : this.selectedType() === 'Achat / Vente' ? 'vente' as const : 'all' as const,
+      category: this.categoryFromTag(this.activeTag()),
+      location: this.selectedLocation() === 'Kinshasa' ? '' : this.selectedLocation(),
+      budgetMax: this.budgetFromLabel(this.selectedBudget()),
+      bedroomsMin: this.roomsFromLabel(this.selectedRooms()),
+    };
+
+    void this.router.navigate(['/annonces'], {
+      queryParams: this.propertySearch.toQueryParams(filters),
+    });
+  }
+
   private toggleDropdown(event: Event, target: WritableSignal<boolean>): void {
     event.stopPropagation();
     const state = target();
     this.closeAllDropdowns();
     target.set(!state);
+  }
+
+  private categoryFromTag(tag: string): PropertyCategory | 'all' {
+    if (tag === 'Maison') return 'maison';
+    if (tag === 'Appartement') return 'appartement';
+    if (tag === 'Résidentiel' || tag === 'RÃ©sidentiel') return 'residence';
+    return 'all';
+  }
+
+  private budgetFromLabel(label: string): number | null {
+    if (label.includes('2 000') || label.includes('2 000')) return 2000;
+    if (label.includes('800')) return 800;
+    if (label.includes('100 000')) return 100000;
+    return null;
+  }
+
+  private roomsFromLabel(label: string): number | null {
+    if (label.includes('1')) return 1;
+    if (label.includes('3')) return 3;
+    if (label.includes('4')) return 4;
+    return null;
   }
 
   private handleTyping(): void {
