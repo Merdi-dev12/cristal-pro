@@ -50,6 +50,8 @@ export class RheodyceDataService {
         featured: Boolean(row['featured']),
         verified: Boolean(row['verified']),
         description: String(row['description'] ?? ''),
+        latitude: row['latitude'] == null ? undefined : Number(row['latitude']),
+        longitude: row['longitude'] == null ? undefined : Number(row['longitude']),
       })),
     );
   }
