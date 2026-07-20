@@ -8,7 +8,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: "./login.html",
+  templateUrl: './login.html',
 })
 export class LoginPage {
   private readonly auth = inject(AuthService);
@@ -26,7 +26,6 @@ export class LoginPage {
   }
 
   protected async onLogin(): Promise<void> {
-  protected async onLogin(): Promise<void> {
     if (!this.email.trim() || !this.password.trim()) {
       this.error.set('Veuillez remplir tous les champs.');
       return;
@@ -39,16 +38,15 @@ export class LoginPage {
       await this.auth.signIn(this.email, this.password);
       const redirect = this.route.snapshot.queryParamMap.get('redirect') || '/';
       await this.router.navigateByUrl(redirect.startsWith('/') ? redirect : '/');
-    } catch (error) (err) {
+    } catch (err) {
       const message = err instanceof Error ? err.message.toLowerCase() : '';
       this.error.set(
         message.includes('email not confirmed')
           ? 'Confirmez votre adresse email (lien envoyé lors de votre inscription) avant de vous connecter.'
-          : error instanceof Error ? error.message : 'Connexion impossible.',
+          : 'Adresse email ou mot de passe incorrect.',
       );
     } finally {
       this.loading.set(false);
-    }
     }
   }
 }

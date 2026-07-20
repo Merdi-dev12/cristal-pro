@@ -1,5 +1,6 @@
-import { Service, computed, signal } from '@angular/core';
+import { Service, computed, inject, signal } from '@angular/core';
 import { SUPABASE_CONFIG } from '../config/supabase.config';
+import { SupabaseClientService } from './supabase-client';
 
 interface SupabaseUser {
   id: string;
@@ -23,17 +24,15 @@ export class AuthService {
 
   readonly session = signal<SupabaseSession | null>(this.readSession());
   readonly isAuthenticated = computed(() => Boolean(this.session()?.access_token));
+  readonly hasSession = this.isAuthenticated;
   readonly isAdmin = computed(() => this.session()?.user.app_metadata?.['role'] === 'admin');
   readonly isSubscriber = signal<boolean>(Boolean(this.session()?.access_token) || this.read());
 
   constructor() {
-    this.supabase.auth.getSession().then(({ data }) => {
-      this.hasSession.set(!!data.session);
-    });
-
-    this.supabase.auth.onAuthStateChange((_event, session) => {
-      this.hasSession.set(!!session);
-    });
+    const existing = this.session();
+    if (existing) {
+      void this.syncSupabaseClientSession(existing);
+    }
   }
 
   setSubscriber(value: boolean): void {
@@ -55,7 +54,14 @@ export class AuthService {
       headers: this.authHeaders(),
       body: JSON.stringify({ email: email.trim(), password }),
     });
-    await this.saveResponse(response, 'Identifiants invalides ou compte non confirmé.');
+
+    const body = await this.parseResponse(response, 'Identifiants invalides ou compte non confirmé.');
+    if (!body['access_token']) {
+      throw new Error('Identifiants invalides ou compte non confirmé.');
+    }
+
+    await this.storeSession(body as unknown as SupabaseSession);
+    await this.markProfileSubscriber();
   }
 
   /**
@@ -63,47 +69,38 @@ export class AuthService {
    * avant d'ouvrir une session (aucune erreur n'est levée dans ce cas, l'inscription a réussi).
    */
   async signUp(email: string, password: string, fullName: string): Promise<{ needsConfirmation: boolean }> {
-    const { data, error } = await this.supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { full_name: fullName } },
+    const response = await fetch(`${SUPABASE_CONFIG.url}/auth/v1/signup`, {
+      method: 'POST',
+      headers: this.authHeaders(),
+      body: JSON.stringify({ email: email.trim(), password, data: { full_name: fullName } }),
     });
-    if (error) throw error;
 
-    if (!data.session) {
+    const body = await this.parseResponse(response, 'Impossible de créer le compte.');
+    if (!body['access_token']) {
       return { needsConfirmation: true };
     }
 
+    await this.storeSession(body as unknown as SupabaseSession);
     await this.markProfileSubscriber();
     return { needsConfirmation: false };
   }
 
-    private async markProfileSubscriber(): Promise<void> {
-    const { data } = await this.supabase.auth.getUser();
-    const user = data.user;
-    if (!user) return;
-
-    await this.supabase
-      .from('profiles')
-      .update({ is_subscriber: true, subscribed_at: new Date().toISOString() })
-      .eq('id', user.id);
-
-    this.setSubscriber(true);
-  }
-
-    const body = await this.parseResponse(response, 'Impossible de créer le compte.');
-    if (!body['access_token']) {
-      throw new Error('Compte créé. Vérifiez votre adresse email avant de vous connecter.');
-    }
-
-    this.storeSession(body as unknown as SupabaseSession);
-  }
-
-  signOut(): void {
+  async signOut(): Promise<void> {
     localStorage.removeItem(this.SESSION_KEY);
     localStorage.removeItem(this.KEY);
     this.session.set(null);
     this.isSubscriber.set(false);
+    await this.supabase.auth.signOut();
+  }
+
+  private async markProfileSubscriber(): Promise<void> {
+    const userId = this.session()?.user.id;
+    if (!userId) return;
+
+    await this.supabase
+      .from('profiles')
+      .update({ is_subscriber: true, subscribed_at: new Date().toISOString() })
+      .eq('id', userId);
   }
 
   private read(): boolean {
@@ -130,25 +127,37 @@ export class AuthService {
     };
   }
 
-  private async saveResponse(response: Response, fallback: string): Promise<void> {
-    const body = await this.parseResponse(response, fallback);
-    if (!body['access_token']) {
-      throw new Error(fallback);
-    }
-    this.storeSession(body as unknown as SupabaseSession);
-  }
-
   private async parseResponse(response: Response, fallback: string): Promise<Record<string, unknown>> {
     const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
     if (!response.ok) {
-      throw new Error(typeof body['msg'] === 'string' ? body['msg'] : typeof body['error_description'] === 'string' ? body['error_description'] : fallback);
+      throw new Error(
+        typeof body['msg'] === 'string'
+          ? body['msg']
+          : typeof body['error_description'] === 'string'
+            ? body['error_description']
+            : fallback,
+      );
     }
     return body;
   }
 
-  private storeSession(session: SupabaseSession): void {
+  private async storeSession(session: SupabaseSession): Promise<void> {
     localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
     this.session.set(session);
     this.setSubscriber(true);
+    await this.syncSupabaseClientSession(session);
+  }
+
+  /**
+   * Garde le client supabase-js (utilisé par RheodyceDataService/ServiceRequestService pour
+   * les requêtes RLS) synchronisé avec la session obtenue via l'API Auth brute ci-dessus.
+   * Sans cela, ces requêtes partiraient en tant qu'utilisateur anonyme malgré la connexion.
+   */
+  private async syncSupabaseClientSession(session: SupabaseSession): Promise<void> {
+    if (!session.refresh_token) return;
+    await this.supabase.auth.setSession({
+      access_token: session.access_token,
+      refresh_token: session.refresh_token,
+    });
   }
 }
