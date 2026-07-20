@@ -35,18 +35,27 @@
     </nav>
 
     <div class="flex items-center gap-3">
-      <a
-        routerLink="/connexion"
-        class="hidden rounded-full border border-white/15 bg-transparent px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:border-white/30 hover:bg-white/10 active:scale-95 sm:inline-flex"
-      >
-        Se connecter
-      </a>
-      <a
-        routerLink="/inscription"
-        class="rounded-full bg-rheo-accent px-5 py-2.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-rheo-accent-hover hover:shadow-[0_0_20px_rgba(197,232,74,0.25)] active:scale-95"
-      >
-        S'inscrire
-      </a>
+      @if (hasSession()) {
+        <a
+          routerLink="/mon-compte/demandes"
+          class="hidden rounded-full border border-white/15 bg-transparent px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:border-white/30 hover:bg-white/10 active:scale-95 sm:inline-flex"
+        >
+          Mes demandes
+        </a>
+      } @else {
+        <a
+          routerLink="/connexion"
+          class="hidden rounded-full border border-white/15 bg-transparent px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:border-white/30 hover:bg-white/10 active:scale-95 sm:inline-flex"
+        >
+          Se connecter
+        </a>
+        <a
+          routerLink="/inscription"
+          class="rounded-full bg-rheo-accent px-5 py-2.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-rheo-accent-hover hover:shadow-[0_0_20px_rgba(197,232,74,0.25)] active:scale-95"
+        >
+          S'inscrire
+        </a>
+      }
     </div>
   </div>
 </header>

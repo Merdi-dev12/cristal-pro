@@ -7,9 +7,16 @@ export class AuthService {
   private readonly supabase = inject(SupabaseClientService).client;
 
   readonly isSubscriber = signal<boolean>(this.read());
+  readonly hasSession = signal(false);
 
   constructor() {
-    // no-op
+    this.supabase.auth.getSession().then(({ data }) => {
+      this.hasSession.set(!!data.session);
+    });
+
+    this.supabase.auth.onAuthStateChange((_event, session) => {
+      this.hasSession.set(!!session);
+    });
   }
 
   setSubscriber(value: boolean): void {
