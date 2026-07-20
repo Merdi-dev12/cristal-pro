@@ -34,8 +34,13 @@ export class LoginPage {
 
     try {
       await this.auth.signIn(this.email.trim(), this.password);
-    } catch {
-      this.error.set('Adresse email ou mot de passe incorrect.');
+    } catch (err) {
+      const message = err instanceof Error ? err.message.toLowerCase() : '';
+      this.error.set(
+        message.includes('email not confirmed')
+          ? 'Confirmez votre adresse email (lien envoyé lors de votre inscription) avant de vous connecter.'
+          : 'Adresse email ou mot de passe incorrect.',
+      );
     } finally {
       this.loading.set(false);
     }

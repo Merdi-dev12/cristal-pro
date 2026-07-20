@@ -21,6 +21,7 @@ export class RegisterPage {
   protected readonly showPassword = signal(false);
   protected readonly loading = signal(false);
   protected readonly error = signal('');
+  protected readonly info = signal('');
 
   protected togglePassword(): void {
     this.showPassword.update((value) => !value);
@@ -39,16 +40,24 @@ export class RegisterPage {
 
     this.loading.set(true);
     this.error.set('');
+    this.info.set('');
 
     try {
       const fullName = `${this.firstName.trim()} ${this.lastName.trim()}`;
-      await this.auth.signUp(this.email.trim(), this.password, fullName);
+      const { needsConfirmation } = await this.auth.signUp(this.email.trim(), this.password, fullName);
+
+      if (needsConfirmation) {
+        this.info.set('Compte créé. Vérifiez votre boîte mail pour confirmer votre adresse avant de vous connecter.');
+      }
     } catch (err) {
-      this.error.set(
-        err instanceof Error && err.message.toLowerCase().includes('already registered')
-          ? 'Un compte existe déjà avec cet email.'
-          : 'Impossible de créer le compte. Réessayez.',
-      );
+      const message = err instanceof Error ? err.message.toLowerCase() : '';
+      if (message.includes('already registered')) {
+        this.error.set('Un compte existe déjà avec cet email.');
+      } else if (message.includes('rate limit')) {
+        this.error.set('Trop de tentatives d\'inscription. Réessayez dans quelques minutes.');
+      } else {
+        this.error.set('Impossible de créer le compte. Réessayez.');
+      }
     } finally {
       this.loading.set(false);
     }

@@ -30,14 +30,24 @@ export class AuthService {
     await this.markProfileSubscriber();
   }
 
-  async signUp(email: string, password: string, fullName: string): Promise<void> {
-    const { error } = await this.supabase.auth.signUp({
+  /**
+   * Retourne `needsConfirmation: true` quand Supabase Auth exige une confirmation par email
+   * avant d'ouvrir une session (aucune erreur n'est levée dans ce cas, l'inscription a réussi).
+   */
+  async signUp(email: string, password: string, fullName: string): Promise<{ needsConfirmation: boolean }> {
+    const { data, error } = await this.supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName } },
     });
     if (error) throw error;
+
+    if (!data.session) {
+      return { needsConfirmation: true };
+    }
+
     await this.markProfileSubscriber();
+    return { needsConfirmation: false };
   }
 
   private async markProfileSubscriber(): Promise<void> {
