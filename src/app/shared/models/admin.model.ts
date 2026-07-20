@@ -78,7 +78,7 @@ export interface AdminPropertyDraft {
   ownerName: string;
 }
 
-export type SubmissionStatus = 'en attente' | 'acceptée' | 'refusée' | 'publiée';
+export type SubmissionStatus = 'en attente' | 'informations requises' | 'refusée' | 'publiée';
 
 export interface SubmissionDecision {
   id: string;

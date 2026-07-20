@@ -1,0 +1,35 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { PropertySubmissionService } from '../../core/services/property-submission.service';
+import { AuthService } from '../../core/services/auth.service';
+import { PropertyCategory, PropertyType } from '../../shared/models/property.model';
+
+@Component({
+  selector: 'app-property-submission-form', standalone: true, imports: [CommonModule, FormsModule, RouterLink],
+  template: `
+    <section class="bg-rheo-bg pb-20 pt-28"><div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <a routerLink="/location-vente" class="text-sm font-semibold text-rheo-muted hover:text-rheo-dark">← Location & Vente</a>
+      <header class="mt-6"><p class="text-sm font-semibold uppercase tracking-[.22em] text-rheo-muted">Déposer une annonce</p><h1 class="mt-3 text-4xl font-semibold tracking-tight text-rheo-dark sm:text-5xl">Proposez votre bien.</h1><p class="mt-4 leading-7 text-rheo-muted">Votre annonce est vérifiée par RHEODYCE avant publication. Vous recevrez la décision dans Mes demandes.</p></header>
+      @if (!auth.isAuthenticated()) { <div class="mt-8 rounded-3xl border border-rheo-border bg-white p-8 text-center"><p class="font-semibold">Connectez-vous pour déposer une annonce.</p><a routerLink="/connexion" class="mt-5 inline-flex rounded-xl bg-rheo-accent px-5 py-3 font-bold">Se connecter</a></div> }
+      @if (auth.isAuthenticated()) { <form class="mt-8 grid gap-5 rounded-[30px] border border-rheo-border bg-white p-6 sm:p-8" (ngSubmit)="submit()">
+        @if (error()) { <p class="rounded-xl bg-red-50 p-4 text-sm text-red-700">{{ error() }}</p> } @if (message()) { <p class="rounded-xl bg-[#eff8d8] p-4 text-sm text-[#38500d]">{{ message() }}</p> }
+        <label class="grid gap-2 text-sm font-semibold">Titre<input [(ngModel)]="title" name="title" required class="rounded-xl border border-rheo-border px-4 py-3 font-normal" placeholder="Ex. Appartement lumineux à Gombe"></label>
+        <div class="grid gap-5 sm:grid-cols-2"><label class="grid gap-2 text-sm font-semibold">Transaction<select [(ngModel)]="type" name="type" class="rounded-xl border border-rheo-border px-4 py-3 font-normal"><option value="location">Location</option><option value="vente">Vente</option></select></label><label class="grid gap-2 text-sm font-semibold">Type de bien<select [(ngModel)]="category" name="category" class="rounded-xl border border-rheo-border px-4 py-3 font-normal"><option value="maison">Maison</option><option value="appartement">Appartement</option><option value="residence">Résidence</option><option value="terrain">Terrain</option></select></label></div>
+        <div class="grid gap-5 sm:grid-cols-2"><label class="grid gap-2 text-sm font-semibold">Ville<input [(ngModel)]="city" name="city" required class="rounded-xl border border-rheo-border px-4 py-3 font-normal" placeholder="Kinshasa"></label><label class="grid gap-2 text-sm font-semibold">Adresse<input [(ngModel)]="address" name="address" required class="rounded-xl border border-rheo-border px-4 py-3 font-normal" placeholder="Commune, quartier"></label></div>
+        <div class="grid gap-5 sm:grid-cols-4"><label class="grid gap-2 text-sm font-semibold">Prix (USD)<input [(ngModel)]="price" name="price" type="number" min="0" required class="rounded-xl border border-rheo-border px-4 py-3 font-normal"></label><label class="grid gap-2 text-sm font-semibold">Surface m²<input [(ngModel)]="surface" name="surface" type="number" min="1" required class="rounded-xl border border-rheo-border px-4 py-3 font-normal"></label><label class="grid gap-2 text-sm font-semibold">Chambres<input [(ngModel)]="bedrooms" name="bedrooms" type="number" min="0" class="rounded-xl border border-rheo-border px-4 py-3 font-normal"></label><label class="grid gap-2 text-sm font-semibold">Salles d’eau<input [(ngModel)]="bathrooms" name="bathrooms" type="number" min="0" class="rounded-xl border border-rheo-border px-4 py-3 font-normal"></label></div>
+        <label class="grid gap-2 text-sm font-semibold">Description<textarea [(ngModel)]="description" name="description" required rows="6" class="resize-y rounded-xl border border-rheo-border px-4 py-3 font-normal" placeholder="Décrivez le bien, ses atouts et les conditions."></textarea></label>
+        <label class="grid gap-2 text-sm font-semibold">Liens des photos <span class="font-normal text-rheo-muted">Un lien par ligne</span><textarea [(ngModel)]="photoLinks" name="photoLinks" rows="3" class="resize-y rounded-xl border border-rheo-border px-4 py-3 font-normal" placeholder="https://..."></textarea></label>
+        <label class="grid gap-2 text-sm font-semibold">Liens des documents <span class="font-normal text-rheo-muted">Optionnel, un lien par ligne</span><textarea [(ngModel)]="documentLinks" name="documentLinks" rows="2" class="resize-y rounded-xl border border-rheo-border px-4 py-3 font-normal"></textarea></label>
+        <button [disabled]="loading()" class="rounded-xl bg-rheo-accent px-6 py-3.5 text-sm font-bold text-rheo-dark disabled:opacity-60">{{ loading() ? 'Envoi…' : 'Envoyer pour validation' }}</button>
+      </form> }
+    </div></section>`,
+})
+export class PropertySubmissionFormPage {
+  protected readonly auth = inject(AuthService); private readonly submissions = inject(PropertySubmissionService); private readonly router = inject(Router);
+  protected title = ''; protected type: PropertyType = 'location'; protected category: PropertyCategory = 'appartement'; protected city = ''; protected address = ''; protected price: number | null = null; protected surface: number | null = null; protected bedrooms = 0; protected bathrooms = 0; protected description = ''; protected photoLinks = ''; protected documentLinks = '';
+  protected readonly loading = signal(false); protected readonly error = signal(''); protected readonly message = signal('');
+  protected async submit(): Promise<void> { this.error.set(''); this.message.set(''); if (!this.title.trim() || !this.city.trim() || !this.address.trim() || !this.description.trim() || this.price === null || this.surface === null) { this.error.set('Complétez les champs obligatoires.'); return; } this.loading.set(true); try { await this.submissions.create({ title: this.title, type: this.type, category: this.category, city: this.city, address: this.address, price: this.price, surface: this.surface, bedrooms: this.bedrooms, bathrooms: this.bathrooms, description: this.description, photoUrls: this.links(this.photoLinks), documentUrls: this.links(this.documentLinks) }); this.message.set('Votre annonce a été envoyée à l’équipe RHEODYCE.'); window.setTimeout(() => void this.router.navigateByUrl('/mon-compte/demandes'), 900); } catch (error) { this.error.set(error instanceof Error ? error.message : 'L’annonce n’a pas pu être envoyée.'); } finally { this.loading.set(false); } }
+  private links(value: string): string[] { return value.split('\n').map((item) => item.trim()).filter(Boolean); }
+}

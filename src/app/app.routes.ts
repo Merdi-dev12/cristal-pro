@@ -26,12 +26,15 @@ import { AdminPropertiesPage } from './features/admin/admin-properties';
 import { SubscriptionPage } from './features/subscription/subscription';
 import { PropertyDetailPage } from './features/annonces/property-detail/property-detail';
 import { ProfilePage } from './features/profile/profile';
+import { PropertySubmissionFormPage } from './features/property-submissions/property-submission-form';
+import { MyPropertySubmissionsPage } from './features/property-submissions/my-property-submissions';
 
 export const routes: Routes = [
   { path: '', component: Home, title: 'Accueil — RHEODYCE' },
   { path: 'annonces', component: AnnoncesPage, title: 'Annonces — RHEODYCE' },
   { path: 'annonces/:id', component: PropertyDetailPage, title: 'Détail annonce — RHEODYCE' },
   { path: 'location-vente', component: LocationVentePage, title: 'Location & Vente — RHEODYCE' },
+  { path: 'location-vente/creer-annonce', component: PropertySubmissionFormPage, canActivate: [authGuard], title: 'Créer une annonce — RHEODYCE' },
   { path: 'maintenance', component: MaintenancePage, title: 'Maintenance — RHEODYCE' },
   { path: 'decoration', component: DecorationPage, title: 'Décoration — RHEODYCE' },
   { path: 'services', component: ServicesPage, title: 'Services — RHEODYCE' },
@@ -41,6 +44,7 @@ export const routes: Routes = [
   { path: 'connexion', component: LoginPage, title: 'Connexion — RHEODYCE' },
   { path: 'inscription', component: RegisterPage, title: 'Inscription — RHEODYCE' },
   { path: 'mon-compte/demandes', component: ServiceRequestsPage, title: 'Mes demandes — RHEODYCE' },
+  { path: 'mon-compte/mes-annonces', component: MyPropertySubmissionsPage, canActivate: [authGuard], title: 'Mes annonces proposées — RHEODYCE' },
   {
     path: 'mon-compte/demandes/:id',
     component: ServiceRequestDetailPage,

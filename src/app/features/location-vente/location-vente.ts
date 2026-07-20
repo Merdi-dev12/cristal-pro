@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { AuthService } from '../../core/services/auth.service';
 import { RouterLink } from '@angular/router';
 import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
 
@@ -15,12 +16,10 @@ import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
             <p class="text-sm font-semibold uppercase tracking-[0.22em] text-rheo-muted">Location & Vente</p>
             <h1 class="mt-3 text-5xl font-semibold tracking-tight text-rheo-dark">Acheter ou louer sans avancer dans le brouillard.</h1>
             <p class="mt-5 text-sm leading-7 text-rheo-muted">
-              La page explique le parcours métier avant connexion backend : présélection, vérification,
-              visite encadrée et assistance documentaire.
+              Explorez les biens disponibles à Kinshasa et dans ses communes : présélection,
+              vérification, visite encadrée et assistance documentaire.
             </p>
-            <a routerLink="/annonces" class="mt-7 inline-flex rounded-full bg-black px-7 py-3 text-sm font-semibold text-white">
-              Voir les annonces
-            </a>
+            <div class="mt-7 flex flex-wrap gap-3"><a routerLink="/annonces" class="inline-flex rounded-full bg-black px-7 py-3 text-sm font-semibold text-white">Voir les annonces</a><a routerLink="/location-vente/creer-annonce" class="inline-flex rounded-full bg-rheo-accent px-7 py-3 text-sm font-bold text-rheo-dark">Créer une annonce</a></div>
           </div>
           <div class="overflow-hidden rounded-[32px] bg-black shadow-2xl">
             <img src="/assets/hero_img.png" alt="Bien immobilier moderne" class="h-[460px] w-full object-cover opacity-90" />
@@ -42,4 +41,5 @@ import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
 })
 export class LocationVentePage {
   protected readonly data = inject(RheodyceDataService);
+  protected readonly auth = inject(AuthService);
 }

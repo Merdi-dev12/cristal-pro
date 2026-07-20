@@ -223,7 +223,7 @@ export class DemenagementPage implements AfterViewInit, OnDestroy {
       this.leaflet = await this.loadLeaflet();
       this.map = this.leaflet.map(this.mapElement.nativeElement, { zoomControl: false }).setView([-4.325, 15.322], 12);
       this.leaflet.control.zoom({ position: 'bottomright' }).addTo(this.map);
-      this.leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      this.leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap',
         maxZoom: 19,
       }).addTo(this.map);
@@ -244,7 +244,6 @@ export class DemenagementPage implements AfterViewInit, OnDestroy {
     const promise = new Promise<LeafletNamespace>((resolve, reject) => {
       const script = document.createElement('script');
       script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-      script.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
       script.crossOrigin = '';
       script.onload = () => {
         const namespace = (window as Window & { L?: LeafletNamespace }).L;

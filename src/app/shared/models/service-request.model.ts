@@ -1,9 +1,12 @@
-export type ServiceType = 'maintenance' | 'decoration' | 'juridique' | 'demenagement';
+export type ServiceType = 'maintenance' | 'decoration' | 'juridique' | 'demenagement' | 'annonce' | 'contact';
+
+export type RequestSource = 'service' | 'moving' | 'property-submission' | 'contact';
 
 export type RequestStatus = 'reçue' | 'en traitement' | 'assignée' | 'terminée' | 'annulée';
 
 export interface ServiceRequest {
   id: string;
+  source: RequestSource;
   userId: string;
   serviceType: ServiceType;
   status: RequestStatus;
@@ -25,6 +28,8 @@ export const SERVICE_TYPE_LABELS: Record<ServiceType, string> = {
   decoration: 'Décoration',
   juridique: 'Assistance juridique',
   demenagement: 'Déménagement',
+  annonce: 'Annonce proposée',
+  contact: 'Contact',
 };
 
 export const REQUEST_STATUS_LABELS: Record<RequestStatus, string> = {

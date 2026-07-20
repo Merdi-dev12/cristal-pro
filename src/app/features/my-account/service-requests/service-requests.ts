@@ -47,6 +47,7 @@ export class ServiceRequestsPage implements OnInit {
   }
 
   protected navigateToDetail(request: ServiceRequest): void {
+    if (request.source !== 'service') return;
     this.router.navigate(['/mon-compte/demandes', request.id]);
   }
 }

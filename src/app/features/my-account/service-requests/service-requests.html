@@ -8,7 +8,7 @@
             Mes demandes de service.
           </h1>
           <p class="mt-4 max-w-2xl text-sm leading-7 text-rheo-muted">
-            Suivez l'avancement de vos demandes de maintenance, décoration, assistance juridique et déménagement.
+            Retrouvez toutes vos demandes : services, déménagements, annonces proposées et messages de contact.
           </p>
         </div>
 
@@ -52,7 +52,9 @@
         <div class="divide-y divide-rheo-border">
           @for (request of filteredRequests(); track request.id; let i = $index) {
             <article
-              class="request-row grid cursor-pointer gap-5 p-5 transition hover:bg-[#f8f9f5] sm:p-7 lg:grid-cols-[72px_1fr_auto] lg:items-center"
+              class="request-row grid gap-5 p-5 transition sm:p-7 lg:grid-cols-[72px_1fr_auto] lg:items-center"
+              [class.cursor-pointer]="request.source === 'service'"
+              [class.hover:bg-[#f8f9f5]]="request.source === 'service'"
               (click)="navigateToDetail(request)"
             >
               <div class="flex h-12 w-12 items-center justify-center rounded-full bg-rheo-bg text-sm font-semibold text-rheo-dark">
@@ -65,15 +67,13 @@
               </div>
               <div class="flex items-center gap-4 lg:justify-end">
                 <app-request-status-badge [status]="request.status" />
-                <svg class="h-4 w-4 shrink-0 text-rheo-muted" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
+                @if (request.source === 'service') { <svg class="h-4 w-4 shrink-0 text-rheo-muted" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg> }
               </div>
             </article>
           } @empty {
             <div class="p-12 text-center">
               <p class="text-lg font-semibold text-rheo-dark">Aucune demande pour le moment.</p>
-              <p class="mt-2 text-sm text-rheo-muted">Vos futures demandes de service apparaîtront ici.</p>
+              <p class="mt-2 text-sm text-rheo-muted">Vos futures demandes apparaîtront ici.</p>
             </div>
           }
         </div>

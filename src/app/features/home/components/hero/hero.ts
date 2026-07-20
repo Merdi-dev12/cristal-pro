@@ -8,13 +8,39 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, WritableSignal,
 })
 export class Hero implements OnInit, OnDestroy {
   protected readonly heroTags = ['Maison', 'Appartement', 'Résidentiel'];
-  protected readonly filterChips = ['Kinshasa', 'Maison', 'Résidentiel', 'Appartement'];
+  protected readonly filterChips = ['Kinshasa', 'Gombe', 'Ngaliema', 'Limete'];
   protected readonly activeTag = signal(this.heroTags[0]);
   protected readonly heroBackgroundUrl = '/assets/hero_img_1.jpg';
 
   protected readonly searchTypes = ['Location', 'Achat / Vente', 'Investissement'];
   protected readonly budgets = ['Tous les budgets', 'Moins de 800 $ / mois', '800 $ à 2 000 $ / mois', 'Plus de 100 000 $'];
-  protected readonly locations = ['Partout en RDC', 'Gombe, Kinshasa', 'Ngaliema, Kinshasa', 'Lubumbashi', 'Goma'];
+  protected readonly locations = [
+    'Kinshasa',
+    'Bandalungwa, Kinshasa',
+    'Barumbu, Kinshasa',
+    'Bumbu, Kinshasa',
+    'Gombe, Kinshasa',
+    'Kalamu, Kinshasa',
+    'Kasa-Vubu, Kinshasa',
+    'Kimbanseke, Kinshasa',
+    'Kinshasa (commune)',
+    'Kintambo, Kinshasa',
+    'Kisenso, Kinshasa',
+    'Lemba, Kinshasa',
+    'Limete, Kinshasa',
+    'Lingwala, Kinshasa',
+    'Makala, Kinshasa',
+    'Maluku, Kinshasa',
+    'Masina, Kinshasa',
+    'Matete, Kinshasa',
+    'Mont-Ngafula, Kinshasa',
+    'Ndjili, Kinshasa',
+    'Ngaba, Kinshasa',
+    'Ngaliema, Kinshasa',
+    'Ngiri-Ngiri, Kinshasa',
+    'Nsele, Kinshasa',
+    'Selembao, Kinshasa',
+  ];
   protected readonly rooms = ['Indifférent', '1 à 2 chambres', '3 chambres', '4 chambres ou plus'];
 
   protected readonly selectedType = signal(this.searchTypes[0]);
