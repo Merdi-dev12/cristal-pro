@@ -21,13 +21,16 @@ export class Header {
   private readonly auth = inject(AuthService);
   protected readonly isScrolled = this.scrollService.isScrolled;
   protected readonly hasSession = this.auth.hasSession;
+  protected readonly isAdmin = this.auth.isAdmin;
   protected readonly isHome = signal(this.isHomeUrl(this.router.url));
+  protected readonly isMenuOpen = signal(false);
 
   protected readonly navLinks = signal<NavLink[]>([
     { path: '/', label: 'Accueil' },
     { path: '/annonces', label: 'Annonces' },
     { path: '/location-vente', label: 'Location & Vente' },
     { path: '/services', label: 'Services' },
+    { path: '/abonnement', label: 'Abonnement' },
     { path: '/faq', label: 'FAQ' },
     { path: '/contact', label: 'Contact' },
   ]);
@@ -35,7 +38,16 @@ export class Header {
   constructor() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
       this.isHome.set(this.isHomeUrl(event.urlAfterRedirects));
+      this.isMenuOpen.set(false);
     });
+  }
+
+  protected toggleMenu(): void {
+    this.isMenuOpen.update((isOpen) => !isOpen);
+  }
+
+  protected closeMenu(): void {
+    this.isMenuOpen.set(false);
   }
 
   private isHomeUrl(url: string): boolean {

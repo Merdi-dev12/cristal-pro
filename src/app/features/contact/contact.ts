@@ -44,7 +44,7 @@ import { ContactService } from '../../core/services/contact.service';
                 </div>
                 <div class="min-w-0">
                   <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#8b98ad]">Téléphone</p>
-                  <p class="mt-0.5 text-[15px] font-semibold leading-snug text-[#071d49]">+243 000 000 000</p>
+                  <p class="mt-0.5 text-[15px] font-semibold leading-snug text-[#071d49]">+243 974 960 149</p>
                   <p class="mt-0.5 text-xs text-[#7c89a3]">Disponible du lundi au samedi</p>
                 </div>
               </article>
@@ -58,7 +58,7 @@ import { ContactService } from '../../core/services/contact.service';
                 </div>
                 <div class="min-w-0">
                   <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#8b98ad]">Email</p>
-                  <p class="mt-0.5 break-words text-[15px] font-semibold leading-snug text-[#071d49]">contact&#64;rheodyce.com</p>
+                  <p class="mt-0.5 break-words text-[15px] font-semibold leading-snug text-[#071d49]">reh.tssimba&#64;gmail.com</p>
                   <p class="mt-0.5 text-xs text-[#7c89a3]">Réponse sous 24h ouvrées</p>
                 </div>
               </article>

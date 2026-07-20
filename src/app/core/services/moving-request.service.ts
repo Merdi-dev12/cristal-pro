@@ -27,10 +27,10 @@ export class MovingRequestService {
     return this.request<MovingRequest[]>('?scope=admin');
   }
 
-  async assignForAdmin(id: string, assignedPartnerId: string, adminNotes: string): Promise<MovingRequest> {
+  async assignForAdmin(id: string, assignedPartnerId: string, adminNotes: string, status = 'assignée'): Promise<MovingRequest> {
     return this.request<MovingRequest>('', {
       method: 'PATCH',
-      body: JSON.stringify({ id, assigned_partner_id: assignedPartnerId, admin_notes: adminNotes }),
+      body: JSON.stringify({ id, assigned_partner_id: assignedPartnerId, admin_notes: adminNotes, status: status === 'en attente' ? 'reçue' : status }),
     });
   }
 

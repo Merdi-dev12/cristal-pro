@@ -66,8 +66,113 @@ body {
 }
 
 .leaflet-container {
+  position: relative;
+  overflow: hidden;
+  background: #dfe8dc;
   font-family: var(--font-sans);
   z-index: 0;
+}
+
+/* Leaflet's CDN stylesheet can be blocked by an ad blocker or a strict CSP.
+   Keep the map layout intact even when that stylesheet is unavailable. */
+.leaflet-container img {
+  max-width: none !important;
+}
+
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-overlay-pane,
+.leaflet-shadow-pane,
+.leaflet-marker-pane,
+.leaflet-tooltip-pane,
+.leaflet-popup-pane {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.leaflet-tile-pane {
+  z-index: 2;
+}
+
+.leaflet-tile-container,
+.leaflet-zoom-animated {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.leaflet-tile {
+  width: 256px;
+  height: 256px;
+  user-select: none;
+}
+
+.leaflet-overlay-pane {
+  z-index: 4;
+}
+
+.leaflet-shadow-pane {
+  z-index: 5;
+}
+
+.leaflet-marker-pane {
+  z-index: 6;
+}
+
+.leaflet-tooltip-pane {
+  z-index: 7;
+}
+
+.leaflet-control {
+  position: relative;
+  z-index: 800;
+  float: left;
+  clear: both;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.leaflet-top { top: 0; }
+.leaflet-bottom { bottom: 0; }
+.leaflet-left { left: 0; }
+.leaflet-right { right: 0; }
+.leaflet-top .leaflet-control,
+.leaflet-bottom .leaflet-control { pointer-events: auto; }
+
+.leaflet-right .leaflet-control { float: right; }
+.leaflet-bottom .leaflet-control { margin-bottom: 10px; }
+.leaflet-right .leaflet-control { margin-right: 10px; }
+
+.leaflet-control-zoom a {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-bottom: 1px solid #d8ded5;
+  background: #fff;
+  color: #1a1a1a;
+  font-size: 22px;
+  line-height: 28px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.leaflet-control-zoom a:first-child { border-radius: 10px 10px 0 0; }
+.leaflet-control-zoom a:last-child { border-bottom: 0; border-radius: 0 0 10px 10px; }
+.leaflet-control-zoom { overflow: hidden; border-radius: 10px; box-shadow: 0 4px 14px rgb(0 0 0 / 0.14); }
+
+.leaflet-control-attribution {
+  padding: 2px 6px;
+  background: rgb(255 255 255 / 0.78);
+  color: #6b7280;
+  font-size: 10px;
 }
 
 .moving-map-marker {

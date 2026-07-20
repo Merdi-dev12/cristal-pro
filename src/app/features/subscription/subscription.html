@@ -1,0 +1,201 @@
+<main class="min-h-screen bg-rheo-bg pt-28 text-rheo-dark sm:pt-36">
+  <section class="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24">
+    <div class="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.24em] text-rheo-muted">
+          RHEODYCE Premium
+        </p>
+        <h1 class="mt-5 max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">
+          Cherchez mieux. Décidez avec confiance.
+        </h1>
+        <p class="mt-6 max-w-2xl text-base leading-8 text-rheo-muted sm:text-lg">
+          Un abonnement immobilier pensé pour vous donner les informations utiles au bon moment,
+          sans perdre de temps entre annonces incomplètes et mauvaises surprises.
+        </p>
+      </div>
+
+      <div
+        class="rounded-rheo-xl bg-rheo-dark p-7 text-white shadow-[0_20px_60px_rgba(26,26,26,0.16)] sm:p-9"
+      >
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-sm text-white/55">À partir de</p>
+            <p class="mt-2 text-5xl font-semibold tracking-tight">
+              19,9<span class="text-2xl"> $</span>
+            </p>
+            <p class="mt-2 text-sm text-white/55">par mois · sans engagement</p>
+          </div>
+          <span class="rounded-full bg-rheo-accent px-3 py-1.5 text-xs font-bold text-rheo-dark"
+            >Accès premium</span
+          >
+        </div>
+        <p class="mt-7 border-t border-white/10 pt-6 text-sm leading-7 text-white/65">
+          Débloquez les fiches complètes et avancez plus sereinement dans votre projet immobilier.
+        </p>
+        <a
+          routerLink="/abonnement"
+          fragment="plans"
+          class="mt-6 inline-flex rounded-full bg-rheo-accent px-6 py-3 text-sm font-bold text-rheo-dark transition hover:bg-rheo-accent-hover"
+        >
+          Voir les formules
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-20 grid gap-5 md:grid-cols-3">
+      @for (
+        benefit of [
+          {
+            icon: '01',
+            title: 'Plus de transparence',
+            text: 'Consultez les informations qui permettent de comparer un bien sur des bases concrètes.',
+          },
+          {
+            icon: '02',
+            title: 'Plus de temps gagné',
+            text: 'Accédez directement aux détails utiles au lieu de multiplier les demandes.',
+          },
+          {
+            icon: '03',
+            title: 'Plus de sérénité',
+            text: 'Profitez de l’accompagnement RHEODYCE pour faire avancer votre recherche.',
+          },
+        ];
+        track benefit.icon
+      ) {
+        <article class="rounded-rheo-xl border border-rheo-border bg-rheo-surface p-7">
+          <span
+            class="flex size-10 items-center justify-center rounded-full bg-rheo-accent text-xs font-black"
+            >{{ benefit.icon }}</span
+          >
+          <h2 class="mt-7 text-xl font-semibold">{{ benefit.title }}</h2>
+          <p class="mt-3 text-sm leading-7 text-rheo-muted">{{ benefit.text }}</p>
+        </article>
+      }
+    </div>
+
+    <div class="mt-20 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.24em] text-rheo-muted">
+          Ce que vous débloquez
+        </p>
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+          Les informations qui font la différence.
+        </h2>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2">
+        @for (
+          item of [
+            'Coordonnées du propriétaire ou de l’agence',
+            'Localisation précise du bien',
+            'Photos et détails supplémentaires',
+            'Informations utiles pour organiser une visite',
+            'Support prioritaire RHEODYCE',
+            'Accès aux annonces premium',
+          ];
+          track item
+        ) {
+          <div
+            class="flex items-start gap-3 rounded-2xl border border-rheo-border bg-rheo-surface p-5 text-sm leading-6"
+          >
+            <span
+              class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-rheo-accent text-xs font-black"
+              >✓</span
+            >
+            <span>{{ item }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div id="plans" class="mt-20 scroll-mt-28">
+      <div class="text-center">
+        <p class="text-xs font-bold uppercase tracking-[0.24em] text-rheo-muted">
+          Choisissez votre formule
+        </p>
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+          Un plan simple pour commencer.
+        </h2>
+      </div>
+
+      <div class="mx-auto mt-10 grid max-w-6xl gap-5 lg:grid-cols-3">
+        @for (plan of plans; track plan.id) {
+          <article
+            [class]="
+              'relative flex flex-col rounded-rheo-xl border p-7 ' +
+              (plan.highlighted
+                ? 'border-rheo-accent bg-rheo-dark text-white shadow-[0_20px_60px_rgba(26,26,26,0.18)] lg:-translate-y-3'
+                : 'border-rheo-border bg-rheo-surface')
+            "
+          >
+            @if (plan.badge) {
+              <span
+                class="absolute -top-3 left-7 rounded-full bg-rheo-accent px-3 py-1 text-xs font-bold text-rheo-dark"
+                >{{ plan.badge }}</span
+              >
+            }
+            <h3 class="text-xl font-semibold">{{ plan.name }}</h3>
+            <p
+              [class]="
+                'mt-3 min-h-14 text-sm leading-6 ' +
+                (plan.highlighted ? 'text-white/60' : 'text-rheo-muted')
+              "
+            >
+              {{ plan.description }}
+            </p>
+            <p class="mt-7 text-4xl font-semibold">
+              {{ plan.price === 0 ? 'Gratuit' : plan.price.toString().replace('.', ',') + ' $' }}
+            </p>
+            @if (plan.price > 0) {
+              <p
+                [class]="'mt-1 text-xs ' + (plan.highlighted ? 'text-white/50' : 'text-rheo-muted')"
+              >
+                {{ plan.period }}
+              </p>
+            }
+            <ul class="mt-7 grid gap-4 border-t border-current/10 pt-6">
+              @for (feature of plan.features; track feature) {
+                <li class="flex gap-3 text-sm leading-6">
+                  <span class="text-rheo-accent">✓</span><span>{{ feature }}</span>
+                </li>
+              }
+            </ul>
+            <button
+              type="button"
+              [class]="
+                'mt-8 w-full rounded-full px-5 py-3.5 text-sm font-bold transition ' +
+                (plan.highlighted
+                  ? 'bg-rheo-accent text-rheo-dark hover:bg-rheo-accent-hover'
+                  : 'border border-rheo-border text-rheo-dark hover:border-rheo-dark')
+              "
+              (click)="subscribe(plan)"
+            >
+              {{
+                plan.id === 'preview'
+                  ? 'Continuer gratuitement'
+                  : isSubscriber() && plan.highlighted
+                    ? 'Abonnement activé'
+                    : 'Souscrire'
+              }}
+            </button>
+          </article>
+        }
+      </div>
+
+      @if (activatedPlan()) {
+        <div
+          class="mx-auto mt-8 max-w-2xl rounded-2xl border border-rheo-accent bg-rheo-accent/20 p-5 text-center text-sm leading-6"
+        >
+          <strong>Votre abonnement est activé.</strong> Les informations premium sont maintenant
+          débloquées sur RHEODYCE.
+        </div>
+      }
+    </div>
+
+    <p class="mx-auto mt-14 max-w-2xl text-center text-xs leading-6 text-rheo-muted">
+      Activation simulée pour cette version. Le bouton de souscription est déjà isolé pour
+      accueillir une future session de paiement sécurisée (Mobile Money, carte ou autre
+      prestataire).
+    </p>
+  </section>
+</main>

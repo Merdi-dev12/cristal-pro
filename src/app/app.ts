@@ -15,17 +15,16 @@ export class App {
 
 
   constructor(private readonly router: Router) {
-    this.showChrome = !this.isAuthRoute(this.router.url);
+    this.showChrome = !this.isChromeHiddenRoute(this.router.url);
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
-        this.showChrome = !this.isAuthRoute(event.urlAfterRedirects);
+        this.showChrome = !this.isChromeHiddenRoute(event.urlAfterRedirects);
       });
   }
 
-  private isAuthRoute(url: string) {
+  private isChromeHiddenRoute(url: string): boolean {
     const path = url.split('?')[0];
-    return path === '/connexion' || path === '/inscription';
+    return path === '/connexion' || path === '/inscription' || path === '/admin' || path.startsWith('/admin/');
   }
 }
-

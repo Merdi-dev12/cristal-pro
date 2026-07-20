@@ -7,6 +7,7 @@ import { HeaderStateService } from './core/services/header-state';
 import { RheodyceDataService } from './core/services/rheodyce-data.service';
 import { MovingRequestService } from './core/services/moving-request.service';
 import { Scroll } from './core/services/scroll';
+import { AdminService } from './core/services/admin.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +25,7 @@ export const appConfig: ApplicationConfig = {
     HeaderStateService,
     RheodyceDataService,
     MovingRequestService,
+    AdminService,
     Scroll,
   ]
 };

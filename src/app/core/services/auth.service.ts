@@ -17,6 +17,11 @@ interface StoredSession {
   user: SupabaseUser;
 }
 
+interface AuthProfile {
+  role?: string;
+  is_subscriber?: boolean;
+}
+
 @Service()
 export class AuthService {
   private readonly SESSION_KEY = 'rheodyce:supabase-session';
@@ -24,9 +29,10 @@ export class AuthService {
   private readonly supabase = inject(SupabaseClientService).client;
 
   readonly session = signal<Session | null>(this.readSession());
+  readonly profile = signal<AuthProfile | null>(null);
   readonly isAuthenticated = computed(() => Boolean(this.session()?.access_token));
   readonly hasSession = this.isAuthenticated;
-  readonly isAdmin = computed(() => this.session()?.user.app_metadata?.['role'] === 'admin');
+  readonly isAdmin = computed(() => this.session()?.user.app_metadata?.['role'] === 'admin' || this.profile()?.role === 'admin');
   readonly isSubscriber = signal<boolean>(Boolean(this.session()) || this.readLegacySubscriber());
 
   async init(): Promise<void> {
@@ -36,8 +42,14 @@ export class AuthService {
     }
 
     const { data } = await this.supabase.auth.getSession();
-    if (data.session) this.setSession(data.session);
-    this.supabase.auth.onAuthStateChange((_event, session) => this.setSession(session));
+    if (data.session) {
+      this.setSession(data.session);
+      await this.loadProfile(data.session.user.id);
+    }
+    this.supabase.auth.onAuthStateChange((_event, session) => {
+      this.setSession(session);
+      if (session) void this.loadProfile(session.user.id);
+    });
   }
 
   setSubscriber(value: boolean): void {
@@ -53,6 +65,10 @@ export class AuthService {
     return this.session()?.user.email ?? '';
   }
 
+  userId(): string {
+    return this.session()?.user.id ?? '';
+  }
+
   async signIn(email: string, password: string): Promise<void> {
     const response = await fetch(`${SUPABASE_CONFIG.url}/auth/v1/token?grant_type=password`, {
       method: 'POST',
@@ -64,6 +80,7 @@ export class AuthService {
 
     await this.storeSession(body as unknown as StoredSession);
     await this.markProfileSubscriber();
+    await this.loadProfile(this.userId());
   }
 
   async signUp(email: string, password: string, fullName: string): Promise<{ needsConfirmation: boolean }> {
@@ -77,6 +94,7 @@ export class AuthService {
 
     await this.storeSession(body as unknown as StoredSession);
     await this.markProfileSubscriber();
+    await this.loadProfile(this.userId());
     return { needsConfirmation: false };
   }
 
@@ -84,6 +102,7 @@ export class AuthService {
     await this.supabase.auth.signOut();
     localStorage.removeItem(this.SESSION_KEY);
     localStorage.removeItem(this.KEY);
+    this.profile.set(null);
     this.setSession(null);
   }
 
@@ -149,5 +168,18 @@ export class AuthService {
   private setSession(session: Session | null): void {
     this.session.set(session);
     this.isSubscriber.set(Boolean(session));
+    if (!session) this.profile.set(null);
+  }
+
+  private async loadProfile(userId: string): Promise<void> {
+    const { data } = await this.supabase
+      .from('profiles')
+      .select('role, is_subscriber')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (!data) return;
+    this.profile.set(data as AuthProfile);
+    if (typeof data['is_subscriber'] === 'boolean') this.isSubscriber.set(data['is_subscriber']);
   }
 }
