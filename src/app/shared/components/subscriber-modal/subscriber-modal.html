@@ -32,21 +32,21 @@
     </div>
 
     <h2 id="modal-title" class="text-center text-xl font-bold text-rheo-dark">
-      Contenu réservé aux abonnés
+      Contenu réservé aux utilisateurs connectés
     </h2>
     <p class="mt-3 text-center text-sm leading-relaxed text-rheo-muted">
       La fiche complète du bien (photos supplémentaires, localisation précise, coordonnées du
-      propriétaire ou de l'agence, prise de contact…) est accessible uniquement aux membres
-      abonnés de RHEODYCE.
+      propriétaire ou de l'agence, prise de contact…) est accessible uniquement aux utilisateurs
+      connectés à RHEODYCE.
     </p>
 
     <div class="mt-6 flex flex-col gap-3">
       <button
         type="button"
         class="w-full rounded-full bg-rheo-accent py-3.5 text-sm font-semibold text-rheo-dark transition-colors hover:bg-rheo-accent-hover"
-        (click)="onSubscribe()"
+        (click)="onLogin()"
       >
-        S'abonner maintenant
+        Se connecter
       </button>
       <button
         type="button"

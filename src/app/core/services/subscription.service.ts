@@ -1,5 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { AuthService } from './auth.service';
+import { SupabaseClientService } from './supabase-client';
 
 export interface SubscriptionPlan {
   id: string;
@@ -12,55 +13,40 @@ export interface SubscriptionPlan {
   badge?: string;
 }
 
+export interface SubscriptionRequest {
+  id: string;
+  planId: string;
+  status: 'pending' | 'approved' | 'rejected';
+}
+
 @Injectable({ providedIn: 'root' })
 export class SubscriptionService {
   private readonly auth = inject(AuthService);
+  private readonly supabase = inject(SupabaseClientService).client;
 
-  readonly plans: SubscriptionPlan[] = [
-    {
-      id: 'preview',
-      name: 'Aperçu',
-      price: 0,
-      period: 'pour toujours',
-      description: 'Pour découvrir les annonces et préparer votre recherche.',
-      features: ['Accès aux annonces publiques', 'Filtres de recherche', 'Conseils immobiliers'],
-    },
-    {
-      id: 'rheodyce',
-      name: 'Abonnement immobilier',
-      price: 19.9,
-      period: 'par mois',
-      description: 'Tout ce qu’il faut pour avancer avec plus de visibilité et de sécurité.',
-      features: [
-        'Coordonnées des propriétaires et agences',
-        'Localisation précise des biens',
-        'Photos et informations complètes',
-        'Support prioritaire RHEODYCE',
-      ],
-      highlighted: true,
-      badge: 'Le plus choisi',
-    },
-    {
-      id: 'accompagnement',
-      name: 'Accompagnement',
-      price: 49.9,
-      period: 'par mois',
-      description:
-        'Une formule de démonstration pour les recherches qui demandent plus d’accompagnement.',
-      features: [
-        'Tous les avantages RHEODYCE',
-        'Mise en relation prioritaire',
-        'Conseils personnalisés',
-      ],
-    },
-  ];
+  readonly plans = signal<SubscriptionPlan[]>([]);
+  readonly isLoading = signal(false);
 
-  activateFake(plan: SubscriptionPlan): void {
-    if (plan.id === 'preview') return;
-    this.auth.setSubscriber(true);
+  async loadPlans(): Promise<void> {
+    this.isLoading.set(true);
+    try {
+      const { data, error } = await this.supabase.from('subscription_plans').select('*').eq('active', true).order('display_order');
+      if (error) throw error;
+      this.plans.set((data ?? []).map((row) => ({
+        id: String(row['slug']), name: String(row['name']), price: Number(row['price']), period: String(row['period']),
+        description: String(row['description']), features: Array.isArray(row['features']) ? row['features'].map(String) : [],
+        highlighted: Boolean(row['highlighted']), badge: row['badge'] ? String(row['badge']) : undefined,
+      })));
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
-  async createCheckoutSession(_plan: SubscriptionPlan): Promise<never> {
-    throw new Error('Le paiement réel sera connecté ici ultérieurement.');
+  async requestSubscription(plan: SubscriptionPlan): Promise<void> {
+    const userId = this.auth.userId();
+    if (!userId) throw new Error('Connectez-vous pour demander un abonnement.');
+    if (plan.price === 0) return;
+    const { error } = await this.supabase.from('subscription_requests').insert({ user_id: userId, plan_slug: plan.id });
+    if (error) throw error;
   }
 }

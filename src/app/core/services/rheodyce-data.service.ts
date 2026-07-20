@@ -1,9 +1,9 @@
-import { Service, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { SupabaseClientService } from './supabase-client';
 import { Property } from '../../shared/models/property.model';
 import { FaqItem, ProcessStep, ServiceOffer, StatItem, Testimonial } from '../../shared/models/site-content.model';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class RheodyceDataService {
   private readonly supabase = inject(SupabaseClientService).client;
 
@@ -31,7 +31,7 @@ export class RheodyceDataService {
       .select('*')
       .order('created_at', { ascending: false });
 
-    if (error || !data) return;
+    if (error) throw error;
 
     this.properties.push(
       ...data.map((row: Record<string, unknown>): Property => ({
@@ -62,7 +62,7 @@ export class RheodyceDataService {
       .select('value, label')
       .order('display_order', { ascending: true });
 
-    if (error || !data) return;
+    if (error) throw error;
     this.stats.push(...data.map((row: Record<string, unknown>): StatItem => ({ value: String(row['value'] ?? ''), label: String(row['label'] ?? '') })));
   }
 
@@ -72,7 +72,9 @@ export class RheodyceDataService {
       .select('slug, title, eyebrow, description, icon, cta')
       .order('display_order', { ascending: true });
 
-    const offers = data?.map((row: Record<string, unknown>): ServiceOffer => ({
+    if (error) throw error;
+
+    const offers = (data ?? []).map((row: Record<string, unknown>): ServiceOffer => ({
         id: String(row['slug'] ?? ''),
         title: String(row['title'] ?? ''),
         eyebrow: String(row['eyebrow'] ?? ''),
@@ -80,17 +82,6 @@ export class RheodyceDataService {
         icon: String(row['icon'] ?? ''),
         cta: String(row['cta'] ?? ''),
       })) ?? [];
-
-    if (!offers.some((offer) => offer.id === 'demenagement')) {
-      offers.push({
-        id: 'demenagement',
-        title: 'Déménagement',
-        eyebrow: 'Logistique',
-        description: 'Préparez votre transfert avec un itinéraire estimé, le volume à transporter et l’affectation d’un partenaire.',
-        icon: '↗',
-        cta: 'Préparer mon déménagement',
-      });
-    }
 
     this.services.push(...offers);
   }
@@ -101,7 +92,7 @@ export class RheodyceDataService {
       .select('step, title, description')
       .order('display_order', { ascending: true });
 
-    if (error || !data) return;
+    if (error) throw error;
     this.process.push(
       ...data.map((row: Record<string, unknown>): ProcessStep => ({ step: String(row['step'] ?? ''), title: String(row['title'] ?? ''), description: String(row['description'] ?? '') })),
     );
@@ -113,7 +104,7 @@ export class RheodyceDataService {
       .select('question, answer')
       .order('display_order', { ascending: true });
 
-    if (error || !data) return;
+    if (error) throw error;
     this.faqs.push(...data.map((row: Record<string, unknown>): FaqItem => ({ question: String(row['question'] ?? ''), answer: String(row['answer'] ?? '') })));
   }
 
@@ -123,7 +114,7 @@ export class RheodyceDataService {
       .select('name, role, quote')
       .order('display_order', { ascending: true });
 
-    if (error || !data) return;
+    if (error) throw error;
     this.testimonials.push(
       ...data.map((row: Record<string, unknown>): Testimonial => ({ name: String(row['name'] ?? ''), role: String(row['role'] ?? ''), quote: String(row['quote'] ?? '') })),
     );

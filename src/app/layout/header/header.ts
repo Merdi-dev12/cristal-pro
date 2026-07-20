@@ -50,6 +50,11 @@ export class Header {
     this.isMenuOpen.set(false);
   }
 
+  protected async signOut(): Promise<void> {
+    await this.auth.signOut();
+    await this.router.navigateByUrl('/connexion');
+  }
+
   private isHomeUrl(url: string): boolean {
     return url.split('?')[0] === '/';
   }

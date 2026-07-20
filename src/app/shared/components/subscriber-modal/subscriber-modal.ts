@@ -7,14 +7,14 @@ import { Component, output } from '@angular/core';
 })
 export class SubscriberModal {
   readonly close = output<void>();
-  readonly subscribe = output<void>();
+  readonly login = output<void>();
 
   protected onClose(): void {
     this.close.emit();
   }
 
-  protected onSubscribe(): void {
-    this.subscribe.emit();
+  protected onLogin(): void {
+    this.login.emit();
   }
 
   protected onBackdropClick(event: MouseEvent): void {

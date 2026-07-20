@@ -18,9 +18,16 @@ export class ServiceRequestService {
     this.error.set(null);
 
     try {
+      const userId = this.auth.userId();
+      if (!userId) {
+        this.requests.set([]);
+        return;
+      }
+
       const { data, error } = await this.supabase
         .from('service_requests')
         .select('*')
+        .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -36,10 +43,14 @@ export class ServiceRequestService {
     const cached = this.requests().find((request) => request.id === id);
     if (cached) return cached;
 
+    const userId = this.auth.userId();
+    if (!userId) return null;
+
     const { data, error } = await this.supabase
       .from('service_requests')
       .select('*')
       .eq('id', id)
+      .eq('user_id', userId)
       .maybeSingle();
 
     if (error || !data) return null;
@@ -51,10 +62,14 @@ export class ServiceRequestService {
   }
 
   async cancelRequest(id: string): Promise<void> {
+    const userId = this.auth.userId();
+    if (!userId) throw new Error('Session utilisateur introuvable.');
+
     const { error } = await this.supabase
       .from('service_requests')
       .update({ status: 'annulée' })
-      .eq('id', id);
+      .eq('id', id)
+      .eq('user_id', userId);
 
     if (error) throw error;
 

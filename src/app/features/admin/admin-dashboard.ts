@@ -12,7 +12,6 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
     <section>
       <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p class="text-sm font-semibold uppercase tracking-[0.2em] text-rheo-muted">Vue d’ensemble</p><h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Bonjour, équipe RHEODYCE.</h1><p class="mt-3 max-w-2xl text-sm leading-6 text-rheo-muted">Pilotez les annonces, les utilisateurs et les demandes depuis un seul espace.</p></div><a routerLink="/admin/annonces" class="inline-flex w-fit items-center gap-2 rounded-xl bg-rheo-dark px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#323a31]">Créer une annonce <span aria-hidden="true">+</span></a></div>
 
-      @if (admin.usingDemoData()) { <div class="mt-7 flex items-start gap-3 rounded-2xl border border-[#dbe6b4] bg-[#f8fbe9] px-4 py-3 text-sm text-[#53621e]"><span class="mt-0.5 font-bold">i</span><p><strong>Mode démonstration.</strong> Les actions sont prêtes à être reliées à Supabase ; les données affichées servent à valider le parcours admin.</p></div> }
       @if (admin.actionMessage()) { <div class="mt-4 rounded-2xl border border-[#dbe6b4] bg-[#f8fbe9] px-4 py-3 text-sm text-[#53621e]">{{ admin.actionMessage() }}</div> }
 
       <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

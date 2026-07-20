@@ -24,10 +24,12 @@ import { AdminServicesPage } from './features/admin/admin-services';
 import { AdminSubmissionsPage } from './features/admin/admin-submissions';
 import { AdminPropertiesPage } from './features/admin/admin-properties';
 import { SubscriptionPage } from './features/subscription/subscription';
+import { PropertyDetailPage } from './features/annonces/property-detail/property-detail';
 
 export const routes: Routes = [
   { path: '', component: Home, title: 'Accueil — RHEODYCE' },
   { path: 'annonces', component: AnnoncesPage, title: 'Annonces — RHEODYCE' },
+  { path: 'annonces/:id', component: PropertyDetailPage, title: 'Détail annonce — RHEODYCE' },
   { path: 'location-vente', component: LocationVentePage, title: 'Location & Vente — RHEODYCE' },
   { path: 'maintenance', component: MaintenancePage, title: 'Maintenance — RHEODYCE' },
   { path: 'decoration', component: DecorationPage, title: 'Décoration — RHEODYCE' },

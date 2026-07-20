@@ -13,7 +13,7 @@ import { Component } from '@angular/core';
             <p class="text-sm font-semibold uppercase tracking-[0.22em] text-rheo-muted">Maintenance</p>
             <h1 class="mt-3 text-5xl font-semibold tracking-tight text-rheo-dark">Des interventions lisibles et suivies.</h1>
             <p class="mt-5 text-sm leading-7 text-rheo-muted">
-              Prestations fake pour la maquette : plomberie, électricité, peinture, climatisation,
+              Prestations disponibles : plomberie, électricité, peinture, climatisation,
               nettoyage et petites réparations.
             </p>
           </div>

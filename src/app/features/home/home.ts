@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
 import { PropertyCard } from '../../shared/components/property-card/property-card';
@@ -17,30 +17,22 @@ import { Hero } from './components/hero/hero';
 })
 export class Home {
   private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
   protected readonly data = inject(RheodyceDataService);
 
   readonly showSubscriberModal = signal(false);
   readonly isSubscriber = computed(() => this.auth.isSubscriber());
   protected readonly homeProperties = computed<Property[]>(() => {
-    if (this.data.properties.length === 0) {
-      return [];
-    }
-
-    return Array.from({ length: 16 }, (_, index) => {
-      const property = this.data.properties[index % this.data.properties.length];
-      return {
-        ...property,
-        id: `${property.id}-home-${index + 1}`,
-      };
-    });
+    return this.data.properties;
   });
 
   protected serviceImage(index: number): string {
     return index % 2 === 0 ? '/assets/hero_img.png' : '/assets/hero_img_1.jpg';
   }
 
-  protected onViewDetails(_property: Property): void {
+  protected onViewDetails(property: Property): void {
     if (this.isSubscriber()) {
+      void this.router.navigate(['/annonces', property.id]);
       return;
     }
 
@@ -51,8 +43,8 @@ export class Home {
     this.showSubscriberModal.set(false);
   }
 
-  protected onSubscribeModal(): void {
-    this.auth.setSubscriber(true);
+  protected onLoginModal(): void {
     this.showSubscriberModal.set(false);
+    void this.router.navigate(['/connexion']);
   }
 }

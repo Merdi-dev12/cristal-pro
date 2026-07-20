@@ -5,18 +5,6 @@ import { RouterLink } from '@angular/router';
 import { MovingRequestService } from '../../core/services/moving-request.service';
 import { MovingRequest, MovingRequestStatus } from '../../shared/models/moving-request.model';
 
-const DEMO_MOVING_REQUESTS: MovingRequest[] = [
-  {
-    id: 'demo-moving-1', userId: 'demo-user-1', departureAddress: 'Gombe, Kinshasa', arrivalAddress: 'Ngaliema, Kinshasa', movingDate: '2026-07-25', estimatedVolume: 18, floor: 2, hasElevator: true, departureCoordinates: null, arrivalCoordinates: null, routeDistanceKm: 12.4, routeDurationMinutes: 38, status: 'reçue', assignedPartnerId: null, adminNotes: null, createdAt: '2026-07-20T09:30:00Z', updatedAt: '2026-07-20T09:30:00Z',
-  },
-  {
-    id: 'demo-moving-2', userId: 'demo-user-3', departureAddress: 'Limete, Kinshasa', arrivalAddress: 'Bandalungwa, Kinshasa', movingDate: '2026-07-28', estimatedVolume: 32, floor: 1, hasElevator: false, departureCoordinates: null, arrivalCoordinates: null, routeDistanceKm: 9.1, routeDurationMinutes: 29, status: 'assignée', assignedPartnerId: 'Move Congo', adminNotes: 'Confirmer la présence d’un monte-charge.', createdAt: '2026-07-19T14:10:00Z', updatedAt: '2026-07-20T08:15:00Z',
-  },
-  {
-    id: 'demo-moving-3', userId: 'demo-user-4', departureAddress: 'Lubumbashi, Golf', arrivalAddress: 'Lubumbashi, Kenya', movingDate: '2026-07-18', estimatedVolume: 12, floor: 0, hasElevator: false, departureCoordinates: null, arrivalCoordinates: null, routeDistanceKm: 7.8, routeDurationMinutes: 22, status: 'terminée', assignedPartnerId: 'Katanga Move', adminNotes: 'Dossier clôturé après confirmation client.', createdAt: '2026-07-12T08:20:00Z', updatedAt: '2026-07-18T16:00:00Z',
-  },
-];
-
 @Component({
   selector: 'app-moving-admin',
   standalone: true,
@@ -32,9 +20,6 @@ const DEMO_MOVING_REQUESTS: MovingRequest[] = [
         <a routerLink="/demenagement" class="inline-flex w-fit rounded-xl border border-[#dfe3dc] bg-white px-4 py-3 text-sm font-semibold text-rheo-dark transition hover:bg-[#f8faf7]">Voir le formulaire</a>
       </header>
 
-      @if (isDemo()) {
-        <div class="mt-7 rounded-2xl border border-[#dbe6b4] bg-[#f8fbe9] px-4 py-3 text-sm text-[#53621e]"><strong>Mode démonstration.</strong> Les demandes réelles seront chargées depuis la Edge Function sécurisée dès qu’elles seront disponibles.</div>
-      }
       @if (error()) { <p class="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{{ error() }}</p> }
 
       <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -95,11 +80,9 @@ export class MovingAdminPage implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       const requests = await this.movingRequests.listForAdmin();
-      this.requests.set(requests.length ? requests : DEMO_MOVING_REQUESTS);
-      this.isDemo.set(!requests.length);
+      this.requests.set(requests);
     } catch {
-      this.requests.set(DEMO_MOVING_REQUESTS);
-      this.isDemo.set(true);
+      this.error.set('Impossible de charger les demandes de déménagement.');
     } finally {
       this.loading.set(false);
     }
@@ -109,12 +92,8 @@ export class MovingAdminPage implements OnInit {
     this.savingId.set(request.id);
     this.savedId.set('');
     try {
-      if (request.id.startsWith('demo-')) {
-        this.requests.update((items) => items.map((item) => item.id === request.id ? { ...item, updatedAt: new Date().toISOString() } : item));
-      } else {
-        const updated = await this.movingRequests.assignForAdmin(request.id, request.assignedPartnerId ?? '', request.adminNotes ?? '', request.status);
-        this.requests.update((items) => items.map((item) => item.id === updated.id ? updated : item));
-      }
+      const updated = await this.movingRequests.assignForAdmin(request.id, request.assignedPartnerId ?? '', request.adminNotes ?? '', request.status);
+      this.requests.update((items) => items.map((item) => item.id === updated.id ? updated : item));
       this.savedId.set(request.id);
     } catch (error) {
       this.error.set(error instanceof Error ? error.message : 'Enregistrement impossible.');

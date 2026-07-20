@@ -27,7 +27,7 @@
     </div>
 
     <div class="mt-10 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
-      @for (property of homeProperties(); track property.id) {
+          @for (property of homeProperties(); track property.id) {
         <app-property-card [property]="property" (viewDetails)="onViewDetails($event)" />
       }
     </div>
@@ -106,5 +106,5 @@
 </main>
 
 @if (showSubscriberModal()) {
-  <app-subscriber-modal (close)="onCloseModal()" (subscribe)="onSubscribeModal()" />
+  <app-subscriber-modal (close)="onCloseModal()" (login)="onLoginModal()" />
 }
