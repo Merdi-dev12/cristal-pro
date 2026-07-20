@@ -23,7 +23,7 @@ export class LoginPage {
     this.showPassword.update((value) => !value);
   }
 
-  protected onLogin(): void {
+  protected async onLogin(): Promise<void> {
     if (!this.email.trim() || !this.password.trim()) {
       this.error.set('Veuillez remplir tous les champs.');
       return;
@@ -32,9 +32,12 @@ export class LoginPage {
     this.loading.set(true);
     this.error.set('');
 
-    window.setTimeout(() => {
-      this.auth.setSubscriber(true);
+    try {
+      await this.auth.signIn(this.email.trim(), this.password);
+    } catch {
+      this.error.set('Adresse email ou mot de passe incorrect.');
+    } finally {
       this.loading.set(false);
-    }, 350);
+    }
   }
 }

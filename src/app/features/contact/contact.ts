@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ContactService } from '../../core/services/contact.service';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <section class="bg-rheo-bg pb-16 pt-28">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -63,24 +65,31 @@ import { Component } from '@angular/core';
             </div>
           </div>
 
-          <form class="rounded-[30px] border border-rheo-border bg-white p-5 sm:p-8">
+          <form class="rounded-[30px] border border-rheo-border bg-white p-5 sm:p-8" (ngSubmit)="onSubmit()">
+            @if (success()) {
+              <div class="mb-5 rounded-xl border border-rheo-accent/40 bg-rheo-accent/15 px-4 py-3 text-sm text-rheo-dark">Votre message a bien été envoyé. Nous revenons vers vous sous 24h.</div>
+            }
+            @if (error()) {
+              <div class="mb-5 rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-700">{{ error() }}</div>
+            }
+
             <div class="grid gap-5 sm:grid-cols-2">
               <div class="grid gap-2">
                 <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Nom</label>
-                <input class="h-12 rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm outline-none transition focus:border-[#071d49]" type="text" placeholder="Votre nom" />
+                <input class="h-12 rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm outline-none transition focus:border-[#071d49]" type="text" placeholder="Votre nom" [(ngModel)]="fullName" name="fullName" />
               </div>
               <div class="grid gap-2">
                 <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Email</label>
-                <input class="h-12 rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm outline-none transition focus:border-[#071d49]" type="email" placeholder="vous@email.com" />
+                <input class="h-12 rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm outline-none transition focus:border-[#071d49]" type="email" placeholder="vous@email.com" [(ngModel)]="email" name="email" />
               </div>
               <div class="grid gap-2">
                 <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Ville</label>
-                <input class="h-12 rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm outline-none transition focus:border-[#071d49]" type="text" placeholder="Kinshasa, Lubumbashi..." />
+                <input class="h-12 rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm outline-none transition focus:border-[#071d49]" type="text" placeholder="Kinshasa, Lubumbashi..." [(ngModel)]="city" name="city" />
               </div>
               <div class="grid gap-2">
                 <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Besoin</label>
                 <div class="relative">
-                  <select class="h-12 w-full appearance-none rounded-xl border border-[#d7e0ed] bg-white px-4 pr-10 text-sm font-semibold text-[#071d49] outline-none transition focus:border-[#071d49]">
+                  <select class="h-12 w-full appearance-none rounded-xl border border-[#d7e0ed] bg-white px-4 pr-10 text-sm font-semibold text-[#071d49] outline-none transition focus:border-[#071d49]" [(ngModel)]="need" name="need">
                     <option>Achat / Vente</option>
                     <option>Location</option>
                     <option>Maintenance</option>
@@ -95,11 +104,15 @@ import { Component } from '@angular/core';
 
             <div class="mt-5 grid gap-2">
               <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Message</label>
-              <textarea rows="6" class="rounded-xl border border-[#d7e0ed] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#071d49]" placeholder="Décrivez votre demande..."></textarea>
+              <textarea rows="6" class="rounded-xl border border-[#d7e0ed] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#071d49]" placeholder="Décrivez votre demande..." [(ngModel)]="message" name="message"></textarea>
             </div>
 
-            <button type="button" class="mt-6 h-12 w-full rounded-[18px] bg-rheo-accent px-6 text-sm font-semibold text-rheo-dark transition hover:bg-rheo-accent-hover">
-              Envoyer la demande
+            <button type="submit" [disabled]="loading()" class="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-[18px] bg-rheo-accent px-6 text-sm font-semibold text-rheo-dark transition hover:bg-rheo-accent-hover disabled:opacity-60">
+              @if (loading()) {
+                <span class="h-4 w-4 animate-spin rounded-full border-2 border-rheo-dark/25 border-t-rheo-dark"></span>
+              } @else {
+                <span>Envoyer la demande</span>
+              }
             </button>
           </form>
         </div>
@@ -107,4 +120,47 @@ import { Component } from '@angular/core';
     </section>
   `,
 })
-export class ContactPage {}
+export class ContactPage {
+  private readonly contact = inject(ContactService);
+
+  fullName = '';
+  email = '';
+  city = '';
+  need = 'Achat / Vente';
+  message = '';
+
+  protected readonly loading = signal(false);
+  protected readonly error = signal('');
+  protected readonly success = signal(false);
+
+  protected async onSubmit(): Promise<void> {
+    if (!this.fullName.trim() || !this.email.trim() || !this.message.trim()) {
+      this.error.set('Veuillez remplir au moins votre nom, votre email et votre message.');
+      this.success.set(false);
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set('');
+    this.success.set(false);
+
+    try {
+      await this.contact.submit({
+        full_name: this.fullName.trim(),
+        email: this.email.trim(),
+        city: this.city.trim(),
+        need: this.need,
+        message: this.message.trim(),
+      });
+      this.success.set(true);
+      this.fullName = '';
+      this.email = '';
+      this.city = '';
+      this.message = '';
+    } catch {
+      this.error.set('Impossible d\'envoyer votre message pour le moment. Réessayez plus tard.');
+    } finally {
+      this.loading.set(false);
+    }
+  }
+}
