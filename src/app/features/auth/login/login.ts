@@ -38,8 +38,8 @@ export class LoginPage {
       await this.auth.signIn(this.email, this.password);
       const redirect = this.route.snapshot.queryParamMap.get('redirect') || '/';
       await this.router.navigateByUrl(redirect.startsWith('/') ? redirect : '/');
-    } catch (error) (err) {
-      const message = err instanceof Error ? err.message.toLowerCase() : '';
+    } catch (error) {
+      const message = error instanceof Error ? error.message.toLowerCase() : '';
       this.error.set(
         message.includes('email not confirmed')
           ? 'Confirmez votre adresse email (lien envoyé lors de votre inscription) avant de vous connecter.'

@@ -56,11 +56,12 @@ export class AuthService {
       return { needsConfirmation: true };
     }
 
+    this.setSession(data.session);
     await this.markProfileSubscriber();
     return { needsConfirmation: false };
   }
 
-    private async markProfileSubscriber(): Promise<void> {
+  private async markProfileSubscriber(): Promise<void> {
     const { data } = await this.supabase.auth.getUser();
     const user = data.user;
     if (!user) return;
@@ -71,13 +72,6 @@ export class AuthService {
       .eq('id', user.id);
 
     this.setSubscriber(true);
-  }
-
-    const body = await this.parseResponse(response, 'Impossible de créer le compte.');
-    if (!body['access_token']) {
-      throw new Error('Compte créé. Vérifiez votre adresse email avant de vous connecter.');
-    }
-    this.setSession(data.session);
   }
 
   async signOut(): Promise<void> {
