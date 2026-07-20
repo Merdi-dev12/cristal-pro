@@ -3,11 +3,12 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mb-5 flex items-center justify-between gap-4">
         <a routerLink="/annonces" class="back-link">
-          <span aria-hidden="true">←</span> Retour aux annonces
+          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6" /></svg>
+          Retour aux annonces
         </a>
         <div class="flex gap-2">
-          <button type="button" class="icon-button" aria-label="Ajouter aux favoris" (click)="onAction()">♡</button>
-          <button type="button" class="icon-button" aria-label="Partager l'annonce" (click)="onAction()">↗</button>
+          <button type="button" class="icon-button" aria-label="Ajouter aux favoris" (click)="onAction()"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5.5-8.8 10-8.8 10s-8.8-4.5-8.8-10A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z" /></svg></button>
+          <button type="button" class="icon-button" aria-label="Partager l'annonce" (click)="onAction()"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" /></svg></button>
         </div>
       </div>
 
@@ -30,18 +31,18 @@
         <article class="detail-content">
           <div class="eyebrow-row">
             <span class="status-pill">{{ propertyTypeLabel(item) }}</span>
-            @if (item.verified) { <span class="verified-pill">✓ Bien vérifié</span> }
+            @if (item.verified) { <span class="verified-pill"><svg class="small-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg> Bien vérifié</span> }
           </div>
           <h1>{{ item.title }}</h1>
-          <p class="location"><span aria-hidden="true">⌖</span> {{ item.address || item.location }}</p>
+          <p class="location"><svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg> {{ item.address || item.location }}</p>
 
           <div class="facts-row">
             @if (item.category !== 'terrain') {
-              <span>⌂ {{ item.bedrooms }} chambre{{ item.bedrooms > 1 ? 's' : '' }}</span>
-              <span>♧ {{ item.bathrooms }} salle{{ item.bathrooms > 1 ? 's' : '' }} de bain</span>
+              <span><svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16v8H4v-8Zm2-5h12a2 2 0 0 1 2 2v3H4V8a2 2 0 0 1 2-2Zm1 8h4m2 0h4" /></svg> {{ item.bedrooms }} chambre{{ item.bedrooms > 1 ? 's' : '' }}</span>
+              <span><svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11h14v3a5 5 0 0 1-5 5h-4a5 5 0 0 1-5-5v-3Zm0 0V7a2 2 0 0 1 2-2h2" /><path d="M7 19v2m10-2v2" /></svg> {{ item.bathrooms }} salle{{ item.bathrooms > 1 ? 's' : '' }} de bain</span>
             }
-            <span>▣ {{ item.surface }} m²</span>
-            <span>◈ {{ categoryLabel(item) }}</span>
+            <span><svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 4v4m8-4v4M4 8h4m8 0h4M8 20v-4m8 4v-4M4 16h4m8 0h4" /></svg> {{ item.surface }} m²</span>
+            <span><svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 9-8 9-8-9 8-9Z" /><path d="m9 12 2 2 4-4" /></svg> {{ categoryLabel(item) }}</span>
           </div>
 
           <div class="divider"></div>
@@ -51,12 +52,12 @@
           <div class="divider"></div>
           <h2>Points forts</h2>
           <div class="amenities">
-            <span>⌂ Espaces lumineux</span>
-            <span>◉ Quartier recherché</span>
-            <span>♧ Accès sécurisé</span>
-            <span>▣ Surface optimisée</span>
-            <span>⌖ Proche commodités</span>
-            <span>✓ Vérifié par Rheodyce</span>
+            <span><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v9H3v-9Zm5 9v-6h8v6" /></svg> Espaces lumineux</span>
+            <span><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3" /></svg> Quartier recherché</span>
+            <span><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5 7-12a7 7 0 1 0-14 0c0 7 7 12 7 12Z" /><path d="m9 10 2 2 4-4" /></svg> Accès sécurisé</span>
+            <span><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM9 9h6v6H9z" /></svg> Surface optimisée</span>
+            <span><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5 7-12a7 7 0 1 0-14 0c0 7 7 12 7 12Z" /><circle cx="12" cy="9" r="2.5" /></svg> Proche commodités</span>
+            <span><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg> Vérifié par Rheodyce</span>
           </div>
         </article>
 
@@ -66,14 +67,20 @@
             <p class="price-note">Prix indiqué par le propriétaire</p>
             <div class="booking-meta"><span>Disponibilité</span><strong>À confirmer</strong></div>
             <div class="booking-meta"><span>Visite</span><strong>Sur rendez-vous</strong></div>
-            <button type="button" class="primary-action" (click)="onAction()">Demander une visite <span>→</span></button>
-            <p class="safe-note">◉ Votre demande est traitée en toute sécurité par Rheodyce.</p>
+            <button type="button" class="primary-action" (click)="onAction()">Demander une visite <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></button>
+            <p class="safe-note"><svg class="small-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="m9 12 2 2 4-4" /></svg> Votre demande est traitée en toute sécurité par Rheodyce.</p>
           </div>
           <div class="contact-card">
             <div class="avatar">R</div>
             <div><strong>Équipe Rheodyce</strong><span>Conseiller immobilier</span></div>
-            <button type="button" class="contact-icon" aria-label="Contacter Rheodyce" (click)="onAction()">✆</button>
+            <button type="button" class="contact-icon" aria-label="Contacter Rheodyce" (click)="onAction()"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h3l1.5 4-2 1.5a13 13 0 0 0 5 5l1.5-2 4 1.5v3c0 1-1 2-3 2C10.5 19 5 13.5 5 7c0-2 1-3 2-3Z" /></svg></button>
           </div>
+          @if (hasCoordinates()) {
+            <section class="map-card">
+              <div class="map-heading"><div><p>Localisation</p><span>{{ item.location }}</span></div><svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg></div>
+              <div #propertyMap class="property-map" aria-label="Carte de localisation du bien"></div>
+            </section>
+          }
         </aside>
       </div>
     </div>

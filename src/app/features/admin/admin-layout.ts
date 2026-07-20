@@ -24,22 +24,47 @@ interface AdminNavItem {
         >
           <div class="flex items-center justify-between px-2">
             <a routerLink="/admin" class="flex items-center gap-3" (click)="closeMenu()">
-              <span class="flex size-10 items-center justify-center rounded-xl bg-rheo-dark text-lg font-bold text-rheo-accent">R</span>
-              <span><span class="block text-sm font-bold tracking-wide">RHEODYCE</span><span class="block text-[10px] uppercase tracking-[0.22em] text-rheo-muted">Administration</span></span>
+              <span
+                class="flex size-10 items-center justify-center rounded-xl bg-rheo-dark text-lg font-bold text-rheo-accent"
+                >R</span
+              >
+              <span
+                ><span class="block text-sm font-bold tracking-wide">RHEODYCE</span
+                ><span class="block text-[10px] uppercase tracking-[0.22em] text-rheo-muted"
+                  >Administration</span
+                ></span
+              >
             </a>
-            <button type="button" class="text-2xl text-rheo-muted lg:hidden" (click)="closeMenu()" aria-label="Fermer le menu">&times;</button>
+            <button
+              type="button"
+              class="text-2xl text-rheo-muted lg:hidden"
+              (click)="closeMenu()"
+              aria-label="Fermer le menu"
+            >
+              &times;
+            </button>
           </div>
 
-          <div class="mt-8 rounded-2xl border border-[#e6e7e4] bg-white p-3 shadow-[0_6px_24px_rgba(24,32,20,0.04)]">
+          <div
+            class="mt-8 rounded-2xl border border-[#e6e7e4] bg-white p-3 shadow-[0_6px_24px_rgba(24,32,20,0.04)]"
+          >
             <div class="flex items-center gap-3">
-              <span class="flex size-10 items-center justify-center rounded-xl bg-[#fff0db] text-sm font-bold text-[#b85b00]">ER</span>
-              <div class="min-w-0"><p class="truncate text-sm font-semibold">Équipe RHEODYCE</p><p class="truncate text-xs text-rheo-muted">Administration centrale</p></div>
+              <span
+                class="flex size-10 items-center justify-center rounded-xl bg-[#fff0db] text-sm font-bold text-[#b85b00]"
+                >ER</span
+              >
+              <div class="min-w-0">
+                <p class="truncate text-sm font-semibold">Équipe RHEODYCE</p>
+                <p class="truncate text-xs text-rheo-muted">Administration centrale</p>
+              </div>
               <span class="ml-auto size-2 rounded-full bg-[#65a30d]"></span>
             </div>
           </div>
 
           <nav class="mt-8 flex-1" aria-label="Navigation admin">
-            <p class="px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#9ca39a]">Espace de travail</p>
+            <p class="px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#9ca39a]">
+              Espace de travail
+            </p>
             <ul class="mt-3 grid gap-1">
               @for (item of navItems; track item.path) {
                 <li>
@@ -50,42 +75,124 @@ interface AdminNavItem {
                     class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark"
                     (click)="closeMenu()"
                   >
-                    <span class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs font-bold" aria-hidden="true">{{ item.icon }}</span>
+                    <span
+                      class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs font-bold"
+                      aria-hidden="true"
+                      >{{ item.icon }}</span
+                    >
                     <span>{{ item.label }}</span>
                   </a>
                 </li>
               }
             </ul>
 
-            <p class="mt-8 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#9ca39a]">Raccourcis</p>
+            <p class="mt-8 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#9ca39a]">
+              Raccourcis
+            </p>
             <ul class="mt-3 grid gap-1">
-              <li><a routerLink="/annonces" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark" (click)="closeMenu()"><span class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs" aria-hidden="true">↗</span>Voir le site</a></li>
-              <li><a routerLink="/contact" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark" (click)="closeMenu()"><span class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs" aria-hidden="true">?</span>Support</a></li>
+              <li>
+                <a
+                  routerLink="/annonces"
+                  class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark"
+                  (click)="closeMenu()"
+                  ><span
+                    class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs"
+                    aria-hidden="true"
+                    >↗</span
+                  >Voir le site</a
+                >
+              </li>
+              <li>
+                <a
+                  routerLink="/contact"
+                  class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark"
+                  (click)="closeMenu()"
+                  ><span
+                    class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs"
+                    aria-hidden="true"
+                    >?</span
+                  >Support</a
+                >
+              </li>
             </ul>
           </nav>
 
           <div class="border-t border-[#e4e6e1] pt-4">
-            <button type="button" class="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark" (click)="signOut()">
-              <span class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs" aria-hidden="true">↪</span>Se déconnecter
+            <button
+              type="button"
+              class="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark"
+              (click)="signOut()"
+            >
+              <span
+                class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs"
+                aria-hidden="true"
+                >↪</span
+              >Se déconnecter
             </button>
           </div>
         </aside>
 
-        @if (menuOpen()) { <button type="button" class="fixed inset-0 z-30 bg-black/25 lg:hidden" (click)="closeMenu()" aria-label="Fermer la navigation"></button> }
+        @if (menuOpen()) {
+          <button
+            type="button"
+            class="fixed inset-0 z-30 bg-black/25 lg:hidden"
+            (click)="closeMenu()"
+            aria-label="Fermer la navigation"
+          ></button>
+        }
 
         <main class="min-w-0 flex-1">
-          <header class="sticky top-0 z-20 flex h-[76px] items-center justify-between border-b border-[#e4e6e1] bg-[#f3f4f2]/90 px-4 backdrop-blur-md sm:px-8 lg:px-10">
-            <div class="flex items-center gap-3"><button type="button" class="flex size-10 items-center justify-center rounded-xl border border-[#dfe3dc] bg-white text-lg lg:hidden" (click)="toggleMenu()" aria-label="Ouvrir la navigation">☰</button><div><p class="text-xs font-semibold uppercase tracking-[0.18em] text-rheo-muted">Panel admin</p><p class="mt-0.5 text-sm font-semibold">Opérations RHEODYCE</p></div></div>
-            <div class="flex items-center gap-3"><span class="hidden rounded-full border border-[#dfe3dc] bg-white px-4 py-2 text-xs text-rheo-muted sm:inline-flex">Données sécurisées</span><span class="flex size-10 items-center justify-center rounded-full bg-rheo-accent text-sm font-bold">ER</span></div>
+          <header
+            class="sticky top-0 z-20 flex h-[76px] items-center justify-between border-b border-[#e4e6e1] bg-[#f3f4f2]/90 px-4 backdrop-blur-md sm:px-8 lg:px-10"
+          >
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="flex size-10 items-center justify-center rounded-xl border border-[#dfe3dc] bg-white text-lg lg:hidden"
+                (click)="toggleMenu()"
+                aria-label="Ouvrir la navigation"
+              >
+                ☰
+              </button>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-rheo-muted">
+                  Panel admin
+                </p>
+                <p class="mt-0.5 text-sm font-semibold">Opérations RHEODYCE</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span
+                class="hidden rounded-full border border-[#dfe3dc] bg-white px-4 py-2 text-xs text-rheo-muted sm:inline-flex"
+                >Données sécurisées</span
+              ><span
+                class="flex size-10 items-center justify-center rounded-full bg-rheo-accent text-sm font-bold"
+                >ER</span
+              >
+            </div>
           </header>
           <div class="px-4 py-7 sm:px-8 sm:py-9 lg:px-10"><router-outlet></router-outlet></div>
           @if (admin.loadError()) {
-            <div class="mx-4 mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 sm:mx-8 lg:mx-10">
+            <div
+              class="mx-4 mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 sm:mx-8 lg:mx-10"
+            >
               <p class="font-semibold">Les données admin n’ont pas pu être chargées.</p>
               <p class="mt-1 break-words">{{ admin.loadError() }}</p>
               <div class="mt-3 flex flex-wrap gap-2">
-                <button type="button" class="rounded-lg bg-red-800 px-3 py-2 text-xs font-semibold text-white" (click)="reload()">Réessayer</button>
-                <button type="button" class="rounded-lg border border-red-300 px-3 py-2 text-xs font-semibold" (click)="signOut()">Se déconnecter</button>
+                <button
+                  type="button"
+                  class="rounded-lg bg-red-800 px-3 py-2 text-xs font-semibold text-white"
+                  (click)="reload()"
+                >
+                  Réessayer
+                </button>
+                <button
+                  type="button"
+                  class="rounded-lg border border-red-300 px-3 py-2 text-xs font-semibold"
+                  (click)="signOut()"
+                >
+                  Se déconnecter
+                </button>
               </div>
             </div>
           }
@@ -104,6 +211,7 @@ export class AdminLayoutPage {
     { path: '/admin/visites', label: 'Demandes de visite', icon: '◎' },
     { path: '/admin/utilisateurs', label: 'Utilisateurs', icon: '♙' },
     { path: '/admin/services', label: 'Demandes de services', icon: '▣' },
+    { path: '/admin/contacts', label: 'Demandes de contact', icon: '✉' },
     { path: '/admin/demenagements', label: 'Déménagements', icon: '↗' },
     { path: '/admin/soumissions', label: 'Soumissions de biens', icon: '▤' },
     { path: '/admin/annonces', label: 'Annonces', icon: '⌑' },
@@ -113,8 +221,12 @@ export class AdminLayoutPage {
     void this.admin.load();
   }
 
-  protected toggleMenu(): void { this.menuOpen.update((value) => !value); }
-  protected closeMenu(): void { this.menuOpen.set(false); }
+  protected toggleMenu(): void {
+    this.menuOpen.update((value) => !value);
+  }
+  protected closeMenu(): void {
+    this.menuOpen.set(false);
+  }
 
   protected async signOut(): Promise<void> {
     await this.auth.signOut();

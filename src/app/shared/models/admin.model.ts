@@ -118,6 +118,25 @@ export interface AdminDashboardStats {
   pendingSubmissions: number;
 }
 
+export type ContactMessageStatus = 'new' | 'read' | 'archived';
+export type ContactNotificationStatus = 'pending' | 'sent' | 'failed';
+
+export interface AdminContactMessage {
+  id: string;
+  userId?: string;
+  fullName: string;
+  email: string;
+  city: string;
+  need: string;
+  message: string;
+  status: ContactMessageStatus;
+  notificationStatus: ContactNotificationStatus;
+  notificationError?: string;
+  notifiedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AdminServiceRequestView extends ServiceRequest {
   notificationPrepared: boolean;
 }

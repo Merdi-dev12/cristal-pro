@@ -35,18 +35,24 @@ export class ServiceRequestService {
       const [moving, submissions, contacts] = await Promise.all([
         this.supabase.from('moving_requests').select('*').eq('user_id', userId),
         this.supabase.from('property_submissions').select('*').eq('owner_id', userId),
-        this.supabase.from('contact_requests').select('*').eq('user_id', userId),
+        this.supabase.from('contact_messages').select('*').eq('user_id', userId),
       ]);
       if (moving.error) throw moving.error;
       if (submissions.error) throw submissions.error;
       if (contacts.error) throw contacts.error;
 
-      this.requests.set([
-        ...(data ?? []).map((row: Record<string, unknown>) => this.mapFromRow(row)),
-        ...(moving.data ?? []).map((row: Record<string, unknown>) => this.mapMovingRequest(row)),
-        ...(submissions.data ?? []).map((row: Record<string, unknown>) => this.mapPropertySubmission(row)),
-        ...(contacts.data ?? []).map((row: Record<string, unknown>) => this.mapContactRequest(row)),
-      ].sort((left, right) => right.createdAt.getTime() - left.createdAt.getTime()));
+      this.requests.set(
+        [
+          ...(data ?? []).map((row: Record<string, unknown>) => this.mapFromRow(row)),
+          ...(moving.data ?? []).map((row: Record<string, unknown>) => this.mapMovingRequest(row)),
+          ...(submissions.data ?? []).map((row: Record<string, unknown>) =>
+            this.mapPropertySubmission(row),
+          ),
+          ...(contacts.data ?? []).map((row: Record<string, unknown>) =>
+            this.mapContactRequest(row),
+          ),
+        ].sort((left, right) => right.createdAt.getTime() - left.createdAt.getTime()),
+      );
     } catch {
       this.error.set('Impossible de charger vos demandes pour le moment.');
     } finally {
@@ -116,40 +122,69 @@ export class ServiceRequestService {
 
   private mapMovingRequest(row: Record<string, unknown>): ServiceRequest {
     return {
-      id: String(row['id']), source: 'moving', userId: String(row['user_id']), serviceType: 'demenagement',
-      status: this.toRequestStatus(row['status']), clientName: '', clientEmail: '', clientPhone: '',
+      id: String(row['id']),
+      source: 'moving',
+      userId: String(row['user_id']),
+      serviceType: 'demenagement',
+      status: this.toRequestStatus(row['status']),
+      clientName: '',
+      clientEmail: '',
+      clientPhone: '',
       description: `Déménagement de ${String(row['departure_address'])} à ${String(row['arrival_address'])}`,
       notes: row['admin_notes'] ? String(row['admin_notes']) : undefined,
-      createdAt: new Date(String(row['created_at'])), updatedAt: new Date(String(row['updated_at'])),
+      createdAt: new Date(String(row['created_at'])),
+      updatedAt: new Date(String(row['updated_at'])),
     };
   }
 
   private mapPropertySubmission(row: Record<string, unknown>): ServiceRequest {
     return {
-      id: String(row['id']), source: 'property-submission', userId: String(row['owner_id']), serviceType: 'annonce',
-      status: this.toRequestStatus(row['status']), clientName: '', clientEmail: '', clientPhone: '',
+      id: String(row['id']),
+      source: 'property-submission',
+      userId: String(row['owner_id']),
+      serviceType: 'annonce',
+      status: this.toRequestStatus(row['status']),
+      clientName: '',
+      clientEmail: '',
+      clientPhone: '',
       description: `Annonce proposée : ${String(row['title'])}`,
       notes: row['admin_message'] ? String(row['admin_message']) : undefined,
-      createdAt: new Date(String(row['created_at'])), updatedAt: new Date(String(row['updated_at'])),
+      createdAt: new Date(String(row['created_at'])),
+      updatedAt: new Date(String(row['updated_at'])),
     };
   }
 
   private mapContactRequest(row: Record<string, unknown>): ServiceRequest {
     return {
-      id: String(row['id']), source: 'contact', userId: String(row['user_id']), serviceType: 'contact',
-      status: 'reçue', clientName: String(row['full_name']), clientEmail: String(row['email']), clientPhone: '',
+      id: String(row['id']),
+      source: 'contact',
+      userId: String(row['user_id']),
+      serviceType: 'contact',
+      status: this.toRequestStatus(row['status']),
+      clientName: String(row['full_name']),
+      clientEmail: String(row['email']),
+      clientPhone: '',
       description: `${String(row['need'])} : ${String(row['message'])}`,
-      createdAt: new Date(String(row['created_at'])), updatedAt: new Date(String(row['updated_at'])),
+      createdAt: new Date(String(row['created_at'])),
+      updatedAt: new Date(String(row['updated_at'])),
     };
   }
 
   private toRequestStatus(value: unknown): ServiceRequest['status'] {
     switch (String(value)) {
-      case 'terminée': case 'publiée': return 'terminée';
-      case 'annulée': case 'refusée': return 'annulée';
-      case 'en traitement': case 'informations requises': return 'en traitement';
-      case 'assignée': return 'assignée';
-      default: return 'reçue';
+      case 'terminée':
+      case 'publiée':
+        return 'terminée';
+      case 'annulée':
+      case 'refusée':
+        return 'annulée';
+      case 'en traitement':
+      case 'informations requises':
+        return 'en traitement';
+      case 'assignée':
+        return 'assignée';
+      default:
+        return 'reçue';
     }
   }
 }

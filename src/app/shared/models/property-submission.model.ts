@@ -1,6 +1,7 @@
 import { PropertyCategory, PropertyType } from './property.model';
 
-export type PropertySubmissionStatus = 'en attente' | 'informations requises' | 'refusée' | 'publiée';
+export type PropertySubmissionStatus =
+  'en attente' | 'informations requises' | 'refusée' | 'publiée';
 
 export interface PropertySubmissionInput {
   title: string;
@@ -13,12 +14,17 @@ export interface PropertySubmissionInput {
   bedrooms: number;
   bathrooms: number;
   description: string;
-  photoUrls: string[];
-  documentUrls: string[];
+  photos: File[];
+  documents: File[];
 }
 
-export interface MyPropertySubmission extends PropertySubmissionInput {
+export interface MyPropertySubmission extends Omit<
+  PropertySubmissionInput,
+  'photos' | 'documents'
+> {
   id: string;
+  photoUrls: string[];
+  documentUrls: string[];
   status: PropertySubmissionStatus;
   adminMessage: string;
   createdAt: Date;

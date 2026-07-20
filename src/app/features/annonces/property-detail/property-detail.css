@@ -1,10 +1,15 @@
-.property-detail { color: #171917; }
+.property-detail { color: #171917; overflow: hidden; }
 .back-link { display: inline-flex; align-items: center; gap: .55rem; color: #657064; font-size: .75rem; font-weight: 700; }
 .back-link:hover { color: #171917; }
-.icon-button { display: grid; place-items: center; width: 2.35rem; height: 2.35rem; border: 1px solid #e5e9e3; border-radius: 999px; background: white; color: #657064; font-size: 1.05rem; transition: .2s ease; }
+.button-icon, .detail-icon, .amenity-icon, .small-icon { display: inline-block; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+.button-icon { width: 1rem; height: 1rem; stroke-width: 1.8; }
+.detail-icon { width: 1.1rem; height: 1.1rem; color: #bd8c43; stroke-width: 1.7; }
+.amenity-icon { width: 1.25rem; height: 1.25rem; color: #bd8c43; stroke-width: 1.65; }
+.small-icon { width: .85rem; height: .85rem; color: #78952f; stroke-width: 1.8; vertical-align: -2px; }
+.icon-button { display: grid; place-items: center; width: 2.35rem; height: 2.35rem; border: 1px solid #e5e9e3; border-radius: 999px; background: white; color: #657064; transition: .2s ease; }
 .icon-button:hover { border-color: #c5e84a; background: #f2fbd8; color: #171917; }
 .gallery-grid { display: grid; grid-template-columns: minmax(0, 1.72fr) minmax(220px, .75fr); gap: .65rem; height: 355px; }
-.gallery-main, .gallery-thumb { position: relative; overflow: hidden; border-radius: 1.1rem; background: #dfe7dd; }
+.gallery-main, .gallery-thumb { position: relative; min-width: 0; overflow: hidden; border-radius: 1.1rem; background: #dfe7dd; }
 .gallery-main img, .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
 .gallery-main:hover img, .gallery-thumb:hover img { transform: scale(1.03); }
 .gallery-side { display: grid; grid-template-rows: 1fr 1fr; gap: .65rem; }
@@ -12,22 +17,22 @@
 .gallery-thumb.active { outline: 3px solid #c5e84a; outline-offset: -3px; }
 .gallery-thumb span { position: absolute; right: 1rem; bottom: 1rem; left: 1rem; border-radius: 999px; background: rgb(255 255 255 / .9); padding: .65rem .8rem; font-size: .68rem; font-weight: 800; }
 .image-count { position: absolute; right: 1rem; bottom: 1rem; border-radius: 999px; background: rgb(255 255 255 / .9); padding: .55rem .8rem; font-size: .68rem; font-weight: 800; }
-.detail-layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 4rem; padding: 2.8rem .25rem 0; }
+.detail-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(290px, 330px); align-items: start; gap: clamp(2rem, 5vw, 4rem); padding: 2.8rem .25rem 0; }
+.detail-content, .booking-column { min-width: 0; }
 .detail-content { max-width: 720px; }
 .eyebrow-row { display: flex; flex-wrap: wrap; gap: .55rem; }
 .status-pill, .verified-pill { border-radius: 999px; padding: .4rem .75rem; font-size: .68rem; font-weight: 800; }
 .status-pill { background: #eaf7bd; color: #405313; }
 .verified-pill { background: #edf1eb; color: #657064; }
 .detail-content h1 { margin: 1rem 0 .6rem; font-size: clamp(2rem, 4vw, 3.1rem); line-height: 1.05; letter-spacing: -.04em; }
-.location { color: #657064; font-size: .82rem; }
-.location span { color: #b88d4d; font-size: 1rem; }
+.location { display: flex; align-items: center; gap: .45rem; color: #657064; font-size: .82rem; }
 .facts-row { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-top: 1.35rem; color: #657064; font-size: .74rem; }
-.facts-row span::first-letter { color: #b88d4d; }
+.facts-row span { display: inline-flex; align-items: center; gap: .4rem; }
 .divider { height: 1px; margin: 2.1rem 0; background: #e2e7e0; }
 .detail-content h2 { margin-bottom: .85rem; font-size: 1rem; font-weight: 800; }
 .description { max-width: 650px; color: #657064; font-size: .82rem; line-height: 1.9; white-space: pre-line; }
 .amenities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 2rem; color: #657064; font-size: .75rem; }
-.amenities span::first-letter { color: #b88d4d; }
+.amenities span { display: inline-flex; align-items: center; gap: .6rem; min-width: 0; }
 .booking-column { padding-top: .25rem; }
 .booking-card, .contact-card { border: 1px solid #e2e7e0; border-radius: 1.1rem; background: white; box-shadow: 0 16px 42px rgb(39 50 39 / .06); }
 .booking-card { padding: 1.4rem; }
@@ -44,5 +49,11 @@
 .contact-card strong { font-size: .72rem; }
 .contact-card span { margin-top: .15rem; color: #899187; font-size: .62rem; }
 .contact-icon { margin-left: auto; border: 0; background: transparent; color: #6f8d2b; font-size: 1.15rem; cursor: pointer; }
-@media (max-width: 800px) { .gallery-grid { height: 290px; grid-template-columns: 1.5fr 1fr; } .detail-layout { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 2rem; } .booking-column { max-width: 520px; } }
+.map-card { margin-top: .8rem; overflow: hidden; border: 1px solid #e2e7e0; border-radius: 1.1rem; background: white; box-shadow: 0 16px 42px rgb(39 50 39 / .06); }
+.map-heading { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: 1rem 1.1rem .85rem; }
+.map-heading p { margin: 0; font-size: .75rem; font-weight: 800; }
+.map-heading span { display: block; max-width: 240px; overflow: hidden; margin-top: .2rem; color: #899187; font-size: .64rem; text-overflow: ellipsis; white-space: nowrap; }
+.property-map { height: 220px; background: #dfe8dc; }
+.property-map :global(.leaflet-control-attribution) { font-size: 9px; }
+@media (max-width: 800px) { .gallery-grid { height: 290px; grid-template-columns: 1.5fr 1fr; } .detail-layout { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 2rem; } .booking-column { width: 100%; max-width: 520px; } }
 @media (max-width: 540px) { .property-detail { padding-top: 6.5rem; } .gallery-grid { height: 230px; gap: .4rem; } .gallery-side { gap: .4rem; } .gallery-main, .gallery-thumb { border-radius: .8rem; } .gallery-thumb span { right: .45rem; bottom: .45rem; left: .45rem; padding: .45rem .5rem; font-size: .55rem; } .image-count { right: .45rem; bottom: .45rem; padding: .45rem .55rem; font-size: .58rem; } .amenities { gap: .85rem; } }
