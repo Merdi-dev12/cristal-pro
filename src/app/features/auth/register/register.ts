@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -12,6 +12,7 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class RegisterPage {
   private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
   firstName = '';
   lastName = '';
@@ -26,7 +27,7 @@ export class RegisterPage {
     this.showPassword.update((value) => !value);
   }
 
-  protected onRegister(): void {
+  protected async onRegister(): Promise<void> {
     if (!this.firstName.trim() || !this.lastName.trim() || !this.email.trim() || !this.password.trim() || !this.passwordConfirm.trim()) {
       this.error.set('Veuillez remplir tous les champs.');
       return;
@@ -40,9 +41,13 @@ export class RegisterPage {
     this.loading.set(true);
     this.error.set('');
 
-    window.setTimeout(() => {
-      this.auth.setSubscriber(true);
+    try {
+      await this.auth.signUp(this.email, this.password, this.firstName, this.lastName);
+      await this.router.navigateByUrl('/demenagement');
+    } catch (error) {
+      this.error.set(error instanceof Error ? error.message : 'Inscription impossible.');
+    } finally {
       this.loading.set(false);
-    }, 350);
+    }
   }
 }

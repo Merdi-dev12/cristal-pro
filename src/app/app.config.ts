@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { AuthService } from './core/services/auth.service';
 import { HeaderStateService } from './core/services/header-state';
 import { RheodyceDataService } from './core/services/rheodyce-data.service';
+import { MovingRequestService } from './core/services/moving-request.service';
 import { Scroll } from './core/services/scroll';
 
 export const appConfig: ApplicationConfig = {
@@ -20,6 +21,7 @@ export const appConfig: ApplicationConfig = {
     AuthService,
     HeaderStateService,
     RheodyceDataService,
+    MovingRequestService,
     Scroll,
   ]
 };

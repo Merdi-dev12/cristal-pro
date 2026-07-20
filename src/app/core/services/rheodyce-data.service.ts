@@ -143,6 +143,14 @@ export class RheodyceDataService {
       cta: 'S’inspirer',
     },
     {
+      id: 'demenagement',
+      title: 'Déménagement',
+      eyebrow: 'Logistique',
+      description: 'Préparez votre transfert avec un itinéraire estimé, le volume à transporter et l’affectation d’un partenaire.',
+      icon: '↗',
+      cta: 'Préparer mon déménagement',
+    },
+    {
       id: 'juridique',
       title: 'Assistance juridique',
       eyebrow: 'Protection',
