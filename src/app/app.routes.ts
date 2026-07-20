@@ -25,6 +25,7 @@ import { AdminSubmissionsPage } from './features/admin/admin-submissions';
 import { AdminPropertiesPage } from './features/admin/admin-properties';
 import { SubscriptionPage } from './features/subscription/subscription';
 import { PropertyDetailPage } from './features/annonces/property-detail/property-detail';
+import { ProfilePage } from './features/profile/profile';
 
 export const routes: Routes = [
   { path: '', component: Home, title: 'Accueil — RHEODYCE' },
@@ -40,9 +41,29 @@ export const routes: Routes = [
   { path: 'connexion', component: LoginPage, title: 'Connexion — RHEODYCE' },
   { path: 'inscription', component: RegisterPage, title: 'Inscription — RHEODYCE' },
   { path: 'mon-compte/demandes', component: ServiceRequestsPage, title: 'Mes demandes — RHEODYCE' },
-  { path: 'mon-compte/demandes/:id', component: ServiceRequestDetailPage, title: 'Détail demande — RHEODYCE' },
-  { path: 'demenagement', component: DemenagementPage, canActivate: [authGuard], title: 'Déménagement — RHEODYCE' },
-  { path: 'espace-utilisateur', component: UserSpacePage, canActivate: [authGuard], title: 'Espace utilisateur — RHEODYCE' },
+  {
+    path: 'mon-compte/demandes/:id',
+    component: ServiceRequestDetailPage,
+    title: 'Détail demande — RHEODYCE',
+  },
+  {
+    path: 'mon-profil',
+    component: ProfilePage,
+    canActivate: [authGuard],
+    title: 'Mon profil — RHEODYCE',
+  },
+  {
+    path: 'demenagement',
+    component: DemenagementPage,
+    canActivate: [authGuard],
+    title: 'Déménagement — RHEODYCE',
+  },
+  {
+    path: 'espace-utilisateur',
+    component: UserSpacePage,
+    canActivate: [authGuard],
+    title: 'Espace utilisateur — RHEODYCE',
+  },
   {
     path: 'admin',
     component: AdminLayoutPage,

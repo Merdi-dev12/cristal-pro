@@ -122,6 +122,31 @@ export interface AdminServiceRequestView extends ServiceRequest {
   notificationPrepared: boolean;
 }
 
+export interface AdminServiceOffer {
+  id: string;
+  slug: string;
+  title: string;
+  eyebrow: string;
+  description: string;
+  icon: string;
+  cta: string;
+  displayOrder: number;
+  active: boolean;
+  createdAt: string;
+}
+
+export interface AdminServiceOfferDraft {
+  id?: string;
+  slug: string;
+  title: string;
+  eyebrow: string;
+  description: string;
+  icon: string;
+  cta: string;
+  displayOrder: number;
+  active: boolean;
+}
+
 export const ADMIN_REQUEST_STATUSES: RequestStatus[] = [
   'reçue',
   'en traitement',

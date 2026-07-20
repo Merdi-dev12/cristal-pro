@@ -34,12 +34,14 @@ export class Header {
     const name = this.auth.session()?.user.user_metadata?.['full_name'];
     const email = this.auth.userEmail();
     const label = typeof name === 'string' && name.trim() ? name : email;
-    return label
-      .split(/[\s@._-]+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase() ?? '')
-      .join('') || 'U';
+    return (
+      label
+        .split(/[\s@._-]+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0]?.toUpperCase() ?? '')
+        .join('') || 'U'
+    );
   });
 
   protected readonly navLinks = signal<NavLink[]>([
@@ -53,11 +55,13 @@ export class Header {
   ]);
 
   constructor() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
-      this.isHome.set(this.isHomeUrl(event.urlAfterRedirects));
-      this.isMenuOpen.set(false);
-      this.isProfileMenuOpen.set(false);
-    });
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        this.isHome.set(this.isHomeUrl(event.urlAfterRedirects));
+        this.isMenuOpen.set(false);
+        this.isProfileMenuOpen.set(false);
+      });
   }
 
   protected toggleMenu(): void {
@@ -72,6 +76,10 @@ export class Header {
   protected toggleProfileMenu(): void {
     this.isMenuOpen.set(false);
     this.isProfileMenuOpen.update((isOpen) => !isOpen);
+  }
+
+  protected closeProfileMenu(): void {
+    this.isProfileMenuOpen.set(false);
   }
 
   protected async signOut(): Promise<void> {

@@ -1,19 +1,27 @@
 <header
-  [class]="'fixed left-0 right-0 top-0 z-50 w-full transition-all duration-500 ' +
-    ((isHome() && !isScrolled())
+  [class]="
+    'fixed left-0 right-0 top-0 z-50 w-full transition-all duration-500 ' +
+    (isHome() && !isScrolled()
       ? 'bg-transparent py-5'
-      : 'border-b border-white/10 bg-black/55 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.28)] backdrop-blur-md')"
+      : 'border-b border-white/10 bg-black/55 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.28)] backdrop-blur-md')
+  "
 >
   <div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-    <a routerLink="/" class="flex shrink-0 items-center gap-2 transition-transform duration-300 hover:scale-105" aria-label="Rheodyce — accueil">
+    <a
+      routerLink="/"
+      class="flex shrink-0 items-center gap-2 transition-transform duration-300 hover:scale-105"
+      aria-label="Rheodyce — accueil"
+    >
       <img src="assets/rheodyce-logo.svg" alt="Rheodyce" class="h-9 w-auto" />
     </a>
 
     <nav
-      [class]="'hidden items-center transition-all duration-500 lg:flex ' +
-        ((isHome() && !isScrolled())
+      [class]="
+        'hidden items-center transition-all duration-500 lg:flex ' +
+        (isHome() && !isScrolled()
           ? 'rounded-full border border-white/10 bg-white/10 px-1.5 py-1.5 shadow-[0_4px_30px_rgba(0,0,0,0.03)] backdrop-blur-md'
-          : 'rounded-full border border-white/10 bg-white/10 px-1.5 py-1.5 shadow-none backdrop-blur-md')"
+          : 'rounded-full border border-white/10 bg-white/10 px-1.5 py-1.5 shadow-none backdrop-blur-md')
+      "
       aria-label="Navigation principale"
     >
       <ul class="flex items-center gap-1">
@@ -42,19 +50,15 @@
             Panel admin
           </a>
         }
-        <a
-          routerLink="/mon-compte/demandes"
-          class="hidden rounded-full border border-white/15 bg-transparent px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:border-white/30 hover:bg-white/10 active:scale-95 sm:inline-flex"
-        >
-          Mes demandes
-        </a>
         <div class="relative">
           <button
             type="button"
             class="flex size-11 items-center justify-center overflow-hidden rounded-full border-2 border-white/40 bg-white/15 text-sm font-semibold text-white transition-all hover:border-white hover:bg-white/25 active:scale-95"
             [attr.aria-expanded]="isProfileMenuOpen()"
             aria-controls="profile-menu"
-            [attr.aria-label]="isProfileMenuOpen() ? 'Fermer le menu du profil' : 'Ouvrir le menu du profil'"
+            [attr.aria-label]="
+              isProfileMenuOpen() ? 'Fermer le menu du profil' : 'Ouvrir le menu du profil'
+            "
             (click)="toggleProfileMenu()"
           >
             @if (profileImageUrl()) {
@@ -69,6 +73,20 @@
               id="profile-menu"
               class="absolute right-0 top-full mt-3 min-w-48 rounded-2xl border border-white/10 bg-black/90 p-2 shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-md"
             >
+              <a
+                routerLink="/mon-profil"
+                class="block rounded-xl px-4 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                (click)="closeProfileMenu()"
+              >
+                Mon profil
+              </a>
+              <a
+                routerLink="/mon-compte/demandes"
+                class="block rounded-xl px-4 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                (click)="closeProfileMenu()"
+              >
+                Mes demandes
+              </a>
               <button
                 type="button"
                 class="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
@@ -99,7 +117,9 @@
         class="inline-flex size-11 items-center justify-center rounded-full border border-white/15 text-white transition-colors hover:bg-white/10 lg:hidden"
         [attr.aria-expanded]="isMenuOpen()"
         aria-controls="mobile-navigation"
-        [attr.aria-label]="isMenuOpen() ? 'Fermer le menu de navigation' : 'Ouvrir le menu de navigation'"
+        [attr.aria-label]="
+          isMenuOpen() ? 'Fermer le menu de navigation' : 'Ouvrir le menu de navigation'
+        "
         (click)="toggleMenu()"
       >
         @if (isMenuOpen()) {
@@ -146,15 +166,6 @@
                 </a>
               </li>
             }
-            <li>
-              <a
-                routerLink="/mon-compte/demandes"
-                class="block rounded-2xl px-4 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-                (click)="closeMenu()"
-              >
-                Mes demandes
-              </a>
-            </li>
           } @else {
             <li>
               <a

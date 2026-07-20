@@ -3,6 +3,9 @@ import type { Session } from '@supabase/supabase-js';
 import { SupabaseClientService } from './supabase-client';
 
 interface AuthProfile {
+  email?: string;
+  full_name?: string;
+  phone?: string;
   role?: string;
   is_subscriber?: boolean;
 }
@@ -15,7 +18,10 @@ export class AuthService {
   readonly profile = signal<AuthProfile | null>(null);
   readonly isAuthenticated = computed(() => Boolean(this.session()?.access_token));
   readonly hasSession = this.isAuthenticated;
-  readonly isAdmin = computed(() => this.session()?.user.app_metadata?.['role'] === 'admin' || this.profile()?.role === 'admin');
+  readonly isAdmin = computed(
+    () =>
+      this.session()?.user.app_metadata?.['role'] === 'admin' || this.profile()?.role === 'admin',
+  );
   readonly isSubscriber = computed(() => this.profile()?.is_subscriber === true);
 
   async init(): Promise<void> {
@@ -56,14 +62,25 @@ export class AuthService {
   }
 
   async signIn(email: string, password: string): Promise<void> {
-    const { data, error } = await this.supabase.auth.signInWithPassword({ email: email.trim(), password });
+    const { data, error } = await this.supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
     if (error) throw error;
     this.setSession(data.session);
     await this.loadProfile(data.user.id);
   }
 
-  async signUp(email: string, password: string, fullName: string): Promise<{ needsConfirmation: boolean }> {
-    const { data, error } = await this.supabase.auth.signUp({ email: email.trim(), password, options: { data: { full_name: fullName } } });
+  async signUp(
+    email: string,
+    password: string,
+    fullName: string,
+  ): Promise<{ needsConfirmation: boolean }> {
+    const { data, error } = await this.supabase.auth.signUp({
+      email: email.trim(),
+      password,
+      options: { data: { full_name: fullName } },
+    });
     if (error) throw error;
     if (!data.session || !data.user) return { needsConfirmation: true };
     this.setSession(data.session);
@@ -77,6 +94,35 @@ export class AuthService {
     this.setSession(null);
   }
 
+  async updateProfile(fullName: string, phone: string): Promise<void> {
+    const userId = this.userId();
+    if (!userId) throw new Error('Session utilisateur introuvable.');
+
+    const cleanName = fullName.trim();
+    const cleanPhone = phone.trim();
+    const { error } = await this.supabase
+      .from('profiles')
+      .update({
+        full_name: cleanName,
+        phone: cleanPhone || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', userId);
+
+    if (error) throw error;
+
+    const { error: authError } = await this.supabase.auth.updateUser({
+      data: { full_name: cleanName },
+    });
+    if (authError) throw authError;
+
+    this.profile.update((profile) => ({
+      ...(profile ?? {}),
+      full_name: cleanName,
+      phone: cleanPhone,
+    }));
+  }
+
   private setSession(session: Session | null): void {
     const previousUserId = this.session()?.user.id;
     const nextUserId = session?.user.id;
@@ -88,7 +134,7 @@ export class AuthService {
     this.profile.set(null);
     const { data } = await this.supabase
       .from('profiles')
-      .select('role, is_subscriber')
+      .select('email, full_name, phone, role, is_subscriber')
       .eq('id', userId)
       .maybeSingle();
 
