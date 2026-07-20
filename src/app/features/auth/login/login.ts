@@ -26,6 +26,7 @@ export class LoginPage {
   }
 
   protected async onLogin(): Promise<void> {
+  protected async onLogin(): Promise<void> {
     if (!this.email.trim() || !this.password.trim()) {
       this.error.set('Veuillez remplir tous les champs.');
       return;
@@ -42,6 +43,7 @@ export class LoginPage {
       this.error.set(error instanceof Error ? error.message : 'Connexion impossible.');
     } finally {
       this.loading.set(false);
+    }
     }
   }
 }

@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { Scroll } from '../../core/services/scroll';
+import { AuthService } from '../../core/services/auth.service';
 
 interface NavLink {
   path: string;
@@ -17,7 +18,9 @@ interface NavLink {
 export class Header {
   private readonly router = inject(Router);
   private readonly scrollService = inject(Scroll);
+  private readonly auth = inject(AuthService);
   protected readonly isScrolled = this.scrollService.isScrolled;
+  protected readonly hasSession = this.auth.hasSession;
   protected readonly isHome = signal(this.isHomeUrl(this.router.url));
 
   protected readonly navLinks = signal<NavLink[]>([

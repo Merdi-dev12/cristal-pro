@@ -9,6 +9,8 @@ import { FaqPage } from './features/faq/faq';
 import { ContactPage } from './features/contact/contact';
 import { LoginPage } from './features/auth/login/login';
 import { RegisterPage } from './features/auth/register/register';
+import { ServiceRequestsPage } from './features/my-account/service-requests/service-requests';
+import { ServiceRequestDetailPage } from './features/my-account/service-requests/service-request-detail/service-request-detail';
 import { DemenagementPage } from './features/demenagement/demenagement';
 import { UserSpacePage } from './features/user-space/user-space';
 import { MovingAdminPage } from './features/admin/moving-admin';
@@ -25,6 +27,8 @@ export const routes: Routes = [
   { path: 'contact', component: ContactPage, title: 'Contact — RHEODYCE' },
   { path: 'connexion', component: LoginPage, title: 'Connexion — RHEODYCE' },
   { path: 'inscription', component: RegisterPage, title: 'Inscription — RHEODYCE' },
+  { path: 'mon-compte/demandes', component: ServiceRequestsPage, title: 'Mes demandes — RHEODYCE' },
+  { path: 'mon-compte/demandes/:id', component: ServiceRequestDetailPage, title: 'Détail demande — RHEODYCE' },
   { path: 'demenagement', component: DemenagementPage, canActivate: [authGuard], title: 'Déménagement — RHEODYCE' },
   { path: 'espace-utilisateur', component: UserSpacePage, canActivate: [authGuard], title: 'Espace utilisateur — RHEODYCE' },
   { path: 'admin/demenagements', component: MovingAdminPage, canActivate: [authGuard], title: 'Demandes de déménagement — RHEODYCE' },

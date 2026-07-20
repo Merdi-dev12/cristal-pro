@@ -19,6 +19,7 @@ interface SupabaseSession {
 export class AuthService {
   private readonly SESSION_KEY = 'rheodyce:supabase-session';
   private readonly KEY = 'rheodyce:isSubscriber';
+  private readonly supabase = inject(SupabaseClientService).client;
 
   readonly session = signal<SupabaseSession | null>(this.readSession());
   readonly isAuthenticated = computed(() => Boolean(this.session()?.access_token));
@@ -26,7 +27,13 @@ export class AuthService {
   readonly isSubscriber = signal<boolean>(Boolean(this.session()?.access_token) || this.read());
 
   constructor() {
-    // no-op
+    this.supabase.auth.getSession().then(({ data }) => {
+      this.hasSession.set(!!data.session);
+    });
+
+    this.supabase.auth.onAuthStateChange((_event, session) => {
+      this.hasSession.set(!!session);
+    });
   }
 
   setSubscriber(value: boolean): void {
@@ -61,6 +68,19 @@ export class AuthService {
         data: { first_name: firstName.trim(), last_name: lastName.trim() },
       }),
     });
+
+    private async markProfileSubscriber(): Promise<void> {
+    const { data } = await this.supabase.auth.getUser();
+    const user = data.user;
+    if (!user) return;
+
+    await this.supabase
+      .from('profiles')
+      .update({ is_subscriber: true, subscribed_at: new Date().toISOString() })
+      .eq('id', user.id);
+
+    this.setSubscriber(true);
+  }
 
     const body = await this.parseResponse(response, 'Impossible de créer le compte.');
     if (!body['access_token']) {

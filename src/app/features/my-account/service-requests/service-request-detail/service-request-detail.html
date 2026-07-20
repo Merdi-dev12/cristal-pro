@@ -1,0 +1,93 @@
+<section class="bg-rheo-bg pb-16 pt-28">
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+    <a routerLink="/mon-compte/demandes" class="group mb-8 inline-flex items-center gap-2 text-sm font-medium text-rheo-muted transition-colors hover:text-rheo-dark">
+      <svg class="h-4 w-4 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M19 12H5m0 0 6-6m-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span>Mes demandes</span>
+    </a>
+
+    @if (isLoading()) {
+      <div class="rounded-[30px] border border-rheo-border bg-white p-12 text-center text-sm text-rheo-muted">
+        Chargement de la demande...
+      </div>
+    } @else if (notFound()) {
+      <div class="rounded-[30px] border border-rheo-border bg-white p-12 text-center">
+        <p class="text-lg font-semibold text-rheo-dark">Demande introuvable.</p>
+        <p class="mt-2 text-sm text-rheo-muted">Elle n'existe pas ou vous n'y avez pas accès.</p>
+      </div>
+    } @else if (request(); as current) {
+      <div class="overflow-hidden rounded-[30px] border border-rheo-border bg-white">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-rheo-border p-6 sm:p-8">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rheo-muted">{{ serviceTypeLabel(current) }}</p>
+            <h1 class="mt-2 text-2xl font-semibold tracking-tight text-rheo-dark sm:text-3xl">Demande de service</h1>
+          </div>
+          <app-request-status-badge [status]="current.status" />
+        </div>
+
+        <div class="grid gap-6 p-6 sm:p-8">
+          <div class="grid gap-4 sm:grid-cols-3">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-rheo-muted">Demandeur</p>
+              <p class="mt-1.5 text-sm font-semibold text-rheo-dark">{{ current.clientName }}</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-rheo-muted">Email</p>
+              <p class="mt-1.5 text-sm font-semibold text-rheo-dark">{{ current.clientEmail }}</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-rheo-muted">Téléphone</p>
+              <p class="mt-1.5 text-sm font-semibold text-rheo-dark">{{ current.clientPhone }}</p>
+            </div>
+          </div>
+
+          <div class="rounded-[20px] bg-rheo-bg p-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-rheo-muted">Description</p>
+            <p class="mt-2 text-sm leading-7 text-rheo-dark">{{ current.description }}</p>
+          </div>
+
+          @if (current.propertyId && propertyTitle(current.propertyId); as title) {
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-rheo-muted">Propriété concernée</p>
+              <p class="mt-1.5 text-sm font-semibold text-rheo-dark">{{ title }}</p>
+            </div>
+          }
+
+          @if (current.budget) {
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-rheo-muted">Budget indicatif</p>
+              <p class="mt-1.5 text-sm font-semibold text-rheo-dark">{{ current.budget }} USD</p>
+            </div>
+          }
+
+          @if (current.assignedTo || current.notes) {
+            <div class="rounded-[20px] border border-rheo-accent/40 bg-rheo-accent/10 p-5">
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-rheo-dark">Suivi RHEODYCE</p>
+              @if (current.assignedTo) {
+                <p class="mt-2 text-sm text-rheo-dark">Assignée à : {{ current.assignedTo }}</p>
+              }
+              @if (current.notes) {
+                <p class="mt-1.5 text-sm text-rheo-dark">{{ current.notes }}</p>
+              }
+            </div>
+          }
+
+          <div class="flex flex-wrap items-center justify-between gap-4 border-t border-rheo-border pt-6">
+            <p class="text-xs text-rheo-muted">Créée le {{ current.createdAt | date: 'd MMMM y' }}</p>
+            @if (canCancel(current)) {
+              <button
+                type="button"
+                [disabled]="isCancelling()"
+                (click)="onCancel()"
+                class="rounded-[16px] border border-[#d7e0ed] px-5 py-2.5 text-sm font-semibold text-rheo-dark transition hover:border-rheo-dark disabled:opacity-60"
+              >
+                {{ isCancelling() ? 'Annulation...' : 'Annuler la demande' }}
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

@@ -28,6 +28,7 @@ export class RegisterPage {
   }
 
   protected async onRegister(): Promise<void> {
+  protected async onRegister(): Promise<void> {
     if (!this.firstName.trim() || !this.lastName.trim() || !this.email.trim() || !this.password.trim() || !this.passwordConfirm.trim()) {
       this.error.set('Veuillez remplir tous les champs.');
       return;
@@ -48,6 +49,7 @@ export class RegisterPage {
       this.error.set(error instanceof Error ? error.message : 'Inscription impossible.');
     } finally {
       this.loading.set(false);
+    }
     }
   }
 }
