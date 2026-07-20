@@ -17,4 +17,6 @@ export interface Property {
   featured?: boolean;
   verified?: boolean;
   description: string;
+  latitude?: number;
+  longitude?: number;
 }

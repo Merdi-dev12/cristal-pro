@@ -46,10 +46,32 @@ export class AuthService {
       this.setSession(data.session);
       await this.loadProfile(data.session.user.id);
     }
+
     this.supabase.auth.onAuthStateChange((_event, session) => {
+      {
       this.setSession(session);
       if (session) void this.loadProfile(session.user.id);
+    };
+
+      if (session) {
+        localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
+        void this.markProfileSubscriber();
+      } else {
+        localStorage.removeItem(this.SESSION_KEY);
+      }
     });
+  }
+
+  /**
+   * Redirige vers Google. Au retour, `onAuthStateChange` (ci-dessus) adopte automatiquement
+   * la session créée par supabase-js — aucune action supplémentaire n'est nécessaire ici.
+   */
+  async signInWithGoogle(): Promise<void> {
+    const { error } = await this.supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) throw error;
   }
 
   setSubscriber(value: boolean): void {
