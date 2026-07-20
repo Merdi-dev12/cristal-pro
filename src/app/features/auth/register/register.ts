@@ -9,6 +9,7 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './register.html',
+  templateUrl: './register.html',
 })
 export class RegisterPage {
   private readonly auth = inject(AuthService);
@@ -29,13 +30,7 @@ export class RegisterPage {
   }
 
   protected async onRegister(): Promise<void> {
-    if (
-      !this.firstName.trim() ||
-      !this.lastName.trim() ||
-      !this.email.trim() ||
-      !this.password.trim() ||
-      !this.passwordConfirm.trim()
-    ) {
+    if (!this.firstName.trim() || !this.lastName.trim() || !this.email.trim() || !this.password.trim() || !this.passwordConfirm.trim()) {
       this.error.set('Veuillez remplir tous les champs.');
       return;
     }
@@ -55,6 +50,8 @@ export class RegisterPage {
 
       if (needsConfirmation) {
         this.info.set('Compte créé. Vérifiez votre boîte mail pour confirmer votre adresse avant de vous connecter.');
+      } else {
+        await this.router.navigateByUrl('/');
       }
     } catch (err) {
       const message = err instanceof Error ? err.message.toLowerCase() : '';
