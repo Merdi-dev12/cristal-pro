@@ -66,9 +66,15 @@ import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
                   <h3 class="mt-2 text-xl font-semibold tracking-tight text-rheo-dark">{{ service.title }}</h3>
                 </div>
                 <p class="max-w-2xl text-sm leading-7 text-rheo-muted">{{ service.description }}</p>
-                <button type="button" class="w-fit rounded-[16px] border border-[#d7e0ed] px-5 py-2.5 text-sm font-semibold text-rheo-dark transition hover:border-rheo-dark">
-                  {{ service.cta }}
-                </button>
+                @if (service.id === 'demenagement') {
+                  <a routerLink="/demenagement" class="w-fit rounded-[16px] border border-rheo-dark bg-rheo-dark px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#253025]">
+                    {{ service.cta }}
+                  </a>
+                } @else {
+                  <button type="button" class="w-fit rounded-[16px] border border-[#d7e0ed] px-5 py-2.5 text-sm font-semibold text-rheo-dark transition hover:border-rheo-dark">
+                    {{ service.cta }}
+                  </button>
+                }
               </article>
             }
           </div>

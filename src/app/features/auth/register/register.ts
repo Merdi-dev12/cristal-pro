@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -12,6 +12,7 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class RegisterPage {
   private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
   firstName = '';
   lastName = '';
@@ -27,6 +28,7 @@ export class RegisterPage {
     this.showPassword.update((value) => !value);
   }
 
+  protected async onRegister(): Promise<void> {
   protected async onRegister(): Promise<void> {
     if (!this.firstName.trim() || !this.lastName.trim() || !this.email.trim() || !this.password.trim() || !this.passwordConfirm.trim()) {
       this.error.set('Veuillez remplir tous les champs.');
@@ -60,6 +62,7 @@ export class RegisterPage {
       }
     } finally {
       this.loading.set(false);
+    }
     }
   }
 }
