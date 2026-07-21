@@ -226,7 +226,11 @@ export class AdminLayoutPage {
     { path: '/admin/utilisateurs', label: 'Utilisateurs', icon: 'users' },
     { path: '/admin/services', label: 'Demandes de services', icon: 'tools', badge: 'services' },
     { path: '/admin/contacts', label: 'Demandes de contact', icon: 'mail', badge: 'contacts' },
-    { path: '/admin/demenagements', label: 'Déménagements', icon: 'truck' },
+    {
+      path: '/admin/demenagements',
+      label: 'Déménagements et aménagements',
+      icon: 'truck',
+    },
     {
       path: '/admin/soumissions',
       label: 'Soumissions de biens',

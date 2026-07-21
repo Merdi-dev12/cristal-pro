@@ -135,7 +135,7 @@ export const routes: Routes = [
     path: 'demenagement',
     loadComponent: () =>
       import('./features/demenagement/demenagement').then((module) => module.DemenagementPage),
-    title: 'Déménagement — RHEODYCE',
+    title: 'Déménagement et aménagement — RHEODYCE',
   },
   {
     path: 'espace-utilisateur',
@@ -246,7 +246,7 @@ export const routes: Routes = [
         path: 'demenagements',
         loadComponent: () =>
           import('./features/admin/moving-admin').then((module) => module.MovingAdminPage),
-        title: 'Déménagements — Administration',
+        title: 'Déménagements et aménagements — Administration',
       },
     ],
   },

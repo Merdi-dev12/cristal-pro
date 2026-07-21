@@ -70,7 +70,7 @@ export const SERVICE_TYPE_LABELS: Record<ServiceType, string> = {
   maintenance: 'Maintenance',
   decoration: 'Décoration',
   juridique: 'Assistance juridique',
-  demenagement: 'Déménagement',
+  demenagement: 'Déménagement et aménagement',
   'installation-solaire': 'Installation de panneaux solaires',
   annonce: 'Annonce proposée',
   contact: 'Contact',

@@ -225,7 +225,7 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
           routerLink="/admin/demenagements"
           class="group rounded-2xl border border-[#e4e6e1] bg-white p-5 transition hover:-translate-y-0.5 hover:border-rheo-accent"
           ><app-admin-icon name="truck" className="size-7" />
-          <h3 class="mt-4 font-semibold">Déménagements</h3>
+          <h3 class="mt-4 font-semibold">Déménagements et aménagements</h3>
           <p class="mt-1 text-xs text-rheo-muted">Partenaires et itinéraires</p></a
         ><a
           routerLink="/admin/annonces"

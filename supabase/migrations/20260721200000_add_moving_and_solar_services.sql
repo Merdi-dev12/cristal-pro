@@ -68,11 +68,11 @@ insert into public.service_offers (
 values
   (
     'demenagement',
-    'Déménagement',
+    'Déménagement et aménagement',
     'Logistique',
     'Organisation du transport, estimation du trajet et mise en relation avec un partenaire terrain.',
     '↗',
-    'Planifier mon déménagement',
+    'Planifier mon projet',
     6,
     true
   ),

@@ -43,7 +43,7 @@ where not exists (
 insert into public.faqs (question, answer, display_order)
 select
   'Quels services complémentaires sont proposés ?',
-  'RHEODYCE propose notamment la maintenance, la décoration intérieure, le déménagement et des conseils immobiliers.',
+  'RHEODYCE propose notamment la maintenance, la décoration intérieure, le déménagement et l’aménagement ainsi que des conseils immobiliers.',
   6
 where not exists (
   select 1 from public.faqs where question = 'Quels services complémentaires sont proposés ?'

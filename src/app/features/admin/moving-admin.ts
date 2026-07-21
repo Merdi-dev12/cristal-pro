@@ -16,7 +16,7 @@ import { MovingRequest, MovingRequestStatus } from '../../shared/models/moving-r
           <p class="text-sm font-semibold uppercase tracking-[0.2em] text-rheo-muted">
             Opérations terrain
           </p>
-          <h1 class="mt-2 text-3xl font-semibold tracking-tight">Déménagements</h1>
+          <h1 class="mt-2 text-3xl font-semibold tracking-tight">Déménagements et aménagements</h1>
           <p class="mt-3 max-w-2xl text-sm leading-6 text-rheo-muted">
             Affectez un partenaire et mettez à jour le statut de chaque demande.
           </p>
@@ -172,7 +172,7 @@ import { MovingRequest, MovingRequestStatus } from '../../shared/models/moving-r
                         </p>
                       </div>
                       <div>
-                        <p class="text-xs text-rheo-muted">Déménagement prévu</p>
+                        <p class="text-xs text-rheo-muted">Déménagement et aménagement prévus</p>
                         <p class="mt-1 font-medium text-rheo-dark">
                           {{ request.movingDate | date: 'EEEE d MMMM y' }}
                         </p>
@@ -275,7 +275,7 @@ import { MovingRequest, MovingRequestStatus } from '../../shared/models/moving-r
             <div
               class="rounded-2xl border border-dashed border-[#d5dbd0] bg-white p-10 text-center text-sm text-rheo-muted"
             >
-              Aucune demande de déménagement.
+              Aucune demande de déménagement et d’aménagement.
             </div>
           }
         }
@@ -332,7 +332,7 @@ export class MovingAdminPage implements OnInit {
       const requests = await this.movingRequests.listForAdmin();
       this.requests.set(requests);
     } catch {
-      this.error.set('Impossible de charger les demandes de déménagement.');
+      this.error.set('Impossible de charger les demandes de déménagement et d’aménagement.');
     } finally {
       this.loading.set(false);
     }

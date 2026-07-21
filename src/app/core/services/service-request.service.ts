@@ -209,7 +209,7 @@ export class ServiceRequestService {
       clientName: '',
       clientEmail: '',
       clientPhone: '',
-      description: `Déménagement de ${String(row['departure_address'])} à ${String(row['arrival_address'])}`,
+      description: `Déménagement et aménagement de ${String(row['departure_address'])} à ${String(row['arrival_address'])}`,
       details: {},
       documents: [],
       notes: row['admin_notes'] ? String(row['admin_notes']) : undefined,
