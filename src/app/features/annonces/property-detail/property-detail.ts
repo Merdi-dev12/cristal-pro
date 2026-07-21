@@ -15,6 +15,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { RheodyceDataService } from '../../../core/services/rheodyce-data.service';
+import { PropertyCard } from '../../../shared/components/property-card/property-card';
 import { Property } from '../../../shared/models/property.model';
 import { CategoryLabelPipe, PropertyPricePipe } from '../../../shared/pipes/pipe';
 
@@ -56,7 +57,7 @@ interface CostItem {
 @Component({
   selector: 'app-property-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, PropertyPricePipe, CategoryLabelPipe],
+  imports: [CommonModule, RouterLink, PropertyCard, PropertyPricePipe, CategoryLabelPipe],
   templateUrl: './property-detail.html',
   styleUrl: './property-detail.css',
 })
@@ -293,6 +294,10 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
       },
       fragment: 'plans',
     });
+  }
+
+  protected openSimilarProperty(property: Property): void {
+    void this.router.navigate(['/annonces', property.id]);
   }
 
   private showShareFeedback(message: string): void {
