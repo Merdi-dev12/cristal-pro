@@ -47,9 +47,10 @@ export class DemenagementPage implements AfterViewInit, OnDestroy {
   protected readonly routeDurationMinutes = signal<number | null>(null);
   protected readonly departureCoordinates = signal<MovingCoordinates | null>(null);
   protected readonly arrivalCoordinates = signal<MovingCoordinates | null>(null);
+  protected readonly mapReady = signal(false);
 
   ngAfterViewInit(): void {
-    this.initMap();
+    window.setTimeout(() => this.initMap(), 80);
   }
 
   async calculateRoute(): Promise<void> {
@@ -196,7 +197,10 @@ export class DemenagementPage implements AfterViewInit, OnDestroy {
         maxZoom: 19,
       }).addTo(this.map);
       this.markers = L.layerGroup().addTo(this.map);
-      window.setTimeout(() => this.map?.invalidateSize(), 0);
+      window.setTimeout(() => {
+        this.map?.invalidateSize();
+        this.mapReady.set(true);
+      }, 120);
     } catch {
       this.routeError.set('La carte n’a pas pu être chargée. Le formulaire reste disponible.');
     }
