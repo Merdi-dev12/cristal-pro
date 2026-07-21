@@ -24,6 +24,7 @@ export class CategoryLabelPipe implements PipeTransform {
       appartement: 'Appartement',
       maison: 'Maison',
       residence: 'Résidence',
+      immeuble: 'Immeuble',
       terrain: 'Terrain',
     };
 

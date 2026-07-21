@@ -102,7 +102,14 @@ const FORM_CONFIGS: Record<RequestableServiceType, ServiceFormConfig> = {
         label: 'Type de bien',
         type: 'select',
         required: true,
-        options: ['Maison', 'Appartement', 'Résidence', 'Terrain', 'Local professionnel'],
+        options: [
+          'Maison',
+          'Appartement',
+          'Résidence',
+          'Immeuble',
+          'Terrain',
+          'Local professionnel',
+        ],
       },
       {
         key: 'city',

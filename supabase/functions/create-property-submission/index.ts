@@ -81,7 +81,7 @@ Deno.serve(async (req: Request) => {
     city.length < 2 ||
     address.length < 3 ||
     description.length < 20 ||
-    !['maison', 'appartement', 'residence', 'terrain'].includes(category) ||
+    !['maison', 'appartement', 'residence', 'immeuble', 'terrain'].includes(category) ||
     !['vente', 'location'].includes(type) ||
     !Number.isFinite(price) ||
     price < 0 ||

@@ -50,6 +50,7 @@ export class AnnoncesPage implements OnInit {
     { label: 'Maison', value: 'maison' },
     { label: 'Appartement', value: 'appartement' },
     { label: 'Résidence', value: 'residence' },
+    { label: 'Immeuble', value: 'immeuble' },
     { label: 'Terrain', value: 'terrain' },
   ];
 

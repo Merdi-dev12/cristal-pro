@@ -1,5 +1,5 @@
 export type PropertyType = 'vente' | 'location';
-export type PropertyCategory = 'maison' | 'appartement' | 'residence' | 'terrain';
+export type PropertyCategory = 'maison' | 'appartement' | 'residence' | 'immeuble' | 'terrain';
 
 export interface Property {
   id: string;

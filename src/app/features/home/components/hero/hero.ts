@@ -1,4 +1,13 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, WritableSignal, inject, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  WritableSignal,
+  inject,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { PropertySearchService } from '../../../../core/services/property-search.service';
 import { PropertyCategory } from '../../../../shared/models/property.model';
@@ -13,13 +22,18 @@ export class Hero implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly propertySearch = inject(PropertySearchService);
 
-  protected readonly heroTags = ['Maison', 'Appartement', 'Résidentiel'];
+  protected readonly heroTags = ['Maison', 'Appartement', 'Résidentiel', 'Immeuble'];
   protected readonly filterChips = ['Kinshasa', 'Gombe', 'Ngaliema', 'Limete'];
   protected readonly activeTag = signal(this.heroTags[0]);
   protected readonly heroBackgroundUrl = '/assets/hero_img_1.jpg';
 
   protected readonly searchTypes = ['Location', 'Achat / Vente', 'Investissement'];
-  protected readonly budgets = ['Tous les budgets', 'Moins de 800 $ / mois', '800 $ à 2 000 $ / mois', 'Plus de 100 000 $'];
+  protected readonly budgets = [
+    'Tous les budgets',
+    'Moins de 800 $ / mois',
+    '800 $ à 2 000 $ / mois',
+    'Plus de 100 000 $',
+  ];
   protected readonly locations = [
     'Kinshasa',
     'Bandalungwa, Kinshasa',
@@ -59,7 +73,11 @@ export class Hero implements OnInit, OnDestroy {
   protected readonly isLocationOpen = signal(false);
   protected readonly isRoomsOpen = signal(false);
 
-  private readonly wordsToType = ['un bien vérifié.', 'un foyer sécurisé.', 'un investissement durable.'];
+  private readonly wordsToType = [
+    'un bien vérifié.',
+    'un foyer sécurisé.',
+    'un investissement durable.',
+  ];
   protected readonly typedText: WritableSignal<string> = signal('');
   private wordIndex = 0;
   private charIndex = 0;
@@ -139,7 +157,12 @@ export class Hero implements OnInit, OnDestroy {
   protected onSearch(): void {
     const filters = {
       ...this.propertySearch.defaultFilters,
-      type: this.selectedType() === 'Location' ? 'location' as const : this.selectedType() === 'Achat / Vente' ? 'vente' as const : 'all' as const,
+      type:
+        this.selectedType() === 'Location'
+          ? ('location' as const)
+          : this.selectedType() === 'Achat / Vente'
+            ? ('vente' as const)
+            : ('all' as const),
       category: this.categoryFromTag(this.activeTag()),
       location: this.selectedLocation() === 'Kinshasa' ? '' : this.selectedLocation(),
       budgetMax: this.budgetFromLabel(this.selectedBudget()),
@@ -162,6 +185,7 @@ export class Hero implements OnInit, OnDestroy {
     if (tag === 'Maison') return 'maison';
     if (tag === 'Appartement') return 'appartement';
     if (tag === 'Résidentiel' || tag === 'RÃ©sidentiel') return 'residence';
+    if (tag === 'Immeuble') return 'immeuble';
     return 'all';
   }
 

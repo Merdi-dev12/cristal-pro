@@ -124,6 +124,7 @@ interface LeafletNamespace {
                   <option value="maison">Maison</option>
                   <option value="appartement">Appartement</option>
                   <option value="residence">Résidence</option>
+                  <option value="immeuble">Immeuble</option>
                   <option value="terrain">Terrain</option>
                 </select>
               </label>
