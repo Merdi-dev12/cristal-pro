@@ -73,6 +73,11 @@ export class Header {
     this.isMenuOpen.set(false);
   }
 
+  protected closeAllMenus(): void {
+    this.isMenuOpen.set(false);
+    this.isProfileMenuOpen.set(false);
+  }
+
   protected toggleProfileMenu(): void {
     this.isMenuOpen.set(false);
     this.isProfileMenuOpen.update((isOpen) => !isOpen);

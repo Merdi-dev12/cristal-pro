@@ -138,7 +138,7 @@
     @if (isMenuOpen()) {
       <nav
         id="mobile-navigation"
-        class="absolute left-4 right-4 top-full mt-3 rounded-3xl border border-white/10 bg-black/90 p-3 shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-md lg:hidden"
+        class="absolute left-4 right-4 top-full z-[60] mt-3 rounded-3xl border border-white/10 bg-black/90 p-3 shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-md lg:hidden"
         aria-label="Navigation mobile"
       >
         <ul class="grid gap-1">
@@ -149,32 +149,79 @@
                 routerLinkActive="bg-white !text-black font-semibold"
                 [routerLinkActiveOptions]="{ exact: link.path === '/' }"
                 class="block rounded-2xl px-4 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-                (click)="closeMenu()"
+                (click)="closeAllMenus()"
               >
                 {{ link.label }}
               </a>
             </li>
           }
           @if (hasSession()) {
+            <li class="my-2 h-px bg-white/10"></li>
+            <li>
+              <a
+                routerLink="/mon-profil"
+                class="block rounded-2xl px-4 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                (click)="closeAllMenus()"
+              >
+                Mon profil
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/mon-compte/demandes"
+                class="block rounded-2xl px-4 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                (click)="closeAllMenus()"
+              >
+                Mes demandes
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/mon-compte/mes-annonces"
+                class="block rounded-2xl px-4 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                (click)="closeAllMenus()"
+              >
+                Mes annonces
+              </a>
+            </li>
             @if (isAdmin()) {
               <li>
                 <a
                   routerLink="/admin"
                   class="block rounded-2xl bg-rheo-accent px-4 py-3 text-sm font-semibold text-black transition-colors hover:bg-rheo-accent-hover"
-                  (click)="closeMenu()"
+                  (click)="closeAllMenus()"
                 >
                   Espace d’administration
                 </a>
               </li>
             }
+            <li>
+              <button
+                type="button"
+                class="block w-full rounded-2xl px-4 py-3 text-left text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                (click)="signOut()"
+              >
+                Se déconnecter
+              </button>
+            </li>
           } @else {
+            <li class="my-2 h-px bg-white/10"></li>
             <li>
               <a
                 routerLink="/connexion"
                 class="block rounded-2xl px-4 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-                (click)="closeMenu()"
+                (click)="closeAllMenus()"
               >
                 Se connecter
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/inscription"
+                class="block rounded-2xl bg-rheo-accent px-4 py-3 text-sm font-semibold text-black transition-colors hover:bg-rheo-accent-hover"
+                (click)="closeAllMenus()"
+              >
+                S'inscrire
               </a>
             </li>
           }
