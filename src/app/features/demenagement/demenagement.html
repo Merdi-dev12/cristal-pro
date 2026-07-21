@@ -42,7 +42,26 @@
       </form>
 
       <div class="overflow-hidden rounded-[30px] border border-rheo-border bg-white">
-        <div class="relative h-[410px] bg-[#dfe8dc] sm:h-[500px]"><div #mapElement class="absolute inset-0"></div></div>
+        <div class="moving-map-shell">
+          <iframe
+            class="moving-map-fallback"
+            title="Carte de Kinshasa"
+            loading="lazy"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=15.15%2C-4.45%2C15.47%2C-4.22&layer=mapnik&marker=-4.325%2C15.322"
+          ></iframe>
+          <div
+            #mapElement
+            class="moving-map-canvas"
+            [class.moving-map-canvas-ready]="mapReady()"
+            aria-label="Carte du trajet de déménagement"
+          ></div>
+          @if (!mapReady()) {
+            <div class="moving-map-placeholder">
+              <p>Chargement de la carte</p>
+              <span>Kinshasa · Itinéraire de déménagement</span>
+            </div>
+          }
+        </div>
         <div class="grid grid-cols-2 gap-3 border-t border-rheo-border p-5 sm:grid-cols-3 sm:p-6">
           <div><p class="text-xs uppercase tracking-wide text-rheo-muted">Distance</p><p class="mt-1 text-xl font-semibold text-rheo-dark">{{ routeDistanceKm() ? (routeDistanceKm() + ' km') : '—' }}</p></div>
           <div><p class="text-xs uppercase tracking-wide text-rheo-muted">Temps estimé</p><p class="mt-1 text-xl font-semibold text-rheo-dark">{{ formatDuration() }}</p></div>
