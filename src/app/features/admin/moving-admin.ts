@@ -80,10 +80,20 @@ import { MovingRequest, MovingRequestStatus } from '../../shared/models/moving-r
                     >Demande du {{ request.createdAt | date: 'dd/MM/yyyy' }}</span
                   >
                 </div>
-                <h2 class="mt-3 break-words text-xl font-semibold tracking-tight">
-                  {{ request.departureAddress }} <span class="text-rheo-muted">→</span>
-                  {{ request.arrivalAddress }}
-                </h2>
+                <button
+                  type="button"
+                  (click)="toggleDetails(request.id)"
+                  class="mt-3 flex w-full items-start justify-between gap-4 text-left"
+                  [attr.aria-expanded]="expandedId() === request.id"
+                >
+                  <span class="break-words text-xl font-semibold tracking-tight">
+                    {{ request.departureAddress }} <span class="text-rheo-muted">→</span>
+                    {{ request.arrivalAddress }}
+                  </span>
+                  <span class="shrink-0 text-sm font-semibold text-[#657b18]">
+                    {{ expandedId() === request.id ? 'Masquer' : 'Voir les détails' }}
+                  </span>
+                </button>
                 <div class="mt-4 grid gap-3 text-sm text-rheo-muted sm:grid-cols-4">
                   <span class="min-w-0"
                     ><strong class="block text-[10px] uppercase tracking-wide text-[#899286]"
@@ -111,7 +121,7 @@ import { MovingRequest, MovingRequestStatus } from '../../shared/models/moving-r
                     ><strong class="block text-[10px] uppercase tracking-wide text-[#899286]"
                       >Demandeur</strong
                     ><span class="mt-1 block truncate text-rheo-dark">{{
-                      request.userId
+                      request.userName
                     }}</span></span
                   >
                 </div>
@@ -120,6 +130,89 @@ import { MovingRequest, MovingRequestStatus } from '../../shared/models/moving-r
                     Trajet indicatif : {{ request.routeDistanceKm || '—' }} km ·
                     {{ request.routeDurationMinutes || '—' }} min
                   </p>
+                }
+                @if (expandedId() === request.id) {
+                  <section class="mt-5 rounded-2xl border border-[#e4e6e1] bg-[#f8faf7] p-4 sm:p-5">
+                    <h3 class="text-sm font-semibold text-rheo-dark">Informations complètes</h3>
+                    <div class="mt-4 grid gap-4 text-sm sm:grid-cols-2 lg:grid-cols-3">
+                      <div>
+                        <p class="text-xs text-rheo-muted">Demandeur</p>
+                        <p class="mt-1 font-semibold text-rheo-dark">{{ request.userName }}</p>
+                        @if (request.userEmail) {
+                          <a
+                            [href]="'mailto:' + request.userEmail"
+                            class="mt-1 block break-all text-[#657b18]"
+                            >{{ request.userEmail }}</a
+                          >
+                        }
+                        @if (request.userPhone) {
+                          <a
+                            [href]="'tel:' + request.userPhone"
+                            class="mt-1 block text-[#657b18]"
+                            >{{ request.userPhone }}</a
+                          >
+                        }
+                      </div>
+                      <div>
+                        <p class="text-xs text-rheo-muted">Départ</p>
+                        <p class="mt-1 break-words font-medium text-rheo-dark">
+                          {{ request.departureAddress }}
+                        </p>
+                        <p class="mt-1 text-xs text-rheo-muted">
+                          {{ coordinatesLabel(request.departureCoordinates) }}
+                        </p>
+                      </div>
+                      <div>
+                        <p class="text-xs text-rheo-muted">Arrivée</p>
+                        <p class="mt-1 break-words font-medium text-rheo-dark">
+                          {{ request.arrivalAddress }}
+                        </p>
+                        <p class="mt-1 text-xs text-rheo-muted">
+                          {{ coordinatesLabel(request.arrivalCoordinates) }}
+                        </p>
+                      </div>
+                      <div>
+                        <p class="text-xs text-rheo-muted">Déménagement prévu</p>
+                        <p class="mt-1 font-medium text-rheo-dark">
+                          {{ request.movingDate | date: 'EEEE d MMMM y' }}
+                        </p>
+                      </div>
+                      <div>
+                        <p class="text-xs text-rheo-muted">Logistique</p>
+                        <p class="mt-1 font-medium text-rheo-dark">
+                          {{ request.estimatedVolume }} m³ · étage {{ request.floor }}
+                        </p>
+                        <p class="mt-1 text-xs text-rheo-muted">
+                          {{ request.hasElevator ? 'Ascenseur disponible' : 'Accès par escaliers' }}
+                        </p>
+                      </div>
+                      <div>
+                        <p class="text-xs text-rheo-muted">Trajet estimé</p>
+                        <p class="mt-1 font-medium text-rheo-dark">
+                          {{ request.routeDistanceKm ?? '—' }} km ·
+                          {{ request.routeDurationMinutes ?? '—' }} min
+                        </p>
+                      </div>
+                      <div>
+                        <p class="text-xs text-rheo-muted">Demande créée</p>
+                        <p class="mt-1 font-medium text-rheo-dark">
+                          {{ request.createdAt | date: 'dd/MM/yyyy à HH:mm' }}
+                        </p>
+                      </div>
+                      <div>
+                        <p class="text-xs text-rheo-muted">Dernière mise à jour</p>
+                        <p class="mt-1 font-medium text-rheo-dark">
+                          {{ request.updatedAt | date: 'dd/MM/yyyy à HH:mm' }}
+                        </p>
+                      </div>
+                      <div>
+                        <p class="text-xs text-rheo-muted">Partenaire affecté</p>
+                        <p class="mt-1 font-medium text-rheo-dark">
+                          {{ request.assignedPartnerId || 'Aucun partenaire' }}
+                        </p>
+                      </div>
+                    </div>
+                  </section>
                 }
               </div>
 
@@ -201,7 +294,7 @@ export class MovingAdminPage implements OnInit {
       (request) =>
         (this.filterStatus() === 'all' || request.status === this.filterStatus()) &&
         (!query ||
-          `${request.departureAddress} ${request.arrivalAddress} ${request.userId} ${request.assignedPartnerId ?? ''}`
+          `${request.departureAddress} ${request.arrivalAddress} ${request.userName} ${request.userEmail ?? ''} ${request.assignedPartnerId ?? ''}`
             .toLowerCase()
             .includes(query)),
     );
@@ -209,6 +302,7 @@ export class MovingAdminPage implements OnInit {
   protected readonly loading = signal(true);
   protected readonly savingId = signal('');
   protected readonly savedId = signal('');
+  protected readonly expandedId = signal('');
   protected readonly error = signal('');
   protected readonly isDemo = signal(false);
   protected readonly pendingCount = computed(
@@ -270,6 +364,17 @@ export class MovingAdminPage implements OnInit {
       ? 'En attente'
       : status.charAt(0).toUpperCase() + status.slice(1);
   }
+
+  protected toggleDetails(id: string): void {
+    this.expandedId.update((current) => (current === id ? '' : id));
+  }
+
+  protected coordinatesLabel(coordinates: MovingRequest['departureCoordinates']): string {
+    return coordinates
+      ? `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`
+      : 'Coordonnées non disponibles';
+  }
+
   protected statusClass(status: MovingRequestStatus): string {
     return status === 'terminée'
       ? 'bg-[#edf5d6] text-[#657b18]'

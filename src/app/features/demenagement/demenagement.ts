@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import * as L from 'leaflet';
 import { MovingRequestService } from '../../core/services/moving-request.service';
 import { MovingCoordinates, MovingRequestInput } from '../../shared/models/moving-request.model';
 
@@ -15,37 +16,6 @@ interface RouteResponse {
   routes?: Array<{ distance: number; duration: number; geometry: { coordinates: Array<[number, number]> } }>;
 }
 
-type LeafletPoint = [number, number];
-interface LeafletMap {
-  setView(point: LeafletPoint, zoom: number): LeafletMap;
-  invalidateSize(): void;
-  fitBounds(bounds: unknown, options: { padding: LeafletPoint }): void;
-  remove(): void;
-}
-interface LeafletLayerGroup {
-  addTo(map: LeafletMap): LeafletLayerGroup;
-  clearLayers(): void;
-  addLayer(layer: unknown): LeafletLayerGroup;
-}
-interface LeafletPolyline {
-  addTo(map: LeafletMap): LeafletPolyline;
-  getBounds(): unknown;
-  removeFrom(map: LeafletMap): LeafletPolyline;
-  remove(): LeafletPolyline;
-}
-interface LeafletMarker {
-  bindTooltip(text: string): LeafletMarker;
-}
-interface LeafletNamespace {
-  map(element: HTMLElement, options: Record<string, unknown>): LeafletMap;
-  control: { zoom(options: Record<string, unknown>): { addTo(map: LeafletMap): void } };
-  tileLayer(url: string, options: Record<string, unknown>): { addTo(map: LeafletMap): void };
-  layerGroup(): LeafletLayerGroup;
-  polyline(points: LeafletPoint[], options: Record<string, unknown>): LeafletPolyline;
-  marker(point: LeafletPoint, options: Record<string, unknown>): LeafletMarker;
-  divIcon(options: Record<string, unknown>): unknown;
-}
-
 @Component({
   selector: 'app-demenagement',
   standalone: true,
@@ -57,10 +27,9 @@ export class DemenagementPage implements AfterViewInit, OnDestroy {
   @ViewChild('mapElement', { static: true }) private readonly mapElement!: ElementRef<HTMLDivElement>;
 
   private readonly requests = inject(MovingRequestService);
-  private map?: LeafletMap;
-  private leaflet?: LeafletNamespace;
-  private markers?: LeafletLayerGroup;
-  private routeLayer?: LeafletPolyline;
+  private map?: L.Map;
+  private markers?: L.LayerGroup;
+  private routeLayer?: L.Polyline;
 
   departureAddress = '';
   arrivalAddress = '';
@@ -80,7 +49,7 @@ export class DemenagementPage implements AfterViewInit, OnDestroy {
   protected readonly arrivalCoordinates = signal<MovingCoordinates | null>(null);
 
   ngAfterViewInit(): void {
-    void this.initMap();
+    this.initMap();
   }
 
   async calculateRoute(): Promise<void> {
@@ -188,19 +157,19 @@ export class DemenagementPage implements AfterViewInit, OnDestroy {
   }
 
   private drawRoute(from: MovingCoordinates, to: MovingCoordinates, coordinates: Array<[number, number]>): void {
-    if (!this.map || !this.leaflet || !this.markers) return;
+    if (!this.map || !this.markers) return;
     this.markers.clearLayers();
     this.routeLayer?.removeFrom(this.map);
-    const points: LeafletPoint[] = coordinates.map(([lng, lat]) => [lat, lng]);
-    this.routeLayer = this.leaflet.polyline(points, { color: '#c5e84a', weight: 6, opacity: 0.9 }).addTo(this.map);
-    const departureMarker = this.leaflet.marker([from.lat, from.lng], { icon: this.markerIcon('D') }).bindTooltip('Départ');
-    const arrivalMarker = this.leaflet.marker([to.lat, to.lng], { icon: this.markerIcon('A') }).bindTooltip('Arrivée');
+    const points: L.LatLngTuple[] = coordinates.map(([lng, lat]) => [lat, lng]);
+    this.routeLayer = L.polyline(points, { color: '#c5e84a', weight: 6, opacity: 0.9 }).addTo(this.map);
+    const departureMarker = L.marker([from.lat, from.lng], { icon: this.markerIcon('D') }).bindTooltip('Départ');
+    const arrivalMarker = L.marker([to.lat, to.lng], { icon: this.markerIcon('A') }).bindTooltip('Arrivée');
     this.markers.addLayer(departureMarker).addLayer(arrivalMarker);
     this.map.fitBounds(this.routeLayer.getBounds(), { padding: [28, 28] });
   }
 
-  private markerIcon(label: string): unknown {
-    return this.leaflet?.divIcon({ className: '', html: `<span class="moving-map-marker"><span>${label}</span></span>`, iconSize: [30, 30], iconAnchor: [15, 30] });
+  private markerIcon(label: string): L.DivIcon {
+    return L.divIcon({ className: '', html: `<span class="moving-map-marker"><span>${label}</span></span>`, iconSize: [30, 30], iconAnchor: [15, 30] });
   }
 
   private resetForm(): void {
@@ -218,41 +187,18 @@ export class DemenagementPage implements AfterViewInit, OnDestroy {
     this.routeLayer?.remove();
   }
 
-  private async initMap(): Promise<void> {
+  private initMap(): void {
     try {
-      this.leaflet = await this.loadLeaflet();
-      this.map = this.leaflet.map(this.mapElement.nativeElement, { zoomControl: false }).setView([-4.325, 15.322], 12);
-      this.leaflet.control.zoom({ position: 'bottomright' }).addTo(this.map);
-      this.leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      this.map = L.map(this.mapElement.nativeElement, { zoomControl: false }).setView([-4.325, 15.322], 12);
+      L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap',
         maxZoom: 19,
       }).addTo(this.map);
-      this.markers = this.leaflet.layerGroup().addTo(this.map);
+      this.markers = L.layerGroup().addTo(this.map);
       window.setTimeout(() => this.map?.invalidateSize(), 0);
     } catch {
       this.routeError.set('La carte n’a pas pu être chargée. Le formulaire reste disponible.');
     }
-  }
-
-  private loadLeaflet(): Promise<LeafletNamespace> {
-    const existing = (window as Window & { L?: LeafletNamespace }).L;
-    if (existing) return Promise.resolve(existing);
-
-    const pending = (window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> }).__rheodyceLeaflet;
-    if (pending) return pending;
-
-    const promise = new Promise<LeafletNamespace>((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-      script.crossOrigin = '';
-      script.onload = () => {
-        const namespace = (window as Window & { L?: LeafletNamespace }).L;
-        namespace ? resolve(namespace) : reject(new Error('Leaflet indisponible'));
-      };
-      script.onerror = () => reject(new Error('Leaflet indisponible'));
-      document.head.appendChild(script);
-    });
-    (window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> }).__rheodyceLeaflet = promise;
-    return promise;
   }
 }

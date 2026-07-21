@@ -45,7 +45,7 @@ describe('PropertyDetailPage', () => {
     fixture.detectChanges();
   });
 
-  it('shares the property information and its URL', async () => {
+  it('shares only the direct property URL', async () => {
     const share = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, 'share', { configurable: true, value: share });
 
@@ -55,16 +55,13 @@ describe('PropertyDetailPage', () => {
     button.click();
     await fixture.whenStable();
 
-    expect(share).toHaveBeenCalledWith({
-      title: property.title,
-      text: expect.stringContaining('Gombe, Kinshasa'),
-      url: expect.stringContaining('/functions/v1/property-share?id=bien-1'),
-    });
+    expect(share).toHaveBeenCalledWith({ url: `${window.location.origin}/annonces/bien-1` });
   });
 
   it('shows a preview and the subscription CTA to a non-subscriber', () => {
     const page = fixture.nativeElement as HTMLElement;
 
+    expect(page.querySelector('button[aria-label="Ajouter aux favoris"]')).toBeNull();
     expect(page.textContent).toContain(property.title);
     expect(page.textContent).toContain('Continuez la lecture avec RHEODYCE Premium');
     expect(page.textContent).toContain('Voir les abonnements');

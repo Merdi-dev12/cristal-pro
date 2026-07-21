@@ -1,4 +1,5 @@
-export type MovingRequestStatus = 'reçue' | 'en attente' | 'en traitement' | 'assignée' | 'terminée' | 'annulée';
+export type MovingRequestStatus =
+  'reçue' | 'en attente' | 'en traitement' | 'assignée' | 'terminée' | 'annulée';
 
 export interface MovingCoordinates {
   lat: number;
@@ -8,6 +9,9 @@ export interface MovingCoordinates {
 export interface MovingRequest {
   id: string;
   userId: string;
+  userName: string;
+  userEmail: string | null;
+  userPhone: string | null;
   departureAddress: string;
   arrivalAddress: string;
   movingDate: string;

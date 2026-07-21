@@ -1,149 +1,247 @@
 import { Routes } from '@angular/router';
-import { Home } from './features/home/home';
-import { AnnoncesPage } from './features/annonces/annonces';
-import { LocationVentePage } from './features/location-vente/location-vente';
-import { MaintenancePage } from './features/maintenance/maintenance';
-import { DecorationPage } from './features/decoration/decoration';
-import { ServicesPage } from './features/services/services';
-import { FaqPage } from './features/faq/faq';
-import { ContactPage } from './features/contact/contact';
-import { LoginPage } from './features/auth/login/login';
-import { RegisterPage } from './features/auth/register/register';
-import { ServiceRequestsPage } from './features/my-account/service-requests/service-requests';
-import { ServiceRequestDetailPage } from './features/my-account/service-requests/service-request-detail/service-request-detail';
-import { DemenagementPage } from './features/demenagement/demenagement';
-import { UserSpacePage } from './features/user-space/user-space';
-import { MovingAdminPage } from './features/admin/moving-admin';
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
-import { AdminLayoutPage } from './features/admin/admin-layout';
-import { AdminDashboardPage } from './features/admin/admin-dashboard';
-import { AdminVisitsPage } from './features/admin/admin-visits';
-import { AdminUsersPage } from './features/admin/admin-users';
-import { AdminServicesPage } from './features/admin/admin-services';
-import { AdminSubmissionsPage } from './features/admin/admin-submissions';
-import { AdminPropertiesPage } from './features/admin/admin-properties';
-import { AdminContactPage } from './features/admin/admin-contact';
-import { AdminContactDetailPage } from './features/admin/admin-contact-detail';
-import { AdminSubmissionDetailPage } from './features/admin/admin-submission-detail';
-import { AdminVisitDetailPage } from './features/admin/admin-visit-detail';
-import { AdminPropertyDetailPage } from './features/admin/admin-property-detail';
-import { AdminServiceRequestDetailPage } from './features/admin/admin-service-request-detail';
-import { SubscriptionPage } from './features/subscription/subscription';
-import { PropertyDetailPage } from './features/annonces/property-detail/property-detail';
-import { ProfilePage } from './features/profile/profile';
-import { PropertySubmissionFormPage } from './features/property-submissions/property-submission-form';
-import { MyPropertySubmissionsPage } from './features/property-submissions/my-property-submissions';
-import { ServiceRequestFormPage } from './features/services/service-request-form/service-request-form';
 
 export const routes: Routes = [
-  { path: '', component: Home, title: 'Accueil — RHEODYCE' },
-  { path: 'annonces', component: AnnoncesPage, title: 'Annonces — RHEODYCE' },
+  {
+    path: '',
+    loadComponent: () => import('./features/home/home').then((module) => module.Home),
+    title: 'Accueil — RHEODYCE',
+  },
+  {
+    path: 'annonces',
+    loadComponent: () =>
+      import('./features/annonces/annonces').then((module) => module.AnnoncesPage),
+    title: 'Annonces — RHEODYCE',
+  },
   {
     path: 'annonces/:id',
-    component: PropertyDetailPage,
+    loadComponent: () =>
+      import('./features/annonces/property-detail/property-detail').then(
+        (module) => module.PropertyDetailPage,
+      ),
     title: 'Détail annonce — RHEODYCE',
   },
-  { path: 'location-vente', component: LocationVentePage, title: 'Location & Vente — RHEODYCE' },
+  {
+    path: 'location-vente',
+    loadComponent: () =>
+      import('./features/location-vente/location-vente').then((module) => module.LocationVentePage),
+    title: 'Location & Vente — RHEODYCE',
+  },
   {
     path: 'location-vente/creer-annonce',
-    component: PropertySubmissionFormPage,
+    loadComponent: () =>
+      import('./features/property-submissions/property-submission-form').then(
+        (module) => module.PropertySubmissionFormPage,
+      ),
     canActivate: [authGuard],
     title: 'Créer une annonce — RHEODYCE',
   },
-  { path: 'maintenance', component: MaintenancePage, title: 'Maintenance — RHEODYCE' },
-  { path: 'decoration', component: DecorationPage, title: 'Décoration — RHEODYCE' },
-  { path: 'services', component: ServicesPage, title: 'Services — RHEODYCE' },
+  {
+    path: 'maintenance',
+    loadComponent: () =>
+      import('./features/maintenance/maintenance').then((module) => module.MaintenancePage),
+    title: 'Maintenance — RHEODYCE',
+  },
+  {
+    path: 'decoration',
+    loadComponent: () =>
+      import('./features/decoration/decoration').then((module) => module.DecorationPage),
+    title: 'Décoration — RHEODYCE',
+  },
+  {
+    path: 'services',
+    loadComponent: () =>
+      import('./features/services/services').then((module) => module.ServicesPage),
+    title: 'Services — RHEODYCE',
+  },
   {
     path: 'services/:type/demande',
-    component: ServiceRequestFormPage,
+    loadComponent: () =>
+      import('./features/services/service-request-form/service-request-form').then(
+        (module) => module.ServiceRequestFormPage,
+      ),
     canActivate: [authGuard],
     title: 'Nouvelle demande — RHEODYCE',
   },
-  { path: 'faq', component: FaqPage, title: 'FAQ — RHEODYCE' },
-  { path: 'contact', component: ContactPage, title: 'Contact — RHEODYCE' },
-  { path: 'abonnement', component: SubscriptionPage, title: 'Abonnement — RHEODYCE' },
-  { path: 'connexion', component: LoginPage, title: 'Connexion — RHEODYCE' },
-  { path: 'inscription', component: RegisterPage, title: 'Inscription — RHEODYCE' },
+  {
+    path: 'faq',
+    loadComponent: () => import('./features/faq/faq').then((module) => module.FaqPage),
+    title: 'FAQ — RHEODYCE',
+  },
+  {
+    path: 'contact',
+    loadComponent: () => import('./features/contact/contact').then((module) => module.ContactPage),
+    title: 'Contact — RHEODYCE',
+  },
+  {
+    path: 'abonnement',
+    loadComponent: () =>
+      import('./features/subscription/subscription').then((module) => module.SubscriptionPage),
+    title: 'Abonnement — RHEODYCE',
+  },
+  {
+    path: 'connexion',
+    loadComponent: () => import('./features/auth/login/login').then((module) => module.LoginPage),
+    title: 'Connexion — RHEODYCE',
+  },
+  {
+    path: 'inscription',
+    loadComponent: () =>
+      import('./features/auth/register/register').then((module) => module.RegisterPage),
+    title: 'Inscription — RHEODYCE',
+  },
   {
     path: 'mon-compte/demandes',
-    component: ServiceRequestsPage,
+    loadComponent: () =>
+      import('./features/my-account/service-requests/service-requests').then(
+        (module) => module.ServiceRequestsPage,
+      ),
     canActivate: [authGuard],
     title: 'Mes demandes — RHEODYCE',
   },
   {
     path: 'mon-compte/mes-annonces',
-    component: MyPropertySubmissionsPage,
+    loadComponent: () =>
+      import('./features/property-submissions/my-property-submissions').then(
+        (module) => module.MyPropertySubmissionsPage,
+      ),
     canActivate: [authGuard],
     title: 'Mes annonces proposées — RHEODYCE',
   },
   {
     path: 'mon-compte/demandes/:id',
-    component: ServiceRequestDetailPage,
+    loadComponent: () =>
+      import('./features/my-account/service-requests/service-request-detail/service-request-detail').then(
+        (module) => module.ServiceRequestDetailPage,
+      ),
     canActivate: [authGuard],
     title: 'Détail demande — RHEODYCE',
   },
   {
     path: 'mon-profil',
-    component: ProfilePage,
+    loadComponent: () => import('./features/profile/profile').then((module) => module.ProfilePage),
     canActivate: [authGuard],
     title: 'Mon profil — RHEODYCE',
   },
   {
     path: 'demenagement',
-    component: DemenagementPage,
+    loadComponent: () =>
+      import('./features/demenagement/demenagement').then((module) => module.DemenagementPage),
     canActivate: [authGuard],
     title: 'Déménagement — RHEODYCE',
   },
   {
     path: 'espace-utilisateur',
-    component: UserSpacePage,
+    loadComponent: () =>
+      import('./features/user-space/user-space').then((module) => module.UserSpacePage),
     canActivate: [authGuard],
     title: 'Espace utilisateur — RHEODYCE',
   },
   {
     path: 'admin',
-    component: AdminLayoutPage,
+    loadComponent: () =>
+      import('./features/admin/admin-layout').then((module) => module.AdminLayoutPage),
     canActivate: [adminGuard],
     children: [
-      { path: '', component: AdminDashboardPage, title: 'Panel admin — RHEODYCE' },
-      { path: 'visites', component: AdminVisitsPage, title: 'Visites — Panel admin' },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/admin/admin-dashboard').then((module) => module.AdminDashboardPage),
+        title: 'Administration — RHEODYCE',
+      },
+      {
+        path: 'visites',
+        loadComponent: () =>
+          import('./features/admin/admin-visits').then((module) => module.AdminVisitsPage),
+        title: 'Visites — Administration',
+      },
       {
         path: 'visites/:id',
-        component: AdminVisitDetailPage,
-        title: 'Détail visite — Panel admin',
+        loadComponent: () =>
+          import('./features/admin/admin-visit-detail').then(
+            (module) => module.AdminVisitDetailPage,
+          ),
+        title: 'Détail visite — Administration',
       },
-      { path: 'utilisateurs', component: AdminUsersPage, title: 'Utilisateurs — Panel admin' },
-      { path: 'services', component: AdminServicesPage, title: 'Services — Panel admin' },
+      {
+        path: 'utilisateurs',
+        loadComponent: () =>
+          import('./features/admin/admin-users').then((module) => module.AdminUsersPage),
+        title: 'Utilisateurs — Administration',
+      },
+      {
+        path: 'services',
+        loadComponent: () =>
+          import('./features/admin/admin-services').then((module) => module.AdminServicesPage),
+        title: 'Services — Administration',
+      },
       {
         path: 'services/demandes/:id',
-        component: AdminServiceRequestDetailPage,
-        title: 'Détail service — Panel admin',
+        loadComponent: () =>
+          import('./features/admin/admin-service-request-detail').then(
+            (module) => module.AdminServiceRequestDetailPage,
+          ),
+        title: 'Détail service — Administration',
       },
-      { path: 'contacts', component: AdminContactPage, title: 'Contacts — Panel admin' },
+      {
+        path: 'contacts',
+        loadComponent: () =>
+          import('./features/admin/admin-contact').then((module) => module.AdminContactPage),
+        title: 'Contacts — Administration',
+      },
       {
         path: 'contacts/:id',
-        component: AdminContactDetailPage,
-        title: 'Détail contact — Panel admin',
+        loadComponent: () =>
+          import('./features/admin/admin-contact-detail').then(
+            (module) => module.AdminContactDetailPage,
+          ),
+        title: 'Détail contact — Administration',
       },
-      { path: 'soumissions', component: AdminSubmissionsPage, title: 'Soumissions — Panel admin' },
+      {
+        path: 'soumissions',
+        loadComponent: () =>
+          import('./features/admin/admin-submissions').then(
+            (module) => module.AdminSubmissionsPage,
+          ),
+        title: 'Soumissions — Administration',
+      },
       {
         path: 'soumissions/:id',
-        component: AdminSubmissionDetailPage,
-        title: 'Détail soumission — Panel admin',
+        loadComponent: () =>
+          import('./features/admin/admin-submission-detail').then(
+            (module) => module.AdminSubmissionDetailPage,
+          ),
+        title: 'Détail soumission — Administration',
       },
-      { path: 'annonces', component: AdminPropertiesPage, title: 'Annonces — Panel admin' },
+      {
+        path: 'annonces',
+        loadComponent: () =>
+          import('./features/admin/admin-properties').then((module) => module.AdminPropertiesPage),
+        title: 'Annonces — Administration',
+      },
       {
         path: 'annonces/nouvelle',
-        component: PropertySubmissionFormPage,
-        title: 'Créer une annonce — Panel admin',
+        loadComponent: () =>
+          import('./features/property-submissions/property-submission-form').then(
+            (module) => module.PropertySubmissionFormPage,
+          ),
+        title: 'Créer une annonce — Administration',
       },
       {
         path: 'annonces/:id',
-        component: AdminPropertyDetailPage,
-        title: 'Gérer une annonce — Panel admin',
+        loadComponent: () =>
+          import('./features/admin/admin-property-detail').then(
+            (module) => module.AdminPropertyDetailPage,
+          ),
+        title: 'Gérer une annonce — Administration',
       },
-      { path: 'demenagements', component: MovingAdminPage, title: 'Déménagements — Panel admin' },
+      {
+        path: 'demenagements',
+        loadComponent: () =>
+          import('./features/admin/moving-admin').then((module) => module.MovingAdminPage),
+        title: 'Déménagements — Administration',
+      },
     ],
   },
   { path: '**', redirectTo: '' },

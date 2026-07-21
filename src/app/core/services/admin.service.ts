@@ -480,6 +480,7 @@ function mapServiceRequest(row: Record<string, unknown>): AdminServiceRequestVie
       row['details'] && typeof row['details'] === 'object' && !Array.isArray(row['details'])
         ? (row['details'] as AdminServiceRequestView['details'])
         : {},
+    documents: mapRequestDocuments(row['documents']),
     propertyId: row['property_id'] ? String(row['property_id']) : undefined,
     budget: row['budget'] == null ? undefined : Number(row['budget']),
     assignedTo: row['assigned_to'] ? String(row['assigned_to']) : undefined,
@@ -504,6 +505,22 @@ function mapServiceOffer(row: Record<string, unknown>): AdminServiceOffer {
     active: Boolean(row['active']),
     createdAt: String(row['created_at'] ?? ''),
   };
+}
+function mapRequestDocuments(value: unknown): AdminServiceRequestView['documents'] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) return [];
+    const row = item as Record<string, unknown>;
+    if (!row['path'] || !row['name']) return [];
+    return [
+      {
+        path: String(row['path']),
+        name: String(row['name']),
+        mimeType: String(row['mimeType'] ?? ''),
+        size: Number(row['size'] ?? 0),
+      },
+    ];
+  });
 }
 function mapVisit(
   row: Record<string, unknown>,

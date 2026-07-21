@@ -8,6 +8,7 @@ import {
   SERVICE_DETAIL_LABELS,
   SERVICE_TYPE_LABELS,
   ServiceRequest,
+  ServiceRequestDocument,
   ServiceRequestEvent,
 } from '../../../../shared/models/service-request.model';
 
@@ -28,6 +29,7 @@ export class ServiceRequestDetailPage implements OnInit {
   protected readonly notFound = signal(false);
   protected readonly isCancelling = signal(false);
   protected readonly events = signal<ServiceRequestEvent[]>([]);
+  protected readonly openingDocument = signal<string | null>(null);
   protected readonly wasCreated = signal(this.route.snapshot.queryParamMap.get('created') === '1');
 
   async ngOnInit(): Promise<void> {
@@ -72,11 +74,23 @@ export class ServiceRequestDetailPage implements OnInit {
       }));
   }
 
+  protected async openDocument(document: ServiceRequestDocument): Promise<void> {
+    this.openingDocument.set(document.path);
+    try {
+      const url = await this.service.getDocumentUrl(document);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch {
+      window.alert('Impossible d’ouvrir ce document pour le moment.');
+    } finally {
+      this.openingDocument.set(null);
+    }
+  }
+
   protected async onCancel(): Promise<void> {
     const current = this.request();
     if (!current) return;
 
-    const confirmed = window.confirm('Confirmez-vous l\'annulation de cette demande ?');
+    const confirmed = window.confirm("Confirmez-vous l'annulation de cette demande ?");
     if (!confirmed) return;
 
     this.isCancelling.set(true);
@@ -85,7 +99,7 @@ export class ServiceRequestDetailPage implements OnInit {
       this.request.set({ ...current, status: 'annulée' });
       this.events.set(await this.service.getRequestEvents(current.id));
     } catch {
-      window.alert('Impossible d\'annuler la demande pour le moment.');
+      window.alert("Impossible d'annuler la demande pour le moment.");
     } finally {
       this.isCancelling.set(false);
     }

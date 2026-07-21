@@ -13,7 +13,6 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../core/services/auth.service';
 import { RheodyceDataService } from '../../../core/services/rheodyce-data.service';
 import { Property } from '../../../shared/models/property.model';
@@ -266,9 +265,7 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
 
   protected async shareProperty(property: Property): Promise<void> {
     const url = this.propertyShareUrl(property);
-    const price = new Intl.NumberFormat('fr-FR').format(property.price);
-    const text = `${property.title} - ${price} USD${property.priceSuffix ?? ''} - ${property.location}`;
-    const shareData: ShareData = { title: property.title, text, url };
+    const shareData: ShareData = { url };
 
     if (navigator.share) {
       try {
@@ -281,7 +278,7 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
     }
 
     try {
-      await navigator.clipboard.writeText(`${text}\n${url}`);
+      await navigator.clipboard.writeText(url);
       this.showShareFeedback('Lien copié');
     } catch {
       this.showShareFeedback('Partage indisponible');
@@ -305,33 +302,10 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
   }
 
   private propertyShareUrl(property: Property): string {
-    const detailUrl = new URL(
+    return new URL(
       `/annonces/${encodeURIComponent(property.id)}`,
       window.location.origin,
-    );
-    const shareUrl = new URL(`${environment.supabaseUrl}/functions/v1/property-share`);
-    shareUrl.searchParams.set('id', property.id);
-    shareUrl.searchParams.set('redirect', detailUrl.toString());
-    return shareUrl.toString();
-  }
-
-  private async withShareImage(property: Property, shareData: ShareData): Promise<ShareData> {
-    if (!navigator.canShare || !property.imageUrl) return shareData;
-
-    try {
-      const response = await fetch(property.imageUrl);
-      if (!response.ok) return shareData;
-      const image = await response.blob();
-      if (!image.type.startsWith('image/')) return shareData;
-      const extension = image.type.split('/')[1]?.replace('jpeg', 'jpg') ?? 'jpg';
-      const candidate: ShareData = {
-        ...shareData,
-        files: [new File([image], `rheodyce-${property.id}.${extension}`, { type: image.type })],
-      };
-      return navigator.canShare(candidate) ? candidate : shareData;
-    } catch {
-      return shareData;
-    }
+    ).toString();
   }
 
   private updateShareMetadata(property: Property): void {

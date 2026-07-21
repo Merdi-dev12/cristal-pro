@@ -1,4 +1,12 @@
-import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+import {
+  ApplicationConfig,
+  inject,
+  LOCALE_ID,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -9,9 +17,12 @@ import { MovingRequestService } from './core/services/moving-request.service';
 import { Scroll } from './core/services/scroll';
 import { AdminService } from './core/services/admin.service';
 
+registerLocaleData(localeFr);
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    { provide: LOCALE_ID, useValue: 'fr-FR' },
     provideRouter(
       routes,
       withInMemoryScrolling({
@@ -27,5 +38,5 @@ export const appConfig: ApplicationConfig = {
     MovingRequestService,
     AdminService,
     Scroll,
-  ]
+  ],
 };
