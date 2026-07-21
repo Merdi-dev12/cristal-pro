@@ -8,29 +8,21 @@
             Des annonces nettes, triées pour décider plus vite.
           </h1>
           <p class="mt-4 max-w-2xl text-sm leading-7 text-rheo-muted">
-            Parcourez les biens disponibles avec une lecture simple du prix, de la ville et des informations
-            essentielles avant de passer à la visite.
+            Recherchez par opération, budget, localisation ou typologie. Les filtres restent dans l'URL pour
+            partager ou reprendre une recherche facilement.
           </p>
         </div>
 
         <div class="w-full rounded-[24px] border border-[#d7e0ed] bg-white p-2 sm:w-auto">
           <div class="grid gap-1.5 sm:grid-cols-3">
-            <button
-              type="button"
-              class="rounded-[16px] px-5 py-2.5 text-sm font-semibold transition"
-              [class]="selectedType() === 'all' ? 'bg-[#111711] text-white' : 'bg-transparent text-rheo-muted hover:bg-rheo-bg hover:text-rheo-dark'"
-              (click)="selectedType.set('all')"
-            >
-              Tous
-            </button>
-            @for (chip of chips; track chip.type) {
+            @for (option of typeOptions; track option.value) {
               <button
                 type="button"
                 class="rounded-[16px] px-5 py-2.5 text-sm font-semibold transition"
-                [class]="selectedType() === chip.type ? 'bg-[#111711] text-white' : 'bg-transparent text-rheo-muted hover:bg-rheo-bg hover:text-rheo-dark'"
-                (click)="selectedType.set(chip.type)"
+                [class]="filters().type === option.value ? 'bg-[#111711] text-white' : 'bg-transparent text-rheo-muted hover:bg-rheo-bg hover:text-rheo-dark'"
+                (click)="setType(option.value)"
               >
-                {{ chip.label }}
+                {{ option.label }}
               </button>
             }
           </div>
@@ -38,10 +30,196 @@
       </div>
     </header>
 
-    <div class="mt-10 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
-      @for (property of filtered(); track property.id) {
-        <app-property-card [property]="property" (viewDetails)="onViewDetails($event)" />
+    <form class="mt-8 rounded-[28px] border border-rheo-border bg-white p-4 sm:p-5" (ngSubmit)="applyFilters()">
+      <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-[1.2fr_0.9fr_0.9fr_0.8fr_0.8fr]">
+        <div class="grid gap-1.5">
+          <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Recherche</label>
+          <input
+            type="search"
+            name="query"
+            [ngModel]="filters().query"
+            (ngModelChange)="updateFilter('query', $event)"
+            placeholder="Titre, quartier, description..."
+            class="h-12 rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm text-rheo-dark outline-none transition focus:border-[#071d49]"
+          />
+        </div>
+
+        <div class="grid gap-1.5">
+          <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Localisation</label>
+          <input
+            type="search"
+            name="location"
+            [ngModel]="filters().location"
+            (ngModelChange)="updateFilter('location', $event)"
+            placeholder="Kinshasa, Gombe..."
+            class="h-12 rounded-xl border border-[#d7e0ed] bg-white px-4 text-sm text-rheo-dark outline-none transition focus:border-[#071d49]"
+          />
+        </div>
+
+        <div class="grid gap-1.5">
+          <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Type de bien</label>
+          <div class="relative">
+            <button
+              type="button"
+              (click)="toggleDropdown('category', $event)"
+              class="flex h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-[#071d49]"
+            >
+              <span>{{ selectedLabel(categoryOptions, filters().category) }}</span>
+              <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="openDropdown() === 'category'" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            @if (openDropdown() === 'category') {
+              <ul class="absolute top-full z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+                @for (option of categoryOptions; track option.value) {
+                  <li>
+                    <button type="button" (click)="selectFilter('category', option.value)" class="w-full rounded-[8px] px-3.5 py-2.5 text-left text-sm font-medium text-[#071d49] transition hover:bg-slate-100">
+                      {{ option.label }}
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        </div>
+
+        <div class="grid gap-1.5">
+          <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Budget</label>
+          <div class="relative">
+            <button
+              type="button"
+              (click)="toggleDropdown('budgetMax', $event)"
+              class="flex h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-[#071d49]"
+            >
+              <span>{{ selectedLabel(budgetOptions, filters().budgetMax) }}</span>
+              <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="openDropdown() === 'budgetMax'" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            @if (openDropdown() === 'budgetMax') {
+              <ul class="absolute top-full z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+                @for (option of budgetOptions; track option.label) {
+                  <li>
+                    <button type="button" (click)="selectFilter('budgetMax', option.value)" class="w-full rounded-[8px] px-3.5 py-2.5 text-left text-sm font-medium text-[#071d49] transition hover:bg-slate-100">
+                      {{ option.label }}
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        </div>
+
+        <div class="grid gap-1.5">
+          <label class="text-xs font-bold uppercase tracking-wide text-rheo-muted">Chambres</label>
+          <div class="relative">
+            <button
+              type="button"
+              (click)="toggleDropdown('bedroomsMin', $event)"
+              class="flex h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-[#071d49]"
+            >
+              <span>{{ selectedLabel(bedroomOptions, filters().bedroomsMin) }}</span>
+              <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="openDropdown() === 'bedroomsMin'" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            @if (openDropdown() === 'bedroomsMin') {
+              <ul class="absolute top-full z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+                @for (option of bedroomOptions; track option.label) {
+                  <li>
+                    <button type="button" (click)="selectFilter('bedroomsMin', option.value)" class="w-full rounded-[8px] px-3.5 py-2.5 text-left text-sm font-medium text-[#071d49] transition hover:bg-slate-100">
+                      {{ option.label }}
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 flex flex-col gap-4 border-t border-rheo-border pt-4 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <label class="inline-flex items-center gap-2 text-sm font-semibold text-rheo-dark">
+            <input
+              type="checkbox"
+              name="verifiedOnly"
+              [ngModel]="filters().verifiedOnly"
+              (ngModelChange)="updateFilter('verifiedOnly', $event)"
+              class="h-4 w-4 rounded border-[#d7e0ed] accent-[#111711]"
+            />
+            Biens vérifiés uniquement
+          </label>
+
+          <div class="relative w-full sm:w-52">
+            <button
+              type="button"
+              (click)="toggleDropdown('sort', $event)"
+              class="flex h-11 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-[#071d49]"
+            >
+              <span>{{ selectedLabel(sortOptions, filters().sort) }}</span>
+              <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="openDropdown() === 'sort'" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            @if (openDropdown() === 'sort') {
+              <ul class="absolute top-full z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+                @for (option of sortOptions; track option.value) {
+                  <li>
+                    <button type="button" (click)="selectFilter('sort', option.value)" class="w-full rounded-[8px] px-3.5 py-2.5 text-left text-sm font-medium text-[#071d49] transition hover:bg-slate-100">
+                      {{ option.label }}
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+          @if (hasActiveFilters()) {
+            <button type="button" (click)="resetFilters()" class="h-11 rounded-xl border border-[#d7e0ed] px-5 text-sm font-semibold text-rheo-muted transition hover:border-rheo-dark hover:text-rheo-dark">
+              Réinitialiser
+            </button>
+          }
+          <button type="submit" class="h-11 rounded-xl bg-[#111711] px-6 text-sm font-bold text-white transition hover:bg-black">
+            Rechercher
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-sm text-rheo-muted">
+        <span class="font-semibold text-rheo-dark">{{ results().length }}</span>
+        bien{{ results().length > 1 ? 's' : '' }} trouvé{{ results().length > 1 ? 's' : '' }}
+      </p>
+      @if (searchError()) {
+        <p class="rounded-full bg-[#fff7df] px-4 py-2 text-xs font-semibold text-[#806000]">{{ searchError() }}</p>
       }
     </div>
+
+    @if (isLoading()) {
+      <div class="mt-10 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+        @for (item of [1, 2, 3, 4]; track item) {
+          <div class="h-[365px] animate-pulse rounded-[20px] bg-white"></div>
+        }
+      </div>
+    } @else if (results().length) {
+      <div class="mt-8 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+        @for (property of results(); track property.id) {
+          <app-property-card [property]="property" (viewDetails)="onViewDetails($event)" />
+        }
+      </div>
+    } @else {
+      <div class="mt-10 rounded-[28px] border border-rheo-border bg-white px-6 py-14 text-center">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-rheo-muted">Aucun résultat</p>
+        <h2 class="mt-3 text-2xl font-semibold tracking-tight text-rheo-dark">Aucun bien ne correspond à cette recherche.</h2>
+        <p class="mx-auto mt-3 max-w-xl text-sm leading-7 text-rheo-muted">Essayez d'élargir le budget, la localisation ou le type de bien.</p>
+        <button type="button" (click)="resetFilters()" class="mt-6 rounded-[18px] bg-rheo-accent px-6 py-3 text-sm font-bold text-rheo-dark">
+          Réinitialiser les filtres
+        </button>
+      </div>
+    }
   </div>
 </section>

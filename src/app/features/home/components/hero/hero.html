@@ -119,13 +119,13 @@
         <div class="flex flex-wrap items-center gap-2">
           <span class="mr-1 text-xs font-bold text-slate-900">Filtres :</span>
           @for (chip of filterChips; track chip) {
-            <button type="button" class="rounded-full border border-slate-200 px-4 py-1.5 text-xs font-medium text-slate-500 transition-all hover:border-slate-400 hover:text-slate-900">
+            <button type="button" (click)="selectQuickLocation(chip)" class="rounded-full border border-slate-200 px-4 py-1.5 text-xs font-medium text-slate-500 transition-all hover:border-slate-400 hover:text-slate-900">
               {{ chip }}
             </button>
           }
         </div>
 
-        <button type="button" class="rounded-full bg-slate-950 px-7 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:bg-slate-900 active:scale-95">
+        <button type="button" (click)="onSearch()" class="rounded-full bg-slate-950 px-7 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:bg-slate-900 active:scale-95">
           Rechercher
         </button>
       </div>
