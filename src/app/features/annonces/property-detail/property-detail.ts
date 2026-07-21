@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, computed, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  OnDestroy,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { RheodyceDataService } from '../../../core/services/rheodyce-data.service';
@@ -41,9 +50,11 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
   private readonly data = inject(RheodyceDataService);
   private readonly auth = inject(AuthService);
   private map?: PropertyMap;
+  private shareFeedbackTimeout?: number;
 
   protected readonly selectedImage = signal(0);
   protected readonly showSubscriberModal = signal(false);
+  protected readonly shareFeedback = signal('');
   protected readonly isSubscriber = computed(() => this.auth.isSubscriber());
   protected readonly property = computed<Property | undefined>(() => {
     const id = this.route.snapshot.paramMap.get('id');
@@ -60,12 +71,14 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.map?.remove();
+    if (this.shareFeedbackTimeout != null) window.clearTimeout(this.shareFeedbackTimeout);
   }
 
   protected readonly gallery = computed<string[]>(() => {
     const property = this.property();
     if (!property) return [];
-    return [property.imageUrl, '/assets/hero_img_1.jpg', property.imageUrl].filter(Boolean);
+    const images = [property.imageUrl, ...(property.photos ?? [])].filter(Boolean);
+    return [...new Set(images)];
   });
 
   protected propertyTypeLabel(property: Property): string {
@@ -82,6 +95,30 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
     }
   }
 
+  protected async shareProperty(property: Property): Promise<void> {
+    const url = window.location.href;
+    const price = new Intl.NumberFormat('fr-FR').format(property.price);
+    const text = `${property.title} — ${price} USD${property.priceSuffix ?? ''} — ${property.location}`;
+    const shareData: ShareData = { title: property.title, text, url };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        this.showShareFeedback('Annonce partagée');
+        return;
+      } catch (error: unknown) {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      this.showShareFeedback('Lien copié');
+    } catch {
+      this.showShareFeedback('Partage indisponible');
+    }
+  }
+
   protected closeModal(): void {
     this.showSubscriberModal.set(false);
   }
@@ -91,6 +128,12 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
     void this.router.navigate(['/connexion']);
   }
 
+  private showShareFeedback(message: string): void {
+    this.shareFeedback.set(message);
+    if (this.shareFeedbackTimeout != null) window.clearTimeout(this.shareFeedbackTimeout);
+    this.shareFeedbackTimeout = window.setTimeout(() => this.shareFeedback.set(''), 3000);
+  }
+
   private async initMap(): Promise<void> {
     const item = this.property();
     const element = this.propertyMap?.nativeElement;
@@ -98,11 +141,15 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
 
     try {
       const leaflet = await this.loadLeaflet();
-      this.map = leaflet.map(element, { zoomControl: true }).setView([item.latitude, item.longitude], 14);
-      leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap',
-        maxZoom: 19,
-      }).addTo(this.map);
+      this.map = leaflet
+        .map(element, { zoomControl: true })
+        .setView([item.latitude, item.longitude], 14);
+      leaflet
+        .tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap',
+          maxZoom: 19,
+        })
+        .addTo(this.map);
       leaflet.marker([item.latitude, item.longitude]).addTo(this.map).bindTooltip(item.location);
       window.setTimeout(() => this.map?.invalidateSize(), 0);
     } catch {
@@ -114,7 +161,8 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
     const existing = (window as Window & { L?: LeafletNamespace }).L;
     if (existing) return Promise.resolve(existing);
 
-    const pending = (window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> }).__rheodyceLeaflet;
+    const pending = (window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> })
+      .__rheodyceLeaflet;
     if (pending) return pending;
 
     const promise = new Promise<LeafletNamespace>((resolve, reject) => {
@@ -128,7 +176,8 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
       script.onerror = () => reject(new Error('Leaflet indisponible'));
       document.head.appendChild(script);
     });
-    (window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> }).__rheodyceLeaflet = promise;
+    (window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> }).__rheodyceLeaflet =
+      promise;
     return promise;
   }
 }

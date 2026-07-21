@@ -463,6 +463,8 @@ function mapSubmission(row: Record<string, unknown>): PropertySubmission {
     address: String(row['address']),
     price: Number(row['price']),
     surface: Number(row['surface']),
+    latitude: Number(row['latitude']),
+    longitude: Number(row['longitude']),
     description: String(row['description']),
     photos: Array.isArray(row['photos']) ? row['photos'].map(String) : [],
     documents: Array.isArray(row['documents']) ? row['documents'].map(String) : [],

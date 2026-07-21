@@ -71,6 +71,8 @@ Deno.serve(async (req: Request) => {
   const surface = Number(form.get('surface'));
   const bedrooms = Number(form.get('bedrooms') ?? 0);
   const bathrooms = Number(form.get('bathrooms') ?? 0);
+  const latitude = Number(form.get('latitude'));
+  const longitude = Number(form.get('longitude'));
   const photos = files(form, 'photos');
   const documents = files(form, 'documents');
 
@@ -88,7 +90,13 @@ Deno.serve(async (req: Request) => {
     !Number.isInteger(bedrooms) ||
     bedrooms < 0 ||
     !Number.isInteger(bathrooms) ||
-    bathrooms < 0;
+    bathrooms < 0 ||
+    !Number.isFinite(latitude) ||
+    latitude < -90 ||
+    latitude > 90 ||
+    !Number.isFinite(longitude) ||
+    longitude < -180 ||
+    longitude > 180;
   if (invalidFields)
     return json({ error: 'Les informations de l’annonce sont incomplètes ou invalides.' }, 400);
   if (photos.length < 1 || photos.length > 12)
@@ -162,6 +170,8 @@ Deno.serve(async (req: Request) => {
         surface,
         bedrooms,
         bathrooms,
+        latitude,
+        longitude,
         description,
         photos: photoUrls,
         documents: documentPaths,

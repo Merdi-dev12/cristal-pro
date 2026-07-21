@@ -14,6 +14,7 @@ export interface Property {
   type: PropertyType;
   category: PropertyCategory;
   imageUrl: string;
+  photos?: string[];
   featured?: boolean;
   verified?: boolean;
   description: string;

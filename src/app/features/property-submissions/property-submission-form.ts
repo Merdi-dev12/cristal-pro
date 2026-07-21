@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, inject, signal } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -9,6 +9,35 @@ import { PropertyCategory, PropertyType } from '../../shared/models/property.mod
 interface SelectedPhoto {
   file: File;
   previewUrl: string;
+}
+
+type MapPoint = [number, number];
+
+interface MapCoordinates {
+  lat: number;
+  lng: number;
+}
+
+interface LocationMap {
+  setView(point: MapPoint, zoom: number): LocationMap;
+  invalidateSize(): void;
+  on(event: 'click', callback: (event: { latlng: MapCoordinates }) => void): LocationMap;
+  remove(): void;
+}
+
+interface LocationMarker {
+  addTo(map: LocationMap): LocationMarker;
+  bindTooltip(text: string): LocationMarker;
+  on(event: 'dragend', callback: () => void): LocationMarker;
+  getLatLng(): MapCoordinates;
+  setLatLng(point: MapPoint): LocationMarker;
+}
+
+interface LeafletNamespace {
+  map(element: HTMLElement, options: Record<string, unknown>): LocationMap;
+  control: { zoom(options: Record<string, unknown>): { addTo(map: LocationMap): void } };
+  tileLayer(url: string, options: Record<string, unknown>): { addTo(map: LocationMap): void };
+  marker(point: MapPoint, options: Record<string, unknown>): LocationMarker;
 }
 
 @Component({
@@ -113,6 +142,54 @@ interface SelectedPhoto {
                   placeholder="Commune, quartier"
               /></label>
             </div>
+
+            <fieldset class="grid gap-3">
+              <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+                <div>
+                  <legend class="text-sm font-semibold">Localisation exacte du bien</legend>
+                  <p class="mt-1 text-xs leading-5 text-rheo-muted">
+                    Cliquez sur la carte pour placer le repère, puis déplacez-le si nécessaire.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="w-fit rounded-xl border border-rheo-border px-4 py-2 text-xs font-semibold transition hover:bg-rheo-bg"
+                  (click)="useCurrentLocation()"
+                >
+                  Utiliser ma position
+                </button>
+              </div>
+              <div
+                class="relative overflow-hidden rounded-2xl border border-rheo-border bg-[#e8ede5]"
+              >
+                <div
+                  #locationMap
+                  class="h-[340px] w-full sm:h-[400px]"
+                  aria-label="Carte pour sélectionner la localisation du bien"
+                ></div>
+                @if (!coordinates()) {
+                  <p
+                    class="pointer-events-none absolute inset-x-4 top-4 z-[500] rounded-xl bg-white/95 px-4 py-3 text-center text-xs font-semibold shadow"
+                  >
+                    Cliquez à l’emplacement exact de votre propriété
+                  </p>
+                }
+              </div>
+              @if (coordinates(); as point) {
+                <p
+                  class="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-xl bg-[#f4f8e7] px-4 py-3 text-xs text-[#536517]"
+                >
+                  <strong>Position sélectionnée</strong>
+                  <span>Latitude : {{ point.lat | number: '1.6-6' }}</span>
+                  <span>Longitude : {{ point.lng | number: '1.6-6' }}</span>
+                </p>
+              }
+              @if (mapError()) {
+                <p class="rounded-xl bg-amber-50 px-4 py-3 text-xs text-amber-800">
+                  {{ mapError() }}
+                </p>
+              }
+            </fieldset>
 
             <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               <label class="grid min-w-0 gap-2 text-sm font-semibold"
@@ -272,9 +349,17 @@ interface SelectedPhoto {
   `,
 })
 export class PropertySubmissionFormPage implements OnDestroy {
+  @ViewChild('locationMap')
+  private set locationMapElement(element: ElementRef<HTMLDivElement> | undefined) {
+    if (element && !this.map) void this.initMap(element.nativeElement);
+  }
+
   protected readonly auth = inject(AuthService);
   private readonly submissions = inject(PropertySubmissionService);
   private readonly router = inject(Router);
+  private map?: LocationMap;
+  private marker?: LocationMarker;
+  private leaflet?: LeafletNamespace;
 
   protected title = '';
   protected type: PropertyType = 'location';
@@ -288,12 +373,31 @@ export class PropertySubmissionFormPage implements OnDestroy {
   protected description = '';
   protected readonly photos = signal<SelectedPhoto[]>([]);
   protected readonly documents = signal<File[]>([]);
+  protected readonly coordinates = signal<MapCoordinates | null>(null);
+  protected readonly mapError = signal('');
   protected readonly loading = signal(false);
   protected readonly error = signal('');
   protected readonly message = signal('');
 
   ngOnDestroy(): void {
     this.photos().forEach((photo) => URL.revokeObjectURL(photo.previewUrl));
+    this.map?.remove();
+  }
+
+  protected useCurrentLocation(): void {
+    if (!navigator.geolocation) {
+      this.mapError.set('La géolocalisation n’est pas disponible sur cet appareil.');
+      return;
+    }
+    this.mapError.set('');
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => this.selectLocation({ lat: coords.latitude, lng: coords.longitude }, true),
+      () =>
+        this.mapError.set(
+          'Votre position n’a pas pu être récupérée. Cliquez directement sur la carte.',
+        ),
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
   }
 
   protected selectPhotos(event: Event): void {
@@ -365,6 +469,11 @@ export class PropertySubmissionFormPage implements OnDestroy {
       this.error.set('Ajoutez au moins une photo du bien.');
       return;
     }
+    const coordinates = this.coordinates();
+    if (!coordinates) {
+      this.error.set('Sélectionnez la localisation exacte du bien sur la carte.');
+      return;
+    }
     this.loading.set(true);
     try {
       await this.submissions.create({
@@ -378,6 +487,8 @@ export class PropertySubmissionFormPage implements OnDestroy {
         bedrooms: this.bedrooms,
         bathrooms: this.bathrooms,
         description: this.description,
+        latitude: coordinates.lat,
+        longitude: coordinates.lng,
         photos: this.photos().map((item) => item.file),
         documents: this.documents(),
       });
@@ -392,5 +503,66 @@ export class PropertySubmissionFormPage implements OnDestroy {
 
   private isImage(file: File): boolean {
     return ['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.type);
+  }
+
+  private async initMap(element: HTMLDivElement): Promise<void> {
+    try {
+      this.leaflet = await this.loadLeaflet();
+      this.map = this.leaflet.map(element, { zoomControl: false }).setView([-4.325, 15.322], 12);
+      this.leaflet.control.zoom({ position: 'bottomright' }).addTo(this.map);
+      this.leaflet
+        .tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap',
+          maxZoom: 19,
+        })
+        .addTo(this.map);
+      this.map.on('click', ({ latlng }) => this.selectLocation(latlng));
+      const selected = this.coordinates();
+      if (selected) this.selectLocation(selected, true);
+      window.setTimeout(() => this.map?.invalidateSize(), 0);
+    } catch {
+      this.mapError.set(
+        'La carte n’a pas pu être chargée. Vérifiez votre connexion puis rechargez la page.',
+      );
+    }
+  }
+
+  private selectLocation(point: MapCoordinates, recenter = false): void {
+    const normalized = { lat: Number(point.lat.toFixed(7)), lng: Number(point.lng.toFixed(7)) };
+    this.coordinates.set(normalized);
+    this.mapError.set('');
+    if (!this.map || !this.leaflet) return;
+    if (this.marker) {
+      this.marker.setLatLng([normalized.lat, normalized.lng]);
+    } else {
+      this.marker = this.leaflet
+        .marker([normalized.lat, normalized.lng], { draggable: true })
+        .addTo(this.map)
+        .bindTooltip('Emplacement du bien');
+      this.marker.on('dragend', () => {
+        const moved = this.marker?.getLatLng();
+        if (moved) this.selectLocation(moved);
+      });
+    }
+    if (recenter) this.map.setView([normalized.lat, normalized.lng], 16);
+  }
+
+  private loadLeaflet(): Promise<LeafletNamespace> {
+    const existing = (window as Window & { L?: LeafletNamespace }).L;
+    if (existing) return Promise.resolve(existing);
+    const host = window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> };
+    if (host.__rheodyceLeaflet) return host.__rheodyceLeaflet;
+    host.__rheodyceLeaflet = new Promise<LeafletNamespace>((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.crossOrigin = '';
+      script.onload = () => {
+        const namespace = (window as Window & { L?: LeafletNamespace }).L;
+        namespace ? resolve(namespace) : reject(new Error('Leaflet indisponible'));
+      };
+      script.onerror = () => reject(new Error('Leaflet indisponible'));
+      document.head.appendChild(script);
+    });
+    return host.__rheodyceLeaflet;
   }
 }

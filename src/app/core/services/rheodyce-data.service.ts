@@ -47,6 +47,7 @@ export class RheodyceDataService {
         type: row['type'] as Property['type'],
         category: row['category'] as Property['category'],
         imageUrl: String(row['image_url'] ?? ''),
+        photos: Array.isArray(row['photos']) ? row['photos'].map(String) : [],
         featured: Boolean(row['featured']),
         verified: Boolean(row['verified']),
         description: String(row['description'] ?? ''),

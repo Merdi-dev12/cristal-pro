@@ -99,6 +99,8 @@ export interface PropertySubmission {
   address: string;
   price: number;
   surface: number;
+  latitude: number;
+  longitude: number;
   description: string;
   photos: string[];
   documents: string[];

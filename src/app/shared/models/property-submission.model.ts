@@ -14,6 +14,8 @@ export interface PropertySubmissionInput {
   bedrooms: number;
   bathrooms: number;
   description: string;
+  latitude: number;
+  longitude: number;
   photos: File[];
   documents: File[];
 }

@@ -28,6 +28,8 @@ export class PropertySubmissionService {
     body.set('bedrooms', String(input.bedrooms));
     body.set('bathrooms', String(input.bathrooms));
     body.set('description', input.description);
+    body.set('latitude', String(input.latitude));
+    body.set('longitude', String(input.longitude));
     input.photos.forEach((file) => body.append('photos', file, file.name));
     input.documents.forEach((file) => body.append('documents', file, file.name));
 
@@ -86,6 +88,8 @@ export class PropertySubmissionService {
       bedrooms: Number(row['bedrooms'] ?? 0),
       bathrooms: Number(row['bathrooms'] ?? 0),
       description: String(row['description']),
+      latitude: Number(row['latitude']),
+      longitude: Number(row['longitude']),
       photoUrls: Array.isArray(row['photos']) ? row['photos'].map(String) : [],
       documentUrls: Array.isArray(row['documents']) ? row['documents'].map(String) : [],
       status: row['status'] as MyPropertySubmission['status'],
