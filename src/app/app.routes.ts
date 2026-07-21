@@ -24,16 +24,26 @@ import { AdminServicesPage } from './features/admin/admin-services';
 import { AdminSubmissionsPage } from './features/admin/admin-submissions';
 import { AdminPropertiesPage } from './features/admin/admin-properties';
 import { AdminContactPage } from './features/admin/admin-contact';
+import { AdminContactDetailPage } from './features/admin/admin-contact-detail';
+import { AdminSubmissionDetailPage } from './features/admin/admin-submission-detail';
+import { AdminVisitDetailPage } from './features/admin/admin-visit-detail';
+import { AdminPropertyDetailPage } from './features/admin/admin-property-detail';
+import { AdminServiceRequestDetailPage } from './features/admin/admin-service-request-detail';
 import { SubscriptionPage } from './features/subscription/subscription';
 import { PropertyDetailPage } from './features/annonces/property-detail/property-detail';
 import { ProfilePage } from './features/profile/profile';
 import { PropertySubmissionFormPage } from './features/property-submissions/property-submission-form';
 import { MyPropertySubmissionsPage } from './features/property-submissions/my-property-submissions';
+import { ServiceRequestFormPage } from './features/services/service-request-form/service-request-form';
 
 export const routes: Routes = [
   { path: '', component: Home, title: 'Accueil — RHEODYCE' },
   { path: 'annonces', component: AnnoncesPage, title: 'Annonces — RHEODYCE' },
-  { path: 'annonces/:id', component: PropertyDetailPage, title: 'Détail annonce — RHEODYCE' },
+  {
+    path: 'annonces/:id',
+    component: PropertyDetailPage,
+    title: 'Détail annonce — RHEODYCE',
+  },
   { path: 'location-vente', component: LocationVentePage, title: 'Location & Vente — RHEODYCE' },
   {
     path: 'location-vente/creer-annonce',
@@ -44,12 +54,23 @@ export const routes: Routes = [
   { path: 'maintenance', component: MaintenancePage, title: 'Maintenance — RHEODYCE' },
   { path: 'decoration', component: DecorationPage, title: 'Décoration — RHEODYCE' },
   { path: 'services', component: ServicesPage, title: 'Services — RHEODYCE' },
+  {
+    path: 'services/:type/demande',
+    component: ServiceRequestFormPage,
+    canActivate: [authGuard],
+    title: 'Nouvelle demande — RHEODYCE',
+  },
   { path: 'faq', component: FaqPage, title: 'FAQ — RHEODYCE' },
   { path: 'contact', component: ContactPage, title: 'Contact — RHEODYCE' },
   { path: 'abonnement', component: SubscriptionPage, title: 'Abonnement — RHEODYCE' },
   { path: 'connexion', component: LoginPage, title: 'Connexion — RHEODYCE' },
   { path: 'inscription', component: RegisterPage, title: 'Inscription — RHEODYCE' },
-  { path: 'mon-compte/demandes', component: ServiceRequestsPage, title: 'Mes demandes — RHEODYCE' },
+  {
+    path: 'mon-compte/demandes',
+    component: ServiceRequestsPage,
+    canActivate: [authGuard],
+    title: 'Mes demandes — RHEODYCE',
+  },
   {
     path: 'mon-compte/mes-annonces',
     component: MyPropertySubmissionsPage,
@@ -59,6 +80,7 @@ export const routes: Routes = [
   {
     path: 'mon-compte/demandes/:id',
     component: ServiceRequestDetailPage,
+    canActivate: [authGuard],
     title: 'Détail demande — RHEODYCE',
   },
   {
@@ -86,11 +108,41 @@ export const routes: Routes = [
     children: [
       { path: '', component: AdminDashboardPage, title: 'Panel admin — RHEODYCE' },
       { path: 'visites', component: AdminVisitsPage, title: 'Visites — Panel admin' },
+      {
+        path: 'visites/:id',
+        component: AdminVisitDetailPage,
+        title: 'Détail visite — Panel admin',
+      },
       { path: 'utilisateurs', component: AdminUsersPage, title: 'Utilisateurs — Panel admin' },
       { path: 'services', component: AdminServicesPage, title: 'Services — Panel admin' },
+      {
+        path: 'services/demandes/:id',
+        component: AdminServiceRequestDetailPage,
+        title: 'Détail service — Panel admin',
+      },
       { path: 'contacts', component: AdminContactPage, title: 'Contacts — Panel admin' },
+      {
+        path: 'contacts/:id',
+        component: AdminContactDetailPage,
+        title: 'Détail contact — Panel admin',
+      },
       { path: 'soumissions', component: AdminSubmissionsPage, title: 'Soumissions — Panel admin' },
+      {
+        path: 'soumissions/:id',
+        component: AdminSubmissionDetailPage,
+        title: 'Détail soumission — Panel admin',
+      },
       { path: 'annonces', component: AdminPropertiesPage, title: 'Annonces — Panel admin' },
+      {
+        path: 'annonces/nouvelle',
+        component: PropertySubmissionFormPage,
+        title: 'Créer une annonce — Panel admin',
+      },
+      {
+        path: 'annonces/:id',
+        component: AdminPropertyDetailPage,
+        title: 'Gérer une annonce — Panel admin',
+      },
       { path: 'demenagements', component: MovingAdminPage, title: 'Déménagements — Panel admin' },
     ],
   },

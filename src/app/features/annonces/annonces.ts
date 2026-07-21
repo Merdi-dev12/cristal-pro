@@ -7,7 +7,11 @@ import { PropertySearchService } from '../../core/services/property-search.servi
 import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
 import { PropertyCard } from '../../shared/components/property-card/property-card';
 import { Property, PropertyCategory, PropertyType } from '../../shared/models/property.model';
-import { PropertySearchFilters, PropertySearchOption, PropertySort } from '../../shared/models/property-search.model';
+import {
+  PropertySearchFilters,
+  PropertySearchOption,
+  PropertySort,
+} from '../../shared/models/property-search.model';
 
 type FilterDropdown = 'category' | 'budgetMax' | 'bedroomsMin' | 'sort';
 
@@ -24,12 +28,16 @@ export class AnnoncesPage implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly propertySearch = inject(PropertySearchService);
 
-  protected readonly filters = signal<PropertySearchFilters>({ ...this.propertySearch.defaultFilters });
+  protected readonly filters = signal<PropertySearchFilters>({
+    ...this.propertySearch.defaultFilters,
+  });
   protected readonly results = signal<Property[]>([]);
   protected readonly isLoading = signal(false);
   protected readonly searchError = signal('');
   protected readonly openDropdown = signal<FilterDropdown | null>(null);
-  protected readonly hasActiveFilters = computed(() => JSON.stringify(this.filters()) !== JSON.stringify(this.propertySearch.defaultFilters));
+  protected readonly hasActiveFilters = computed(
+    () => JSON.stringify(this.filters()) !== JSON.stringify(this.propertySearch.defaultFilters),
+  );
 
   protected readonly typeOptions: PropertySearchOption<PropertyType | 'all'>[] = [
     { label: 'Tous', value: 'all' },
@@ -68,12 +76,10 @@ export class AnnoncesPage implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.route.queryParamMap
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((params) => {
-        this.filters.set(this.propertySearch.fromQueryParams(params));
-        void this.runSearch();
-      });
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.filters.set(this.propertySearch.fromQueryParams(params));
+      void this.runSearch();
+    });
   }
 
   protected setType(type: PropertyType | 'all'): void {
@@ -81,7 +87,10 @@ export class AnnoncesPage implements OnInit {
     void this.applyFilters();
   }
 
-  protected updateFilter<K extends keyof PropertySearchFilters>(key: K, value: PropertySearchFilters[K]): void {
+  protected updateFilter<K extends keyof PropertySearchFilters>(
+    key: K,
+    value: PropertySearchFilters[K],
+  ): void {
     this.filters.update((filters) => ({ ...filters, [key]: value }));
   }
 
@@ -90,12 +99,18 @@ export class AnnoncesPage implements OnInit {
     this.openDropdown.update((current) => (current === dropdown ? null : dropdown));
   }
 
-  protected selectFilter<K extends keyof PropertySearchFilters>(key: K, value: PropertySearchFilters[K]): void {
+  protected selectFilter<K extends keyof PropertySearchFilters>(
+    key: K,
+    value: PropertySearchFilters[K],
+  ): void {
     this.updateFilter(key, value);
     this.openDropdown.set(null);
   }
 
-  protected selectedLabel<T extends string | number | null>(options: PropertySearchOption<T>[], value: T): string {
+  protected selectedLabel<T extends string | number | null>(
+    options: PropertySearchOption<T>[],
+    value: T,
+  ): string {
     return options.find((option) => option.value === value)?.label ?? '';
   }
 
@@ -130,7 +145,9 @@ export class AnnoncesPage implements OnInit {
       this.results.set(properties);
     } catch {
       this.results.set(this.propertySearch.filterLocal(this.data.properties, this.filters()));
-      this.searchError.set('Recherche locale affichée. La connexion aux filtres Supabase est à vérifier.');
+      this.searchError.set(
+        'Recherche locale affichée. La connexion aux filtres Supabase est à vérifier.',
+      );
     } finally {
       this.isLoading.set(false);
     }

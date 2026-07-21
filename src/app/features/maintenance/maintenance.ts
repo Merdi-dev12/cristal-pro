@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-maintenance',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   template: `
     <section class="bg-rheo-bg pb-16 pt-28">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -27,6 +28,7 @@ import { Component } from '@angular/core';
             }
           </div>
         </div>
+        <a routerLink="/services/maintenance/demande" class="mt-8 inline-flex rounded-[18px] bg-rheo-accent px-6 py-3 text-sm font-bold text-rheo-dark transition hover:bg-rheo-accent-hover">Demander une intervention →</a>
       </div>
     </section>
   `,

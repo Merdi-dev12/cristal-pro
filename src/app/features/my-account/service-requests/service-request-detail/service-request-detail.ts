@@ -4,7 +4,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ServiceRequestService } from '../../../../core/services/service-request.service';
 import { RheodyceDataService } from '../../../../core/services/rheodyce-data.service';
 import { RequestStatusBadge } from '../../../../shared/components/request-status-badge/request-status-badge';
-import { SERVICE_TYPE_LABELS, ServiceRequest } from '../../../../shared/models/service-request.model';
+import {
+  SERVICE_DETAIL_LABELS,
+  SERVICE_TYPE_LABELS,
+  ServiceRequest,
+  ServiceRequestEvent,
+} from '../../../../shared/models/service-request.model';
 
 @Component({
   selector: 'app-service-request-detail',
@@ -22,6 +27,8 @@ export class ServiceRequestDetailPage implements OnInit {
   protected readonly isLoading = signal(true);
   protected readonly notFound = signal(false);
   protected readonly isCancelling = signal(false);
+  protected readonly events = signal<ServiceRequestEvent[]>([]);
+  protected readonly wasCreated = signal(this.route.snapshot.queryParamMap.get('created') === '1');
 
   async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
@@ -31,11 +38,15 @@ export class ServiceRequestDetailPage implements OnInit {
       return;
     }
 
-    const found = await this.service.getRequest(id);
+    const [found, events] = await Promise.all([
+      this.service.getRequest(id),
+      this.service.getRequestEvents(id).catch(() => []),
+    ]);
     if (!found) {
       this.notFound.set(true);
     } else {
       this.request.set(found);
+      this.events.set(events);
     }
     this.isLoading.set(false);
   }
@@ -52,6 +63,15 @@ export class ServiceRequestDetailPage implements OnInit {
     return this.service.canCancel(request);
   }
 
+  protected detailRows(request: ServiceRequest): Array<{ label: string; value: string }> {
+    return Object.entries(request.details)
+      .filter(([, value]) => value !== null && value !== '')
+      .map(([key, value]) => ({
+        label: SERVICE_DETAIL_LABELS[key] ?? key,
+        value: typeof value === 'boolean' ? (value ? 'Oui' : 'Non') : String(value),
+      }));
+  }
+
   protected async onCancel(): Promise<void> {
     const current = this.request();
     if (!current) return;
@@ -63,6 +83,7 @@ export class ServiceRequestDetailPage implements OnInit {
     try {
       await this.service.cancelRequest(current.id);
       this.request.set({ ...current, status: 'annulée' });
+      this.events.set(await this.service.getRequestEvents(current.id));
     } catch {
       window.alert('Impossible d\'annuler la demande pour le moment.');
     } finally {

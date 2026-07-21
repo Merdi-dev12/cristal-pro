@@ -21,4 +21,22 @@ describe('Footer', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should provide a clickable phone number', () => {
+    const phoneLink = fixture.nativeElement.querySelector(
+      'a[href="tel:+243974960149"]',
+    ) as HTMLAnchorElement | null;
+
+    expect(phoneLink).not.toBeNull();
+    expect(phoneLink?.textContent?.trim()).toBe('+243 974 960 149');
+  });
+
+  it('should provide a clickable email address', () => {
+    const emailLink = fixture.nativeElement.querySelector(
+      'a[href="mailto:reh.tssimba@gmail.com"]',
+    ) as HTMLAnchorElement | null;
+
+    expect(emailLink).not.toBeNull();
+    expect(emailLink?.textContent?.trim()).toBe('reh.tssimba@gmail.com');
+  });
 });

@@ -13,7 +13,9 @@
         </div>
 
         @if (service.isAuthenticated()) {
-          <div class="w-full rounded-[24px] border border-[#d7e0ed] bg-white p-2 sm:w-auto">
+          <div class="grid w-full gap-3 sm:w-auto">
+            <a routerLink="/services" class="inline-flex justify-center rounded-[16px] bg-rheo-accent px-5 py-3 text-sm font-bold text-rheo-dark transition hover:bg-rheo-accent-hover">Nouvelle demande</a>
+          <div class="rounded-[24px] border border-[#d7e0ed] bg-white p-2">
             <div class="grid gap-1.5 sm:grid-cols-3">
               @for (filter of filters; track filter.key) {
                 <button
@@ -26,6 +28,7 @@
                 </button>
               }
             </div>
+          </div>
           </div>
         }
       </div>

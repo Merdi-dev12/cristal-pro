@@ -1,52 +1,282 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
-import { ADMIN_REQUEST_STATUSES, ADMIN_SERVICE_TYPES, AdminServiceOffer, AdminServiceOfferDraft } from '../../shared/models/admin.model';
-import { REQUEST_STATUS_LABELS, RequestStatus, SERVICE_TYPE_LABELS, ServiceType } from '../../shared/models/service-request.model';
-
+import {
+  ADMIN_REQUEST_STATUSES,
+  ADMIN_SERVICE_TYPES,
+  AdminServiceOffer,
+  AdminServiceOfferDraft,
+} from '../../shared/models/admin.model';
+import {
+  REQUEST_STATUS_LABELS,
+  RequestStatus,
+  SERVICE_TYPE_LABELS,
+  ServiceType,
+} from '../../shared/models/service-request.model';
 @Component({
   selector: 'app-admin-services',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  template: `
-    <section>
-      <header class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p class="text-sm font-semibold uppercase tracking-[0.2em] text-rheo-muted">Catalogue public</p><h1 class="mt-2 text-3xl font-semibold tracking-tight">Gérer les services.</h1><p class="mt-3 max-w-2xl text-sm leading-6 text-rheo-muted">Ajoutez, modifiez ou désactivez les services visibles sur le site. Le service déménagement est enregistré dans ce catalogue.</p></div><button type="button" class="inline-flex w-fit rounded-xl bg-rheo-dark px-4 py-3 text-sm font-semibold text-white hover:bg-[#323a31]" (click)="newOffer()">Nouveau service <span class="ml-2 text-rheo-accent">+</span></button></header>
-      <div class="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]"><section class="overflow-hidden rounded-2xl border border-[#e4e6e1] bg-white"><div class="border-b border-[#edf0eb] px-5 py-4 sm:px-6"><p class="text-xs text-rheo-muted">{{ admin.serviceOffers().length }} service(s) au catalogue</p></div><div class="divide-y divide-[#edf0eb]">@for (offer of admin.serviceOffers(); track offer.id) {<button type="button" class="flex w-full items-center gap-4 px-5 py-4 text-left transition hover:bg-[#fafbf9] sm:px-6" [class.bg-[#f8fbe9]]="offer.id === selectedOfferId()" (click)="editOffer(offer)"><span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#eef2e9] text-lg">{{ offer.icon }}</span><span class="min-w-0 flex-1"><strong class="block truncate text-sm">{{ offer.title }}</strong><span class="mt-1 block truncate text-xs text-rheo-muted">{{ offer.eyebrow }} · /{{ offer.slug }}</span></span><span class="rounded-full px-2 py-1 text-[10px] font-semibold" [class]="offer.active ? 'bg-[#edf5d6] text-[#657b18]' : 'bg-[#f1f3ef] text-[#667064]'">{{ offer.active ? 'Actif' : 'Désactivé' }}</span></button>} @empty {<div class="p-10 text-center text-sm text-rheo-muted">Aucun service dans le catalogue.</div>}</div></section><aside class="rounded-2xl border border-[#e4e6e1] bg-white p-5 sm:p-6"><div class="flex items-start justify-between gap-3"><div><p class="text-xs font-bold uppercase tracking-[0.18em] text-rheo-muted">{{ offerDraft.id ? 'Modifier le service' : 'Créer un service' }}</p><h2 class="mt-2 text-xl font-semibold">{{ offerDraft.title || 'Nouveau service' }}</h2></div>@if (offerDraft.id) {<button type="button" class="text-xs font-semibold text-[#b42318] hover:underline" (click)="removeOffer()">Supprimer</button>}</div><div class="mt-6 grid gap-3"><div class="grid gap-3 sm:grid-cols-2"><label class="text-xs font-semibold text-rheo-muted">Nom interne (slug)<input [(ngModel)]="offerDraft.slug" class="mt-2 h-11 w-full rounded-xl border border-[#dfe3dc] px-3 text-sm outline-none" placeholder="ex. nettoyage" /></label><label class="text-xs font-semibold text-rheo-muted">Icône<input [(ngModel)]="offerDraft.icon" class="mt-2 h-11 w-full rounded-xl border border-[#dfe3dc] px-3 text-sm outline-none" placeholder="✦" /></label></div><div class="grid gap-3 sm:grid-cols-2"><label class="text-xs font-semibold text-rheo-muted">Titre<input [(ngModel)]="offerDraft.title" class="mt-2 h-11 w-full rounded-xl border border-[#dfe3dc] px-3 text-sm outline-none" /></label><label class="text-xs font-semibold text-rheo-muted">Catégorie<input [(ngModel)]="offerDraft.eyebrow" class="mt-2 h-11 w-full rounded-xl border border-[#dfe3dc] px-3 text-sm outline-none" /></label></div><label class="text-xs font-semibold text-rheo-muted">Description<textarea [(ngModel)]="offerDraft.description" rows="3" class="mt-2 w-full resize-none rounded-xl border border-[#dfe3dc] px-3 py-3 text-sm outline-none"></textarea></label><div class="grid gap-3 sm:grid-cols-2"><label class="text-xs font-semibold text-rheo-muted">Bouton d’action<input [(ngModel)]="offerDraft.cta" class="mt-2 h-11 w-full rounded-xl border border-[#dfe3dc] px-3 text-sm outline-none" /></label><label class="text-xs font-semibold text-rheo-muted">Ordre d’affichage<input type="number" [(ngModel)]="offerDraft.displayOrder" class="mt-2 h-11 w-full rounded-xl border border-[#dfe3dc] px-3 text-sm outline-none" /></label></div><label class="inline-flex items-center gap-2 text-xs font-semibold text-rheo-muted"><input type="checkbox" [(ngModel)]="offerDraft.active" class="accent-[#657b18]" /> Service visible sur le site</label><button type="button" class="mt-2 h-11 rounded-xl bg-rheo-accent text-sm font-bold hover:bg-rheo-accent-hover" (click)="saveOffer()">Enregistrer le service</button></div></aside></div>
-      <header class="mt-14 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p class="text-sm font-semibold uppercase tracking-[0.2em] text-rheo-muted">Demandes de services</p><h2 class="mt-2 text-2xl font-semibold tracking-tight">Chaque demande, bien orientée.</h2><p class="mt-3 max-w-2xl text-sm leading-6 text-rheo-muted">Filtrez par service, assignez un partenaire et préparez la prochaine notification client.</p></div><div class="rounded-xl border border-[#e1e5dc] bg-white px-4 py-3 text-sm"><span class="font-semibold">{{ filteredRequests().length }}</span> <span class="text-rheo-muted">dossier(s)</span></div></header>
-      <div class="mt-8 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]"><section class="overflow-hidden rounded-2xl border border-[#e4e6e1] bg-white"><div class="flex flex-wrap items-center gap-2 border-b border-[#edf0eb] px-5 py-4 sm:px-6"><select [ngModel]="filterType()" (ngModelChange)="filterType.set($event)" class="h-10 rounded-xl border border-[#dfe3dc] bg-white px-3 text-xs font-semibold outline-none"><option value="all">Tous les services</option>@for (type of serviceTypes; track type) {<option [value]="type">{{ SERVICE_TYPE_LABELS[type] }}</option>}</select><select [ngModel]="filterStatus()" (ngModelChange)="filterStatus.set($event)" class="h-10 rounded-xl border border-[#dfe3dc] bg-white px-3 text-xs font-semibold outline-none"><option value="all">Tous les statuts</option>@for (status of statuses; track status) {<option [value]="status">{{ REQUEST_STATUS_LABELS[status] }}</option>}</select><span class="ml-auto text-xs text-rheo-muted">{{ filteredRequests().length }} résultat(s)</span></div><div class="divide-y divide-[#edf0eb]">@for (request of filteredRequests(); track request.id) {<button type="button" class="w-full px-5 py-5 text-left transition hover:bg-[#fafbf9] sm:px-6" [class.bg-[#f8fbe9]]="selectedId() === request.id" (click)="select(request)"><div class="flex items-start gap-4"><span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#eef2e9] text-lg">{{ serviceIcon(request.serviceType) }}</span><span class="min-w-0 flex-1"><span class="flex flex-wrap items-center gap-2"><strong class="truncate text-sm">{{ request.description }}</strong><span class="rounded-full bg-[#f1f3ef] px-2 py-1 text-[10px] font-semibold text-[#667064]">{{ SERVICE_TYPE_LABELS[request.serviceType] }}</span></span><span class="mt-2 block text-xs text-rheo-muted">{{ request.clientName }} · {{ request.createdAt | date:'dd MMM yyyy' }}</span></span><span class="hidden rounded-full px-3 py-1 text-[11px] font-semibold sm:inline-flex" [class]="statusClass(request.status)">{{ request.status }}</span></div></button>} @empty {<div class="p-10 text-center text-sm text-rheo-muted">Aucune demande pour ces filtres.</div>}</div></section>
-      @if (selectedRequest(); as request) {<aside class="rounded-2xl border border-[#e4e6e1] bg-white p-5 sm:p-6"><div class="flex items-start justify-between gap-3"><div><p class="text-xs font-bold uppercase tracking-[0.18em] text-rheo-muted">Détail demande</p><h2 class="mt-2 text-xl font-semibold">{{ request.description }}</h2></div><span class="rounded-full px-3 py-1 text-[11px] font-semibold" [class]="statusClass(request.status)">{{ request.status }}</span></div><div class="mt-6 grid gap-3 rounded-2xl bg-[#f6f7f4] p-4 text-sm"><div class="flex justify-between gap-3"><span class="text-rheo-muted">Demandeur</span><strong>{{ request.clientName }}</strong></div><div class="flex justify-between gap-3"><span class="text-rheo-muted">Email</span><strong class="truncate">{{ request.clientEmail }}</strong></div><div class="flex justify-between gap-3"><span class="text-rheo-muted">Téléphone</span><strong>{{ request.clientPhone }}</strong></div>@if (request.propertyId) {<div class="flex justify-between gap-3"><span class="text-rheo-muted">Annonce liée</span><strong>{{ request.propertyId }}</strong></div>}</div><div class="mt-6 grid gap-3"><label class="text-xs font-semibold text-rheo-muted">Statut<select [(ngModel)]="draftStatus" class="mt-2 h-11 w-full rounded-xl border border-[#dfe3dc] bg-white px-3 text-sm outline-none"><option value="reçue">Reçue</option><option value="en traitement">En traitement</option><option value="assignée">Assignée</option><option value="terminée">Terminée</option><option value="annulée">Annulée</option></select></label><label class="text-xs font-semibold text-rheo-muted">Partenaire assigné<input [(ngModel)]="draftAssigned" class="mt-2 h-11 w-full rounded-xl border border-[#dfe3dc] bg-white px-3 text-sm outline-none" placeholder="Nom ou identifiant du partenaire"></label><label class="text-xs font-semibold text-rheo-muted">Note interne<textarea [(ngModel)]="draftNotes" rows="4" class="mt-2 w-full resize-none rounded-xl border border-[#dfe3dc] bg-white px-3 py-3 text-sm outline-none" placeholder="Ajouter une note pour l’équipe..."></textarea></label><button type="button" class="h-11 rounded-xl bg-rheo-accent text-sm font-bold hover:bg-rheo-accent-hover" (click)="save(request)">Enregistrer le dossier</button><button type="button" class="h-11 rounded-xl border border-[#dfe3dc] text-sm font-semibold hover:bg-[#f6f7f4]" (click)="prepareNotification(request)">{{ request.notificationPrepared ? 'Notification préparée ✓' : 'Préparer la notification utilisateur' }}</button></div></aside>} @else {<aside class="flex min-h-[360px] items-center justify-center rounded-2xl border border-dashed border-[#d5dbd0] bg-white p-8 text-center"><div><span class="text-4xl">▣</span><h2 class="mt-4 font-semibold">Sélectionnez une demande</h2><p class="mt-2 max-w-xs text-sm leading-6 text-rheo-muted">Le détail, le partenaire et les notes internes seront accessibles ici.</p></div></aside>}
+  imports: [CommonModule, FormsModule, RouterLink],
+  template: `<section>
+    <header class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[.2em] text-rheo-muted">Services</p>
+        <h1 class="mt-2 text-3xl font-semibold">Catalogue et demandes.</h1>
+        <p class="mt-3 text-sm text-rheo-muted">
+          Gérez l’offre publique et orientez les demandes reçues.
+        </p>
+      </div>
+      <button
+        type="button"
+        class="w-fit rounded-xl bg-rheo-dark px-5 py-3 text-sm font-semibold text-white"
+        (click)="newOffer()"
+      >
+        ＋ Nouveau service
+      </button>
+    </header>
+    @if (editing()) {
+      <section class="mt-8 rounded-3xl border border-[#e4e6e1] bg-white p-5 sm:p-7">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[.18em] text-rheo-muted">
+              {{ offerDraft.id ? 'Modifier' : 'Créer' }} un service
+            </p>
+            <h2 class="mt-2 text-xl font-semibold">{{ offerDraft.title || 'Nouveau service' }}</h2>
+          </div>
+          <button
+            type="button"
+            (click)="cancelOffer()"
+            class="text-sm font-semibold text-rheo-muted"
+          >
+            Fermer ×
+          </button>
+        </div>
+        <div class="mt-5 grid gap-4">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="text-sm font-semibold"
+              >Slug<input
+                [(ngModel)]="offerDraft.slug"
+                class="mt-2 h-12 w-full rounded-xl border border-[#dfe3dc] px-4 font-normal" /></label
+            ><label class="text-sm font-semibold"
+              >Icône<input
+                [(ngModel)]="offerDraft.icon"
+                class="mt-2 h-12 w-full rounded-xl border border-[#dfe3dc] px-4 font-normal"
+            /></label>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="text-sm font-semibold"
+              >Titre<input
+                [(ngModel)]="offerDraft.title"
+                class="mt-2 h-12 w-full rounded-xl border border-[#dfe3dc] px-4 font-normal" /></label
+            ><label class="text-sm font-semibold"
+              >Catégorie<input
+                [(ngModel)]="offerDraft.eyebrow"
+                class="mt-2 h-12 w-full rounded-xl border border-[#dfe3dc] px-4 font-normal"
+            /></label>
+          </div>
+          <label class="text-sm font-semibold"
+            >Description<textarea
+              [(ngModel)]="offerDraft.description"
+              rows="4"
+              class="mt-2 w-full rounded-xl border border-[#dfe3dc] px-4 py-3 font-normal"
+            ></textarea>
+          </label>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="text-sm font-semibold"
+              >CTA<input
+                [(ngModel)]="offerDraft.cta"
+                class="mt-2 h-12 w-full rounded-xl border border-[#dfe3dc] px-4 font-normal" /></label
+            ><label class="text-sm font-semibold"
+              >Ordre<input
+                type="number"
+                [(ngModel)]="offerDraft.displayOrder"
+                class="mt-2 h-12 w-full rounded-xl border border-[#dfe3dc] px-4 font-normal"
+            /></label>
+          </div>
+          <label class="flex items-center gap-2 text-sm"
+            ><input type="checkbox" [(ngModel)]="offerDraft.active" /> Visible sur le site</label
+          >
+          <div class="flex gap-3">
+            <button
+              type="button"
+              [disabled]="offerLoading()"
+              (click)="saveOffer()"
+              class="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-rheo-accent px-5 text-sm font-bold disabled:opacity-60"
+            >
+              @if (offerLoading()) {
+                <span
+                  class="size-4 animate-spin rounded-full border-2 border-black/20 border-t-black"
+                ></span>
+              }
+              Enregistrer
+            </button>
+            @if (offerDraft.id) {
+              <button
+                type="button"
+                [disabled]="offerLoading()"
+                (click)="removeOffer()"
+                class="rounded-xl border border-red-200 px-5 text-sm font-semibold text-red-700"
+              >
+                Supprimer
+              </button>
+            }
+          </div>
+        </div>
+      </section>
+    }
+    <section class="mt-8 rounded-2xl border border-[#e4e6e1] bg-white">
+      <div class="border-b border-[#edf0eb] p-5">
+        <h2 class="font-semibold">Catalogue public</h2>
+        <p class="mt-1 text-xs text-rheo-muted">{{ admin.serviceOffers().length }} service(s)</p>
+      </div>
+      <div class="grid gap-3 p-5 sm:grid-cols-2 xl:grid-cols-3">
+        @for (offer of admin.serviceOffers(); track offer.id) {
+          <button
+            type="button"
+            (click)="editOffer(offer)"
+            class="flex items-center gap-4 rounded-xl border border-[#edf0eb] p-4 text-left hover:border-rheo-accent"
+          >
+            <span class="grid size-12 place-items-center rounded-xl bg-[#eef2e9] text-xl">{{
+              offer.icon
+            }}</span
+            ><span class="min-w-0 flex-1"
+              ><strong class="block truncate">{{ offer.title }}</strong
+              ><small class="mt-1 block truncate text-rheo-muted">/{{ offer.slug }}</small></span
+            ><span
+              class="rounded-full px-2 py-1 text-[10px] font-semibold"
+              [class]="offer.active ? 'bg-[#edf5d6] text-[#657b18]' : 'bg-gray-100 text-gray-600'"
+              >{{ offer.active ? 'Actif' : 'Masqué' }}</span
+            >
+          </button>
+        }
       </div>
     </section>
-  `,
+    <header class="mt-12">
+      <p class="text-sm font-semibold uppercase tracking-[.2em] text-rheo-muted">Demandes reçues</p>
+      <h2 class="mt-2 text-2xl font-semibold">Suivi des dossiers.</h2>
+    </header>
+    <section class="mt-6 overflow-hidden rounded-2xl border border-[#e4e6e1] bg-white">
+      <div class="flex flex-wrap gap-3 border-b border-[#edf0eb] p-4 sm:p-5">
+        <input
+          [ngModel]="search()"
+          (ngModelChange)="search.set($event)"
+          class="h-11 min-w-[240px] flex-1 rounded-xl border border-[#dfe3dc] px-4 text-sm"
+          placeholder="⌕ Client, description, e-mail…"
+        /><select
+          [ngModel]="filterType()"
+          (ngModelChange)="filterType.set($event)"
+          class="h-11 rounded-xl border border-[#dfe3dc] bg-white px-3 text-sm"
+        >
+          <option value="all">Tous les services</option>
+          @for (t of serviceTypes; track t) {
+            <option [value]="t">{{ SERVICE_TYPE_LABELS[t] }}</option>
+          }</select
+        ><select
+          [ngModel]="filterStatus()"
+          (ngModelChange)="filterStatus.set($event)"
+          class="h-11 rounded-xl border border-[#dfe3dc] bg-white px-3 text-sm"
+        >
+          <option value="all">Tous les statuts</option>
+          @for (s of statuses; track s) {
+            <option [value]="s">{{ REQUEST_STATUS_LABELS[s] }}</option>
+          }
+        </select>
+      </div>
+      <div class="divide-y divide-[#edf0eb]">
+        @for (request of requests(); track request.id) {
+          <a
+            [routerLink]="['/admin/services/demandes', request.id]"
+            class="flex items-center gap-4 px-5 py-5 hover:bg-[#fafbf9] sm:px-6"
+            ><span
+              class="grid size-12 shrink-0 place-items-center rounded-xl bg-[#eef2e9] text-lg"
+              >{{ icon(request.serviceType) }}</span
+            ><span class="min-w-0 flex-1"
+              ><strong class="block truncate">{{ request.description }}</strong
+              ><span class="mt-1 block text-xs text-rheo-muted"
+                >{{ request.clientName }} · {{ request.clientEmail }} ·
+                {{ request.createdAt | date: 'dd MMM yyyy' }}</span
+              ></span
+            ><span
+              class="hidden rounded-full bg-amber-50 px-3 py-1 text-[11px] font-semibold text-amber-800 sm:block"
+              >{{ REQUEST_STATUS_LABELS[request.status] }}</span
+            ><span>→</span></a
+          >
+        } @empty {
+          <p class="p-12 text-center text-sm text-rheo-muted">Aucune demande trouvée.</p>
+        }
+      </div>
+    </section>
+  </section>`,
 })
 export class AdminServicesPage {
   protected readonly admin = inject(AdminService);
-  protected readonly serviceTypes = ADMIN_SERVICE_TYPES;
-  protected readonly statuses = ADMIN_REQUEST_STATUSES;
   protected readonly SERVICE_TYPE_LABELS = SERVICE_TYPE_LABELS;
   protected readonly REQUEST_STATUS_LABELS = REQUEST_STATUS_LABELS;
+  protected readonly serviceTypes = ADMIN_SERVICE_TYPES;
+  protected readonly statuses = ADMIN_REQUEST_STATUSES;
+  protected readonly editing = signal(false);
+  protected readonly offerLoading = signal(false);
+  protected readonly search = signal('');
   protected readonly filterType = signal<'all' | ServiceType>('all');
   protected readonly filterStatus = signal<'all' | RequestStatus>('all');
-  protected readonly selectedId = signal('');
-  protected readonly selectedOfferId = signal('');
-  protected offerDraft: AdminServiceOfferDraft = createOfferDraft();
-  protected draftStatus: RequestStatus = 'reçue';
-  protected draftAssigned = '';
-  protected draftNotes = '';
-  protected readonly filteredRequests = computed(() => this.admin.serviceRequests().filter((request) => (this.filterType() === 'all' || request.serviceType === this.filterType()) && (this.filterStatus() === 'all' || request.status === this.filterStatus())));
-  protected readonly selectedRequest = computed(() => this.admin.serviceRequests().find((request) => request.id === this.selectedId()) ?? null);
-
-  protected newOffer(): void { this.offerDraft = createOfferDraft(); this.selectedOfferId.set(''); }
-  protected editOffer(offer: AdminServiceOffer): void { this.selectedOfferId.set(offer.id); this.offerDraft = { id: offer.id, slug: offer.slug, title: offer.title, eyebrow: offer.eyebrow, description: offer.description, icon: offer.icon, cta: offer.cta, displayOrder: offer.displayOrder, active: offer.active }; }
-  protected async saveOffer(): Promise<void> { await this.admin.saveServiceOffer(this.offerDraft); this.newOffer(); }
-  protected async removeOffer(): Promise<void> { const offer = this.admin.serviceOffers().find((item) => item.id === this.offerDraft.id); if (!offer) return; await this.admin.deleteServiceOffer(offer); this.newOffer(); }
-
-  protected select(request: { id: string; status: RequestStatus; assignedTo?: string; notes?: string }): void { this.selectedId.set(request.id); this.draftStatus = request.status; this.draftAssigned = request.assignedTo ?? ''; this.draftNotes = request.notes ?? ''; }
-  protected async save(request: { id: string }): Promise<void> { await this.admin.updateServiceRequest(request.id, this.draftStatus, this.draftAssigned, this.draftNotes); }
-  protected async prepareNotification(request: { id: string; clientName: string; description: string }): Promise<void> { await this.admin.prepareNotification('service', request.id, `Bonjour ${request.clientName}, votre demande « ${request.description} » est suivie par RHEODYCE.`); }
-  protected serviceIcon(type: ServiceType): string { return type === 'maintenance' ? '⌁' : type === 'decoration' ? '✦' : type === 'juridique' ? '§' : '↗'; }
-  protected statusClass(status: RequestStatus): string { return status === 'terminée' ? 'bg-[#edf5d6] text-[#657b18]' : status === 'annulée' ? 'bg-[#fff0f0] text-[#b42318]' : status === 'assignée' ? 'bg-[#eee9fb] text-[#7050a2]' : 'bg-[#fff4d9] text-[#946200]'; }
+  protected offerDraft: AdminServiceOfferDraft = draft();
+  protected readonly requests = computed(() => {
+    const q = this.search().trim().toLowerCase();
+    return this.admin
+      .serviceRequests()
+      .filter(
+        (r) =>
+          (this.filterType() === 'all' || r.serviceType === this.filterType()) &&
+          (this.filterStatus() === 'all' || r.status === this.filterStatus()) &&
+          (!q || `${r.clientName} ${r.clientEmail} ${r.description}`.toLowerCase().includes(q)),
+      );
+  });
+  protected newOffer() {
+    this.offerDraft = draft();
+    this.editing.set(true);
+  }
+  protected editOffer(o: AdminServiceOffer) {
+    this.offerDraft = { ...o };
+    this.editing.set(true);
+  }
+  protected cancelOffer() {
+    this.editing.set(false);
+  }
+  protected async saveOffer() {
+    this.offerLoading.set(true);
+    try {
+      await this.admin.saveServiceOffer(this.offerDraft);
+      this.editing.set(false);
+    } finally {
+      this.offerLoading.set(false);
+    }
+  }
+  protected async removeOffer() {
+    const o = this.admin.serviceOffers().find((v) => v.id === this.offerDraft.id);
+    if (!o) return;
+    this.offerLoading.set(true);
+    try {
+      await this.admin.deleteServiceOffer(o);
+      this.editing.set(false);
+    } finally {
+      this.offerLoading.set(false);
+    }
+  }
+  protected icon(t: ServiceType) {
+    return t === 'maintenance' ? '🛠' : t === 'decoration' ? '✦' : t === 'juridique' ? '⚖' : '🚚';
+  }
 }
-
-function createOfferDraft(): AdminServiceOfferDraft { return { slug: '', title: '', eyebrow: '', description: '', icon: '✦', cta: 'En savoir plus', displayOrder: 0, active: true }; }
+function draft(): AdminServiceOfferDraft {
+  return {
+    slug: '',
+    title: '',
+    eyebrow: '',
+    description: '',
+    icon: '✦',
+    cta: 'Découvrir',
+    displayOrder: 0,
+    active: true,
+  };
+}

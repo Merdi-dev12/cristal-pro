@@ -50,8 +50,8 @@ import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
               <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rheo-muted">Catalogue service</p>
               <h2 class="mt-2 text-2xl font-semibold tracking-tight text-rheo-dark">Choisir le bon niveau d’aide.</h2>
             </div>
-            <a routerLink="/contact" class="inline-flex w-fit rounded-[18px] bg-rheo-accent px-6 py-3 text-sm font-bold text-rheo-dark transition hover:bg-rheo-accent-hover">
-              Démarrer un dossier
+            <a routerLink="/mon-compte/demandes" class="inline-flex w-fit rounded-[18px] bg-rheo-accent px-6 py-3 text-sm font-bold text-rheo-dark transition hover:bg-rheo-accent-hover">
+              Mes demandes
             </a>
           </div>
 
@@ -66,15 +66,9 @@ import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
                   <h3 class="mt-2 text-xl font-semibold tracking-tight text-rheo-dark">{{ service.title }}</h3>
                 </div>
                 <p class="max-w-2xl text-sm leading-7 text-rheo-muted">{{ service.description }}</p>
-                @if (service.id === 'demenagement') {
-                  <a routerLink="/demenagement" class="w-fit rounded-[16px] border border-rheo-dark bg-rheo-dark px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#253025]">
-                    {{ service.cta }}
-                  </a>
-                } @else {
-                  <button type="button" class="w-fit rounded-[16px] border border-[#d7e0ed] px-5 py-2.5 text-sm font-semibold text-rheo-dark transition hover:border-rheo-dark">
-                    {{ service.cta }}
-                  </button>
-                }
+                <a [routerLink]="['/services', service.id, 'demande']" class="w-fit rounded-[16px] border border-rheo-dark bg-rheo-dark px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#253025]">
+                  {{ service.cta }}
+                </a>
               </article>
             }
           </div>

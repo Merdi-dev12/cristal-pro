@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -9,6 +9,7 @@ interface AdminNavItem {
   label: string;
   icon: string;
   exact?: boolean;
+  badge?: 'visits' | 'services' | 'contacts' | 'submissions' | 'properties';
 }
 
 @Component({
@@ -81,6 +82,12 @@ interface AdminNavItem {
                       >{{ item.icon }}</span
                     >
                     <span>{{ item.label }}</span>
+                    @if (item.badge && badgeCount(item.badge) > 0) {
+                      <span
+                        class="ml-auto inline-flex min-w-6 items-center justify-center rounded-full bg-rheo-accent px-2 py-0.5 text-[10px] font-extrabold text-rheo-dark"
+                        >{{ badgeCount(item.badge) > 99 ? '99+' : badgeCount(item.badge) }}</span
+                      >
+                    }
                   </a>
                 </li>
               }
@@ -122,12 +129,13 @@ interface AdminNavItem {
               type="button"
               class="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark"
               (click)="signOut()"
+              [disabled]="signingOut()"
             >
               <span
                 class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs"
                 aria-hidden="true"
                 >↪</span
-              >Se déconnecter
+              >{{ signingOut() ? 'Déconnexion…' : 'Se déconnecter' }}
             </button>
           </div>
         </aside>
@@ -142,6 +150,11 @@ interface AdminNavItem {
         }
 
         <main class="min-w-0 flex-1">
+          @if (admin.isLoading()) {
+            <div class="fixed inset-x-0 top-0 z-[80] h-1 overflow-hidden bg-rheo-accent/25">
+              <div class="h-full w-1/3 animate-pulse bg-rheo-accent"></div>
+            </div>
+          }
           <header
             class="sticky top-0 z-20 flex h-[76px] items-center justify-between border-b border-[#e4e6e1] bg-[#f3f4f2]/90 px-4 backdrop-blur-md sm:px-8 lg:px-10"
           >
@@ -162,6 +175,17 @@ interface AdminNavItem {
               </div>
             </div>
             <div class="flex items-center gap-3">
+              <span
+                class="relative flex size-10 items-center justify-center rounded-full border border-[#dfe3dc] bg-white"
+                aria-label="Nouvelles informations"
+                >🔔
+                @if (totalBadge() > 0) {
+                  <span
+                    class="absolute -right-1 -top-1 inline-flex min-w-5 items-center justify-center rounded-full bg-rheo-accent px-1 text-[9px] font-extrabold"
+                    >{{ totalBadge() > 99 ? '99+' : totalBadge() }}</span
+                  >
+                }
+              </span>
               <span
                 class="hidden rounded-full border border-[#dfe3dc] bg-white px-4 py-2 text-xs text-rheo-muted sm:inline-flex"
                 >Données sécurisées</span
@@ -206,15 +230,31 @@ export class AdminLayoutPage {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   protected readonly menuOpen = signal(false);
+  protected readonly signingOut = signal(false);
+  private readonly badges = computed(() => ({
+    visits: this.admin.visits().filter((item) => item.status === 'en attente').length,
+    services: this.admin
+      .serviceRequests()
+      .filter((item) => item.status !== 'terminée' && item.status !== 'annulée').length,
+    contacts: this.admin.contactMessages().filter((item) => item.status === 'new').length,
+    submissions: this.admin
+      .submissions()
+      .filter((item) => item.status === 'en attente' || item.status === 'informations requises')
+      .length,
+    properties: this.admin.properties().filter((item) => item.status === 'draft').length,
+  }));
+  protected readonly totalBadge = computed(() =>
+    Object.values(this.badges()).reduce((total, count) => total + count, 0),
+  );
   protected readonly navItems: AdminNavItem[] = [
-    { path: '/admin', label: 'Vue d’ensemble', icon: '⌂', exact: true },
-    { path: '/admin/visites', label: 'Demandes de visite', icon: '◎' },
-    { path: '/admin/utilisateurs', label: 'Utilisateurs', icon: '♙' },
-    { path: '/admin/services', label: 'Demandes de services', icon: '▣' },
-    { path: '/admin/contacts', label: 'Demandes de contact', icon: '✉' },
-    { path: '/admin/demenagements', label: 'Déménagements', icon: '↗' },
-    { path: '/admin/soumissions', label: 'Soumissions de biens', icon: '▤' },
-    { path: '/admin/annonces', label: 'Annonces', icon: '⌑' },
+    { path: '/admin', label: 'Vue d’ensemble', icon: '▦', exact: true },
+    { path: '/admin/visites', label: 'Demandes de visite', icon: '📅', badge: 'visits' },
+    { path: '/admin/utilisateurs', label: 'Utilisateurs', icon: '👥' },
+    { path: '/admin/services', label: 'Demandes de services', icon: '🛠', badge: 'services' },
+    { path: '/admin/contacts', label: 'Demandes de contact', icon: '✉', badge: 'contacts' },
+    { path: '/admin/demenagements', label: 'Déménagements', icon: '🚚' },
+    { path: '/admin/soumissions', label: 'Soumissions de biens', icon: '📋', badge: 'submissions' },
+    { path: '/admin/annonces', label: 'Annonces', icon: '🏠', badge: 'properties' },
   ];
 
   constructor() {
@@ -229,11 +269,20 @@ export class AdminLayoutPage {
   }
 
   protected async signOut(): Promise<void> {
-    await this.auth.signOut();
-    await this.router.navigateByUrl('/connexion');
+    this.signingOut.set(true);
+    try {
+      await this.auth.signOut();
+      await this.router.navigateByUrl('/connexion');
+    } finally {
+      this.signingOut.set(false);
+    }
   }
 
   protected async reload(): Promise<void> {
     await this.admin.load();
+  }
+
+  protected badgeCount(key: NonNullable<AdminNavItem['badge']>): number {
+    return this.badges()[key];
   }
 }

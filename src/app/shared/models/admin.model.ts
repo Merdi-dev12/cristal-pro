@@ -51,6 +51,8 @@ export interface AdminProperty {
   featured: boolean;
   verified: boolean;
   description: string;
+  latitude?: number;
+  longitude?: number;
   sensitiveInfo: string;
   ownerName: string;
   createdAt: string;
@@ -74,6 +76,8 @@ export interface AdminPropertyDraft {
   featured: boolean;
   verified: boolean;
   description: string;
+  latitude?: number;
+  longitude?: number;
   sensitiveInfo: string;
   ownerName: string;
 }
@@ -177,8 +181,9 @@ export const ADMIN_REQUEST_STATUSES: RequestStatus[] = [
 ];
 
 export const ADMIN_SERVICE_TYPES: ServiceType[] = [
+  'verification',
+  'location-vente',
   'maintenance',
   'decoration',
   'juridique',
-  'demenagement',
 ];

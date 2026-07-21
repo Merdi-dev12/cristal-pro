@@ -1,7 +1,12 @@
 import { Service, inject, signal } from '@angular/core';
 import { SupabaseClientService } from './supabase-client';
 import { AuthService } from './auth.service';
-import { CANCELLABLE_STATUSES, ServiceRequest } from '../../shared/models/service-request.model';
+import {
+  CANCELLABLE_STATUSES,
+  CreateServiceRequestInput,
+  ServiceRequest,
+  ServiceRequestEvent,
+} from '../../shared/models/service-request.model';
 
 @Service()
 export class ServiceRequestService {
@@ -12,6 +17,25 @@ export class ServiceRequestService {
   readonly isLoading = signal(false);
   readonly error = signal<string | null>(null);
   readonly isAuthenticated = this.auth.hasSession;
+
+  async createRequest(input: CreateServiceRequestInput): Promise<ServiceRequest> {
+    const { data, error } = await this.supabase.functions.invoke('create-service-request', {
+      body: {
+        service_type: input.serviceType,
+        client_name: input.clientName.trim(),
+        client_email: input.clientEmail.trim(),
+        client_phone: input.clientPhone.trim(),
+        description: input.description.trim(),
+        details: input.details,
+        budget: input.budget ?? null,
+      },
+    });
+
+    if (error) throw error;
+    const request = this.mapFromRow(data as Record<string, unknown>);
+    this.requests.update((requests) => [request, ...requests]);
+    return request;
+  }
 
   async loadMyRequests(): Promise<void> {
     this.isLoading.set(true);
@@ -78,6 +102,23 @@ export class ServiceRequestService {
     return this.mapFromRow(data as Record<string, unknown>);
   }
 
+  async getRequestEvents(id: string): Promise<ServiceRequestEvent[]> {
+    const { data, error } = await this.supabase
+      .from('service_request_events')
+      .select('id, service_request_id, status, message, created_at')
+      .eq('service_request_id', id)
+      .order('created_at', { ascending: true });
+
+    if (error) throw error;
+    return (data ?? []).map((row: Record<string, unknown>) => ({
+      id: String(row['id']),
+      requestId: String(row['service_request_id']),
+      status: row['status'] as ServiceRequestEvent['status'],
+      message: String(row['message'] ?? ''),
+      createdAt: new Date(String(row['created_at'])),
+    }));
+  }
+
   canCancel(request: ServiceRequest): boolean {
     return CANCELLABLE_STATUSES.includes(request.status);
   }
@@ -110,6 +151,7 @@ export class ServiceRequestService {
       clientEmail: row['client_email'] as string,
       clientPhone: row['client_phone'] as string,
       description: row['description'] as string,
+      details: this.toDetails(row['details']),
       propertyId: (row['property_id'] as string) ?? undefined,
       budget: row['budget'] !== null ? Number(row['budget']) : undefined,
       assignedTo: (row['assigned_to'] as string) ?? undefined,
@@ -131,6 +173,7 @@ export class ServiceRequestService {
       clientEmail: '',
       clientPhone: '',
       description: `Déménagement de ${String(row['departure_address'])} à ${String(row['arrival_address'])}`,
+      details: {},
       notes: row['admin_notes'] ? String(row['admin_notes']) : undefined,
       createdAt: new Date(String(row['created_at'])),
       updatedAt: new Date(String(row['updated_at'])),
@@ -148,6 +191,7 @@ export class ServiceRequestService {
       clientEmail: '',
       clientPhone: '',
       description: `Annonce proposée : ${String(row['title'])}`,
+      details: {},
       notes: row['admin_message'] ? String(row['admin_message']) : undefined,
       createdAt: new Date(String(row['created_at'])),
       updatedAt: new Date(String(row['updated_at'])),
@@ -165,6 +209,7 @@ export class ServiceRequestService {
       clientEmail: String(row['email']),
       clientPhone: '',
       description: `${String(row['need'])} : ${String(row['message'])}`,
+      details: {},
       createdAt: new Date(String(row['created_at'])),
       updatedAt: new Date(String(row['updated_at'])),
     };
@@ -186,5 +231,10 @@ export class ServiceRequestService {
       default:
         return 'reçue';
     }
+  }
+
+  private toDetails(value: unknown): ServiceRequest['details'] {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+    return value as ServiceRequest['details'];
   }
 }

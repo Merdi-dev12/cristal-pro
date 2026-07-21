@@ -3,6 +3,7 @@ import { Component, ElementRef, OnDestroy, ViewChild, inject, signal } from '@an
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { AdminService } from '../../core/services/admin.service';
 import { PropertySubmissionService } from '../../core/services/property-submission.service';
 import { PropertyCategory, PropertyType } from '../../shared/models/property.model';
 
@@ -45,23 +46,26 @@ interface LeafletNamespace {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <section class="min-h-screen bg-rheo-bg pb-20 pt-28">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <section [class]="isAdmin ? 'pb-12' : 'min-h-screen bg-rheo-bg pb-20 pt-28'">
+      <div [class]="isAdmin ? 'w-full' : 'mx-auto max-w-4xl px-4 sm:px-6 lg:px-8'">
         <a
-          routerLink="/location-vente"
+          [routerLink]="isAdmin ? '/admin/annonces' : '/location-vente'"
           class="text-sm font-semibold text-rheo-muted hover:text-rheo-dark"
-          >← Location & Vente</a
+          >← {{ isAdmin ? 'Retour aux annonces' : 'Location & Vente' }}</a
         >
         <header class="mt-6 max-w-2xl">
           <p class="text-sm font-semibold uppercase tracking-[.22em] text-rheo-muted">
-            Déposer une annonce
+            {{ isAdmin ? 'Nouvelle annonce' : 'Déposer une annonce' }}
           </p>
           <h1 class="mt-3 text-4xl font-semibold tracking-tight text-rheo-dark sm:text-5xl">
-            Proposez votre bien.
+            {{ isAdmin ? 'Créer une annonce.' : 'Proposez votre bien.' }}
           </h1>
           <p class="mt-4 leading-7 text-rheo-muted">
-            Votre annonce est vérifiée par RHEODYCE avant publication. Vous recevrez la décision
-            dans Mes demandes.
+            {{
+              isAdmin
+                ? 'Complétez la fiche comme un utilisateur, localisez le bien sur la carte puis publiez-la dans le catalogue.'
+                : 'Votre annonce est vérifiée par RHEODYCE avant publication. Vous recevrez la décision dans Mes demandes.'
+            }}
           </p>
         </header>
 
@@ -291,56 +295,67 @@ interface LeafletNamespace {
               }
             </fieldset>
 
-            <fieldset class="grid gap-3">
-              <div>
-                <legend class="text-sm font-semibold">
-                  Documents justificatifs
-                  <span class="font-normal text-rheo-muted">(optionnel)</span>
-                </legend>
-                <p class="mt-1 text-xs leading-5 text-rheo-muted">
-                  PDF ou image · 8 fichiers maximum · 10 Mo par fichier. Ils restent privés.
-                </p>
-              </div>
-              <label
-                class="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-rheo-border px-4 py-3 text-sm transition hover:bg-rheo-bg"
-              >
-                <span class="font-semibold">Choisir des documents</span
-                ><span class="text-xs text-rheo-muted">{{
-                  documents().length ? documents().length + ' sélectionné(s)' : 'Aucun fichier'
-                }}</span>
-                <input
-                  type="file"
-                  accept="application/pdf,image/jpeg,image/png,image/webp"
-                  multiple
-                  class="sr-only"
-                  (change)="selectDocuments($event)"
-                />
-              </label>
-              @if (documents().length) {
-                <ul class="grid gap-2">
-                  @for (document of documents(); track document.name) {
-                    <li
-                      class="flex items-center justify-between gap-3 rounded-xl bg-rheo-bg px-4 py-3 text-xs"
-                    >
-                      <span class="min-w-0 truncate">{{ document.name }}</span
-                      ><button
-                        type="button"
-                        class="font-bold text-red-700"
-                        (click)="removeDocument(document)"
+            @if (!isAdmin) {
+              <fieldset class="grid gap-3">
+                <div>
+                  <legend class="text-sm font-semibold">
+                    Documents justificatifs
+                    <span class="font-normal text-rheo-muted">(optionnel)</span>
+                  </legend>
+                  <p class="mt-1 text-xs leading-5 text-rheo-muted">
+                    PDF ou image · 8 fichiers maximum · 10 Mo par fichier. Ils restent privés.
+                  </p>
+                </div>
+                <label
+                  class="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-rheo-border px-4 py-3 text-sm transition hover:bg-rheo-bg"
+                >
+                  <span class="font-semibold">Choisir des documents</span
+                  ><span class="text-xs text-rheo-muted">{{
+                    documents().length ? documents().length + ' sélectionné(s)' : 'Aucun fichier'
+                  }}</span>
+                  <input
+                    type="file"
+                    accept="application/pdf,image/jpeg,image/png,image/webp"
+                    multiple
+                    class="sr-only"
+                    (change)="selectDocuments($event)"
+                  />
+                </label>
+                @if (documents().length) {
+                  <ul class="grid gap-2">
+                    @for (document of documents(); track document.name) {
+                      <li
+                        class="flex items-center justify-between gap-3 rounded-xl bg-rheo-bg px-4 py-3 text-xs"
                       >
-                        Retirer
-                      </button>
-                    </li>
-                  }
-                </ul>
-              }
-            </fieldset>
+                        <span class="min-w-0 truncate">{{ document.name }}</span
+                        ><button
+                          type="button"
+                          class="font-bold text-red-700"
+                          (click)="removeDocument(document)"
+                        >
+                          Retirer
+                        </button>
+                      </li>
+                    }
+                  </ul>
+                }
+              </fieldset>
+            }
 
             <button
               [disabled]="loading()"
               class="rounded-xl bg-rheo-accent px-6 py-3.5 text-sm font-bold text-rheo-dark disabled:opacity-60"
             >
-              {{ loading() ? 'Envoi des fichiers…' : 'Envoyer pour validation' }}
+              @if (loading()) {
+                <span class="inline-flex items-center gap-2"
+                  ><span
+                    class="size-4 animate-spin rounded-full border-2 border-rheo-dark/25 border-t-rheo-dark"
+                  ></span
+                  >{{ isAdmin ? 'Création en cours…' : 'Envoi des fichiers…' }}</span
+                >
+              } @else {
+                {{ isAdmin ? 'Créer l’annonce' : 'Envoyer pour validation' }}
+              }
             </button>
           </form>
         }
@@ -356,7 +371,9 @@ export class PropertySubmissionFormPage implements OnDestroy {
 
   protected readonly auth = inject(AuthService);
   private readonly submissions = inject(PropertySubmissionService);
+  private readonly admin = inject(AdminService);
   private readonly router = inject(Router);
+  protected readonly isAdmin = this.router.url.startsWith('/admin/');
   private map?: LocationMap;
   private marker?: LocationMarker;
   private leaflet?: LeafletNamespace;
@@ -476,6 +493,39 @@ export class PropertySubmissionFormPage implements OnDestroy {
     }
     this.loading.set(true);
     try {
+      if (this.isAdmin) {
+        const property = await this.admin.saveProperty({
+          title: this.title,
+          type: this.type,
+          category: this.category,
+          location: this.city,
+          address: this.address,
+          price: this.price,
+          priceSuffix: this.type === 'location' ? '/mois' : '',
+          surface: this.surface,
+          bedrooms: this.bedrooms,
+          bathrooms: this.bathrooms,
+          description: this.description,
+          latitude: coordinates.lat,
+          longitude: coordinates.lng,
+          imageUrl: '',
+          photos: [],
+          status: 'published',
+          featured: false,
+          verified: true,
+          sensitiveInfo: '',
+          ownerName: 'RHEODYCE',
+        });
+        if (this.photos().length) {
+          await this.admin.addPhotos(
+            property,
+            this.photos().map((item) => item.file),
+          );
+        }
+        this.message.set('L’annonce a été créée et publiée dans le catalogue.');
+        await this.router.navigateByUrl(`/admin/annonces/${property.id}`);
+        return;
+      }
       await this.submissions.create({
         title: this.title,
         type: this.type,

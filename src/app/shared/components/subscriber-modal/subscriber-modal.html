@@ -22,7 +22,13 @@
     <div
       class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-rheo bg-rheo-accent/20"
     >
-      <svg class="h-7 w-7 text-rheo-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+      <svg
+        class="h-7 w-7 text-rheo-dark"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -31,29 +37,26 @@
       </svg>
     </div>
 
-    <h2 id="modal-title" class="text-center text-xl font-bold text-rheo-dark">
-      Contenu réservé aux utilisateurs connectés
-    </h2>
+    <h2 id="modal-title" class="text-center text-xl font-bold text-rheo-dark">Abonnement requis</h2>
     <p class="mt-3 text-center text-sm leading-relaxed text-rheo-muted">
-      La fiche complète du bien (photos supplémentaires, localisation précise, coordonnées du
-      propriétaire ou de l'agence, prise de contact…) est accessible uniquement aux utilisateurs
-      connectés à RHEODYCE.
+      Vous devez payer un abonnement actif pour accéder aux détails du bien, à sa localisation
+      précise et aux informations de contact.
     </p>
 
     <div class="mt-6 flex flex-col gap-3">
       <button
         type="button"
         class="w-full rounded-full bg-rheo-accent py-3.5 text-sm font-semibold text-rheo-dark transition-colors hover:bg-rheo-accent-hover"
-        (click)="onLogin()"
+        (click)="onSubscribe()"
       >
-        Se connecter
+        Voir les abonnements
       </button>
       <button
         type="button"
         class="w-full rounded-full border border-rheo-border py-3.5 text-sm font-medium text-rheo-muted transition-colors hover:border-rheo-dark hover:text-rheo-dark"
         (click)="onClose()"
       >
-        Continuer en mode aperçu
+        Retour aux annonces
       </button>
     </div>
   </div>

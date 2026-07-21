@@ -1,20 +1,23 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   AfterViewInit,
   Component,
   computed,
+  effect,
   ElementRef,
   inject,
   OnDestroy,
   signal,
   ViewChild,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { RheodyceDataService } from '../../../core/services/rheodyce-data.service';
-import { SubscriberModal } from '../../../shared/components/subscriber-modal/subscriber-modal';
 import { Property } from '../../../shared/models/property.model';
 import { PropertyPricePipe } from '../../../shared/pipes/pipe';
+import { environment } from '../../../../environments/environment';
 
 type MapPoint = [number, number];
 
@@ -38,7 +41,7 @@ interface LeafletNamespace {
 @Component({
   selector: 'app-property-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, PropertyPricePipe, SubscriberModal],
+  imports: [CommonModule, RouterLink, PropertyPricePipe],
   templateUrl: './property-detail.html',
   styleUrl: './property-detail.css',
 })
@@ -49,21 +52,33 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly data = inject(RheodyceDataService);
   private readonly auth = inject(AuthService);
+  private readonly meta = inject(Meta);
+  private readonly title = inject(Title);
+  private readonly document = inject(DOCUMENT);
+  private readonly routeParams = toSignal(this.route.paramMap, {
+    initialValue: this.route.snapshot.paramMap,
+  });
   private map?: PropertyMap;
   private shareFeedbackTimeout?: number;
 
   protected readonly selectedImage = signal(0);
-  protected readonly showSubscriberModal = signal(false);
   protected readonly shareFeedback = signal('');
   protected readonly isSubscriber = computed(() => this.auth.isSubscriber());
   protected readonly property = computed<Property | undefined>(() => {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.routeParams().get('id');
     return this.data.properties.find((item) => item.id === id);
   });
   protected readonly hasCoordinates = computed(() => {
     const item = this.property();
     return Number.isFinite(item?.latitude) && Number.isFinite(item?.longitude);
   });
+
+  constructor() {
+    effect(() => {
+      const item = this.property();
+      if (item) this.updateShareMetadata(item);
+    });
+  }
 
   ngAfterViewInit(): void {
     if (this.hasCoordinates()) void this.initMap();
@@ -72,11 +87,13 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.map?.remove();
     if (this.shareFeedbackTimeout != null) window.clearTimeout(this.shareFeedbackTimeout);
+    this.resetShareMetadata();
   }
 
   protected readonly gallery = computed<string[]>(() => {
     const property = this.property();
     if (!property) return [];
+    if (!this.isSubscriber()) return [property.imageUrl].filter(Boolean);
     const images = [property.imageUrl, ...(property.photos ?? [])].filter(Boolean);
     return [...new Set(images)];
   });
@@ -91,15 +108,19 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
 
   protected onAction(): void {
     if (!this.isSubscriber()) {
-      this.showSubscriberModal.set(true);
+      this.openSubscription();
     }
   }
 
   protected async shareProperty(property: Property): Promise<void> {
-    const url = window.location.href;
+    const url = this.propertyShareUrl(property);
     const price = new Intl.NumberFormat('fr-FR').format(property.price);
     const text = `${property.title} — ${price} USD${property.priceSuffix ?? ''} — ${property.location}`;
-    const shareData: ShareData = { title: property.title, text, url };
+    const shareData = await this.withShareImage(property, {
+      title: property.title,
+      text,
+      url,
+    });
 
     if (navigator.share) {
       try {
@@ -119,19 +140,107 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
     }
   }
 
-  protected closeModal(): void {
-    this.showSubscriberModal.set(false);
-  }
-
-  protected onLogin(): void {
-    this.closeModal();
-    void this.router.navigate(['/connexion']);
+  protected openSubscription(): void {
+    void this.router.navigate(['/abonnement'], {
+      queryParams: {
+        access: 'subscription-required',
+        redirect: `/annonces/${this.property()?.id ?? ''}`,
+      },
+      fragment: 'plans',
+    });
   }
 
   private showShareFeedback(message: string): void {
     this.shareFeedback.set(message);
     if (this.shareFeedbackTimeout != null) window.clearTimeout(this.shareFeedbackTimeout);
     this.shareFeedbackTimeout = window.setTimeout(() => this.shareFeedback.set(''), 3000);
+  }
+
+  private propertyShareUrl(property: Property): string {
+    const detailUrl = new URL(
+      `/annonces/${encodeURIComponent(property.id)}`,
+      window.location.origin,
+    );
+    const shareUrl = new URL(`${environment.supabaseUrl}/functions/v1/property-share`);
+    shareUrl.searchParams.set('id', property.id);
+    shareUrl.searchParams.set('redirect', detailUrl.toString());
+    return shareUrl.toString();
+  }
+
+  private async withShareImage(property: Property, shareData: ShareData): Promise<ShareData> {
+    if (!navigator.canShare || !property.imageUrl) return shareData;
+
+    try {
+      const response = await fetch(property.imageUrl);
+      if (!response.ok) return shareData;
+      const image = await response.blob();
+      if (!image.type.startsWith('image/')) return shareData;
+      const extension = image.type.split('/')[1]?.replace('jpeg', 'jpg') ?? 'jpg';
+      const candidate: ShareData = {
+        ...shareData,
+        files: [new File([image], `rheodyce-${property.id}.${extension}`, { type: image.type })],
+      };
+      return navigator.canShare(candidate) ? candidate : shareData;
+    } catch {
+      return shareData;
+    }
+  }
+
+  private updateShareMetadata(property: Property): void {
+    const detailUrl = new URL(
+      `/annonces/${encodeURIComponent(property.id)}`,
+      window.location.origin,
+    ).toString();
+    const imageUrl = new URL(property.imageUrl, window.location.origin).toString();
+    const description = `${property.title}, ${property.location} · ${property.surface} m². Découvrez cette annonce vérifiée sur RHEODYCE.`;
+
+    this.title.setTitle(`${property.title} — RHEODYCE`);
+    this.meta.updateTag({ name: 'description', content: description });
+    this.meta.updateTag({ property: 'og:type', content: 'article' });
+    this.meta.updateTag({ property: 'og:site_name', content: 'RHEODYCE' });
+    this.meta.updateTag({ property: 'og:title', content: property.title });
+    this.meta.updateTag({ property: 'og:description', content: description });
+    this.meta.updateTag({ property: 'og:image', content: imageUrl });
+    this.meta.updateTag({ property: 'og:image:alt', content: property.title });
+    this.meta.updateTag({ property: 'og:url', content: detailUrl });
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ name: 'twitter:title', content: property.title });
+    this.meta.updateTag({ name: 'twitter:description', content: description });
+    this.meta.updateTag({ name: 'twitter:image', content: imageUrl });
+    this.setCanonicalUrl(detailUrl);
+  }
+
+  private resetShareMetadata(): void {
+    const description =
+      'RHEODYCE — Annonces immobilières vérifiées, location, vente, maintenance et assistance juridique.';
+    this.title.setTitle('RHEODYCE — Agence immobilière');
+    this.meta.updateTag({ name: 'description', content: description });
+    this.meta.updateTag({ property: 'og:type', content: 'website' });
+    this.meta.updateTag({ property: 'og:site_name', content: 'RHEODYCE' });
+    this.meta.updateTag({ property: 'og:title', content: 'RHEODYCE — Agence immobilière' });
+    this.meta.updateTag({ property: 'og:description', content: description });
+    this.meta.updateTag({ property: 'og:image', content: '/assets/hero_img.png' });
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    for (const selector of [
+      'property="og:image:alt"',
+      'property="og:url"',
+      'name="twitter:title"',
+      'name="twitter:description"',
+      'name="twitter:image"',
+    ]) {
+      this.meta.removeTag(selector);
+    }
+    this.document.head.querySelector('link[rel="canonical"]')?.remove();
+  }
+
+  private setCanonicalUrl(url: string): void {
+    let canonical = this.document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = this.document.createElement('link');
+      canonical.rel = 'canonical';
+      this.document.head.appendChild(canonical);
+    }
+    canonical.href = url;
   }
 
   private async initMap(): Promise<void> {

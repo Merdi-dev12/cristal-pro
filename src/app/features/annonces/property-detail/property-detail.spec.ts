@@ -1,6 +1,7 @@
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { RheodyceDataService } from '../../../core/services/rheodyce-data.service';
 import { Property } from '../../../shared/models/property.model';
@@ -13,7 +14,7 @@ describe('PropertyDetailPage', () => {
     price: 2500,
     priceSuffix: '/mois',
     location: 'Gombe, Kinshasa',
-    address: 'Gombe, Kinshasa',
+    address: '12 avenue du Fleuve, Gombe',
     bedrooms: 3,
     bathrooms: 2,
     surface: 180,
@@ -26,13 +27,14 @@ describe('PropertyDetailPage', () => {
   let fixture: ComponentFixture<PropertyDetailPage>;
 
   beforeEach(async () => {
+    const paramMap = convertToParamMap({ id: property.id });
     await TestBed.configureTestingModule({
       imports: [PropertyDetailPage],
       providers: [
         provideRouter([]),
         {
           provide: ActivatedRoute,
-          useValue: { snapshot: { paramMap: convertToParamMap({ id: property.id }) } },
+          useValue: { paramMap: of(paramMap), snapshot: { paramMap } },
         },
         { provide: RheodyceDataService, useValue: { properties: [property] } },
         { provide: AuthService, useValue: { isSubscriber: signal(false) } },
@@ -56,7 +58,17 @@ describe('PropertyDetailPage', () => {
     expect(share).toHaveBeenCalledWith({
       title: property.title,
       text: expect.stringContaining('Gombe, Kinshasa'),
-      url: window.location.href,
+      url: expect.stringContaining('/functions/v1/property-share?id=bien-1'),
     });
+  });
+
+  it('shows a preview and the subscription CTA to a non-subscriber', () => {
+    const page = fixture.nativeElement as HTMLElement;
+
+    expect(page.textContent).toContain(property.title);
+    expect(page.textContent).toContain('Continuez la lecture avec RHEODYCE Premium');
+    expect(page.textContent).toContain('Voir les abonnements');
+    expect(page.textContent).toContain('Retour à l’accueil');
+    expect(page.textContent).not.toContain(property.address);
   });
 });

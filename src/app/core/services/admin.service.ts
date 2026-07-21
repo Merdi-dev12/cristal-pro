@@ -386,6 +386,8 @@ function mapProperty(row: Record<string, unknown>): AdminProperty {
     featured: Boolean(row['featured']),
     verified: Boolean(row['verified']),
     description: String(row['description'] ?? ''),
+    latitude: row['latitude'] == null ? undefined : Number(row['latitude']),
+    longitude: row['longitude'] == null ? undefined : Number(row['longitude']),
     sensitiveInfo: '',
     ownerName: String(row['owner_name'] ?? '—'),
     createdAt: String(row['created_at'] ?? ''),
@@ -402,6 +404,10 @@ function mapServiceRequest(row: Record<string, unknown>): AdminServiceRequestVie
     clientEmail: String(row['client_email'] ?? ''),
     clientPhone: String(row['client_phone'] ?? ''),
     description: String(row['description'] ?? ''),
+    details:
+      row['details'] && typeof row['details'] === 'object' && !Array.isArray(row['details'])
+        ? (row['details'] as AdminServiceRequestView['details'])
+        : {},
     propertyId: row['property_id'] ? String(row['property_id']) : undefined,
     budget: row['budget'] == null ? undefined : Number(row['budget']),
     assignedTo: row['assigned_to'] ? String(row['assigned_to']) : undefined,
@@ -522,6 +528,8 @@ function toPropertyRow(draft: AdminPropertyDraft): Record<string, unknown> {
     featured: draft.featured,
     verified: draft.verified,
     description: draft.description,
+    latitude: draft.latitude ?? null,
+    longitude: draft.longitude ?? null,
     owner_name: draft.ownerName || null,
   };
 }

@@ -40,8 +40,7 @@ import { RouterLink } from '@angular/router';
               }
             </div>
             <a
-              routerLink="/contact"
-              [queryParams]="{ besoin: 'Décoration' }"
+              routerLink="/services/decoration/demande"
               class="mt-8 inline-flex items-center justify-center gap-2 rounded-[18px] bg-rheo-accent px-6 py-3.5 text-sm font-bold text-rheo-dark transition hover:bg-rheo-accent-hover"
             >
               Demander un accompagnement

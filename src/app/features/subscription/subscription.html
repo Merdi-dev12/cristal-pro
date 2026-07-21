@@ -1,5 +1,14 @@
 <main class="min-h-screen bg-rheo-bg pt-28 text-rheo-dark sm:pt-36">
   <section class="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24">
+    @if (accessRequired) {
+      <div
+        class="mb-8 rounded-2xl border border-rheo-accent bg-rheo-accent/20 p-5 text-center text-sm leading-6"
+        role="alert"
+      >
+        <strong>Un abonnement actif est obligatoire pour consulter le détail d’un bien.</strong>
+        Choisissez et payez une formule pour débloquer cet accès.
+      </div>
+    }
     <div class="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
       <div>
         <p class="text-xs font-bold uppercase tracking-[0.24em] text-rheo-muted">
@@ -119,7 +128,7 @@
       </div>
 
       <div class="mx-auto mt-10 grid max-w-6xl gap-5 lg:grid-cols-3">
-      @for (plan of plans(); track plan.id) {
+        @for (plan of plans(); track plan.id) {
           <article
             [class]="
               'relative flex flex-col rounded-rheo-xl border p-7 ' +
@@ -189,11 +198,18 @@
           <strong>Votre demande a été enregistrée.</strong> L’équipe RHEODYCE va la traiter.
         </div>
       }
-      @if (error()) { <p class="mx-auto mt-5 max-w-2xl rounded-2xl bg-red-50 p-4 text-center text-sm text-red-700">{{ error() }}</p> }
+      @if (error()) {
+        <p
+          class="mx-auto mt-5 max-w-2xl rounded-2xl bg-red-50 p-4 text-center text-sm text-red-700"
+        >
+          {{ error() }}
+        </p>
+      }
     </div>
 
     <p class="mx-auto mt-14 max-w-2xl text-center text-xs leading-6 text-rheo-muted">
-      Les demandes d’abonnement sont enregistrées dans votre espace utilisateur et traitées par RHEODYCE.
+      Les demandes d’abonnement sont enregistrées dans votre espace utilisateur et traitées par
+      RHEODYCE.
     </p>
   </section>
 </main>
