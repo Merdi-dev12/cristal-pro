@@ -246,6 +246,56 @@ const FORM_CONFIGS: Record<RequestableServiceType, ServiceFormConfig> = {
       { key: 'documents_available', label: 'Pièces disponibles', type: 'file' },
     ],
   },
+  'installation-solaire': {
+    eyebrow: 'Énergie',
+    title: 'Projet d’installation de panneaux solaires',
+    intro:
+      'Décrivez le bâtiment et vos besoins énergétiques afin que RHEODYCE puisse préparer une étude et vous orienter vers un installateur qualifié.',
+    descriptionLabel: 'Votre besoin énergétique',
+    descriptionPlaceholder:
+      'Précisez les équipements à alimenter, les coupures rencontrées et le résultat attendu…',
+    fields: [
+      {
+        key: 'property_address',
+        label: 'Adresse d’installation',
+        type: 'text',
+        required: true,
+        placeholder: 'Avenue, quartier, commune, ville',
+      },
+      {
+        key: 'property_type',
+        label: 'Type de bâtiment',
+        type: 'select',
+        required: true,
+        options: ['Maison', 'Appartement', 'Immeuble', 'Commerce', 'Bureau', 'Autre'],
+      },
+      {
+        key: 'installation_type',
+        label: 'Type d’installation souhaité',
+        type: 'select',
+        required: true,
+        options: [
+          'Installation avec batteries',
+          'Installation sans batteries',
+          'Système hybride',
+          'À définir après étude',
+        ],
+      },
+      {
+        key: 'energy_need',
+        label: 'Consommation ou puissance estimée',
+        type: 'text',
+        placeholder: 'Ex. 10 kWh/jour, compteur 20 A ou liste des appareils',
+      },
+      {
+        key: 'roof_surface',
+        label: 'Surface de toiture disponible (m²)',
+        type: 'number',
+        min: 1,
+      },
+      { key: 'preferred_date', label: 'Date souhaitée', type: 'date' },
+    ],
+  },
 };
 
 @Component({

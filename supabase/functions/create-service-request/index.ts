@@ -33,6 +33,17 @@ const SERVICE_FIELDS = {
     allowed: ['case_type', 'property_address', 'deadline', 'documents_available'],
     required: ['case_type'],
   },
+  'installation-solaire': {
+    allowed: [
+      'property_address',
+      'property_type',
+      'installation_type',
+      'energy_need',
+      'roof_surface',
+      'preferred_date',
+    ],
+    required: ['property_address', 'property_type', 'installation_type'],
+  },
 } as const;
 
 type ServiceType = keyof typeof SERVICE_FIELDS;

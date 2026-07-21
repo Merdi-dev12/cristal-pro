@@ -190,4 +190,5 @@ export const ADMIN_SERVICE_TYPES: ServiceType[] = [
   'maintenance',
   'decoration',
   'juridique',
+  'installation-solaire',
 ];

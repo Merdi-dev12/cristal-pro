@@ -25,6 +25,10 @@ export class Home {
     return index % 2 === 0 ? '/assets/hero_img.png' : '/assets/hero_img_1.jpg';
   }
 
+  protected serviceRequestLink(serviceId: string): string[] {
+    return serviceId === 'demenagement' ? ['/demenagement'] : ['/services', serviceId, 'demande'];
+  }
+
   protected onViewDetails(property: Property): void {
     void this.router.navigate(['/annonces', property.id]);
   }

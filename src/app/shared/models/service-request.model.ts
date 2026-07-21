@@ -5,6 +5,7 @@ export type ServiceType =
   | 'decoration'
   | 'juridique'
   | 'demenagement'
+  | 'installation-solaire'
   | 'annonce'
   | 'contact';
 
@@ -70,6 +71,7 @@ export const SERVICE_TYPE_LABELS: Record<ServiceType, string> = {
   decoration: 'Décoration',
   juridique: 'Assistance juridique',
   demenagement: 'Déménagement',
+  'installation-solaire': 'Installation de panneaux solaires',
   annonce: 'Annonce proposée',
   contact: 'Contact',
 };
@@ -102,4 +104,8 @@ export const SERVICE_DETAIL_LABELS: Record<string, string> = {
   preferred_style: 'Style préféré',
   case_type: 'Nature du besoin',
   deadline: 'Échéance',
+  property_type: 'Type de bâtiment',
+  energy_need: 'Besoin énergétique',
+  installation_type: 'Type d’installation',
+  roof_surface: 'Surface de toiture disponible',
 };

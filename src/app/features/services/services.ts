@@ -40,7 +40,7 @@ import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
                 class="grid grid-cols-3 gap-3 rounded-[22px] border border-white/12 bg-white/10 p-3 text-white"
               >
                 <div>
-                  <p class="text-2xl font-semibold">5</p>
+                  <p class="text-2xl font-semibold">{{ data.services.length }}</p>
                   <p class="mt-1 text-xs text-white/58">Pôles service</p>
                 </div>
                 <div>
@@ -90,7 +90,7 @@ import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
                 </div>
                 <p class="max-w-2xl text-sm leading-7 text-rheo-muted">{{ service.description }}</p>
                 <a
-                  [routerLink]="['/services', service.id, 'demande']"
+                  [routerLink]="serviceRequestLink(service.id)"
                   class="w-fit rounded-[16px] border border-rheo-dark bg-rheo-dark px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#253025]"
                 >
                   Créer une demande →
@@ -128,4 +128,8 @@ import { RheodyceDataService } from '../../core/services/rheodyce-data.service';
 })
 export class ServicesPage {
   protected readonly data = inject(RheodyceDataService);
+
+  protected serviceRequestLink(serviceId: string): string[] {
+    return serviceId === 'demenagement' ? ['/demenagement'] : ['/services', serviceId, 'demande'];
+  }
 }

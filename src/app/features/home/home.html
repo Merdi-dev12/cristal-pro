@@ -121,7 +121,7 @@
                   {{ service.description }}
                 </p>
                 <a
-                  [routerLink]="['/services', service.id, 'demande']"
+                  [routerLink]="serviceRequestLink(service.id)"
                   class="mt-6 rounded-[14px] bg-white px-5 py-2.5 text-sm font-bold text-black transition hover:bg-rheo-accent"
                 >
                   Créer une demande →
