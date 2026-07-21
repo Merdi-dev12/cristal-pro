@@ -45,7 +45,7 @@ describe('PropertyDetailPage', () => {
     fixture.detectChanges();
   });
 
-  it('shares the property information and its URL', async () => {
+  it('shares only the direct property URL', async () => {
     const share = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, 'share', { configurable: true, value: share });
 
@@ -55,11 +55,7 @@ describe('PropertyDetailPage', () => {
     button.click();
     await fixture.whenStable();
 
-    expect(share).toHaveBeenCalledWith({
-      title: property.title,
-      text: expect.stringContaining('Gombe, Kinshasa'),
-      url: expect.stringContaining('/functions/v1/property-share?id=bien-1'),
-    });
+    expect(share).toHaveBeenCalledWith({ url: `${window.location.origin}/annonces/bien-1` });
   });
 
   it('shows a preview and the subscription CTA to a non-subscriber', () => {
