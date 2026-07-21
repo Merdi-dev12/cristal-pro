@@ -30,7 +30,12 @@ export class SubscriptionService {
   async loadPlans(): Promise<void> {
     this.isLoading.set(true);
     try {
-      const { data, error } = await this.supabase.from('subscription_plans').select('*').eq('active', true).order('display_order');
+      const { data, error } = await this.supabase
+        .from('subscription_plans')
+        .select('*')
+        .eq('active', true)
+        .eq('slug', 'rheodyce')
+        .order('display_order');
       if (error) throw error;
       this.plans.set((data ?? []).map((row) => ({
         id: String(row['slug']), name: String(row['name']), price: Number(row['price']), period: String(row['period']),
