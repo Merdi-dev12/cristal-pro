@@ -5,8 +5,11 @@ import {
   CANCELLABLE_STATUSES,
   CreateServiceRequestInput,
   ServiceRequest,
+  ServiceRequestDocument,
   ServiceRequestEvent,
 } from '../../shared/models/service-request.model';
+
+const DOCUMENT_BUCKET = 'service-request-documents';
 
 @Service()
 export class ServiceRequestService {
@@ -19,22 +22,55 @@ export class ServiceRequestService {
   readonly isAuthenticated = this.auth.hasSession;
 
   async createRequest(input: CreateServiceRequestInput): Promise<ServiceRequest> {
-    const { data, error } = await this.supabase.functions.invoke('create-service-request', {
-      body: {
-        service_type: input.serviceType,
-        client_name: input.clientName.trim(),
-        client_email: input.clientEmail.trim(),
-        client_phone: input.clientPhone.trim(),
-        description: input.description.trim(),
-        details: input.details,
-        budget: input.budget ?? null,
-      },
-    });
+    const userId = this.auth.userId();
+    if (!userId) throw new Error('Connectez-vous pour envoyer une demande.');
+    const requestId = crypto.randomUUID();
+    const uploadedDocuments: ServiceRequestDocument[] = [];
 
+    try {
+      for (const file of input.documents ?? []) {
+        const path = `${userId}/${requestId}/${crypto.randomUUID()}-${this.safeFileName(file.name)}`;
+        const { error: uploadError } = await this.supabase.storage
+          .from(DOCUMENT_BUCKET)
+          .upload(path, file, { contentType: file.type, upsert: false });
+        if (uploadError) throw uploadError;
+        uploadedDocuments.push({ path, name: file.name, mimeType: file.type, size: file.size });
+      }
+
+      const { data, error } = await this.supabase.functions.invoke('create-service-request', {
+        body: {
+          request_id: requestId,
+          service_type: input.serviceType,
+          client_name: input.clientName.trim(),
+          client_email: input.clientEmail.trim(),
+          client_phone: input.clientPhone.trim(),
+          description: input.description.trim(),
+          details: input.details,
+          budget: input.budget ?? null,
+          documents: uploadedDocuments,
+        },
+      });
+
+      if (error) throw error;
+      const request = this.mapFromRow(data as Record<string, unknown>);
+      this.requests.update((requests) => [request, ...requests]);
+      return request;
+    } catch (error) {
+      if (uploadedDocuments.length) {
+        await this.supabase.storage
+          .from(DOCUMENT_BUCKET)
+          .remove(uploadedDocuments.map((document) => document.path));
+      }
+      throw error;
+    }
+  }
+
+  async getDocumentUrl(document: ServiceRequestDocument): Promise<string> {
+    const { data, error } = await this.supabase.storage
+      .from(DOCUMENT_BUCKET)
+      .createSignedUrl(document.path, 120);
     if (error) throw error;
-    const request = this.mapFromRow(data as Record<string, unknown>);
-    this.requests.update((requests) => [request, ...requests]);
-    return request;
+    return data.signedUrl;
   }
 
   async loadMyRequests(): Promise<void> {
@@ -152,6 +188,7 @@ export class ServiceRequestService {
       clientPhone: row['client_phone'] as string,
       description: row['description'] as string,
       details: this.toDetails(row['details']),
+      documents: this.toDocuments(row['documents']),
       propertyId: (row['property_id'] as string) ?? undefined,
       budget: row['budget'] !== null ? Number(row['budget']) : undefined,
       assignedTo: (row['assigned_to'] as string) ?? undefined,
@@ -174,6 +211,7 @@ export class ServiceRequestService {
       clientPhone: '',
       description: `Déménagement de ${String(row['departure_address'])} à ${String(row['arrival_address'])}`,
       details: {},
+      documents: [],
       notes: row['admin_notes'] ? String(row['admin_notes']) : undefined,
       createdAt: new Date(String(row['created_at'])),
       updatedAt: new Date(String(row['updated_at'])),
@@ -192,6 +230,7 @@ export class ServiceRequestService {
       clientPhone: '',
       description: `Annonce proposée : ${String(row['title'])}`,
       details: {},
+      documents: [],
       notes: row['admin_message'] ? String(row['admin_message']) : undefined,
       createdAt: new Date(String(row['created_at'])),
       updatedAt: new Date(String(row['updated_at'])),
@@ -210,6 +249,7 @@ export class ServiceRequestService {
       clientPhone: '',
       description: `${String(row['need'])} : ${String(row['message'])}`,
       details: {},
+      documents: [],
       createdAt: new Date(String(row['created_at'])),
       updatedAt: new Date(String(row['updated_at'])),
     };
@@ -236,5 +276,30 @@ export class ServiceRequestService {
   private toDetails(value: unknown): ServiceRequest['details'] {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
     return value as ServiceRequest['details'];
+  }
+
+  private toDocuments(value: unknown): ServiceRequestDocument[] {
+    if (!Array.isArray(value)) return [];
+    return value.flatMap((item) => {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) return [];
+      const row = item as Record<string, unknown>;
+      if (!row['path'] || !row['name']) return [];
+      return [
+        {
+          path: String(row['path']),
+          name: String(row['name']),
+          mimeType: String(row['mimeType'] ?? ''),
+          size: Number(row['size'] ?? 0),
+        },
+      ];
+    });
+  }
+
+  private safeFileName(name: string): string {
+    return name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9._-]/g, '-')
+      .slice(-120);
   }
 }

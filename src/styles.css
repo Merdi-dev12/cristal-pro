@@ -1,6 +1,7 @@
 /* IMPORTANT: avoid inlining fonts from the internet during build (offline/CI can fail). */
 /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap'); */
 @import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
 
 @theme {
   --color-rheo-bg: #f5f7f4;
@@ -59,6 +60,7 @@ select:not([multiple]) {
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.25rem;
+  vertical-align: middle;
   cursor: pointer;
   transition:
     border-color 150ms ease,
@@ -94,6 +96,11 @@ select:not([multiple]) option {
     appearance: base-select;
   }
 
+  select:not([multiple]) {
+    display: inline-flex;
+    align-items: center;
+  }
+
   select:not([multiple])::picker-icon {
     display: none;
   }
@@ -110,6 +117,8 @@ select:not([multiple]) option {
   }
 
   select:not([multiple]) option {
+    display: flex;
+    align-items: center;
     min-height: 2.5rem;
     padding: 0.625rem 0.875rem;
     border-radius: 0.5rem;

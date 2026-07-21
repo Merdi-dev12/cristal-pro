@@ -56,7 +56,7 @@ export class DecorationPage {
   protected readonly items = [
     'Aménagement sur-mesure',
     'Rénovation intérieure',
-    'Home staging',
+    'Mise en valeur immobilière',
     'Conseil mobilier et lumière',
   ];
 }

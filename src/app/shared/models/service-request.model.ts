@@ -23,6 +23,7 @@ export interface ServiceRequest {
   clientPhone: string;
   description: string;
   details: ServiceRequestDetails;
+  documents: ServiceRequestDocument[];
   propertyId?: string;
   budget?: number;
   assignedTo?: string;
@@ -36,6 +37,13 @@ export type ServiceRequestDetailValue = string | number | boolean | null;
 
 export type ServiceRequestDetails = Record<string, ServiceRequestDetailValue>;
 
+export interface ServiceRequestDocument {
+  path: string;
+  name: string;
+  mimeType: string;
+  size: number;
+}
+
 export interface CreateServiceRequestInput {
   serviceType: Exclude<ServiceType, 'demenagement' | 'annonce' | 'contact'>;
   clientName: string;
@@ -43,6 +51,7 @@ export interface CreateServiceRequestInput {
   clientPhone: string;
   description: string;
   details: ServiceRequestDetails;
+  documents?: File[];
   budget?: number;
 }
 
@@ -66,11 +75,11 @@ export const SERVICE_TYPE_LABELS: Record<ServiceType, string> = {
 };
 
 export const REQUEST_STATUS_LABELS: Record<RequestStatus, string> = {
-  'reçue': 'Reçue',
+  reçue: 'Reçue',
   'en traitement': 'En traitement',
-  'assignée': 'Assignée',
-  'terminée': 'Terminée',
-  'annulée': 'Annulée',
+  assignée: 'Assignée',
+  terminée: 'Terminée',
+  annulée: 'Annulée',
 };
 
 export const CANCELLABLE_STATUSES: RequestStatus[] = ['reçue', 'en traitement'];

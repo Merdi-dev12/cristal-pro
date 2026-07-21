@@ -64,7 +64,7 @@ interface LeafletNamespace {
           <p class="mt-4 leading-7 text-rheo-muted">
             {{
               isAdmin
-                ? 'Complétez la fiche comme un utilisateur, localisez le bien sur la carte puis publiez-la dans le catalogue.'
+                ? 'Complétez la fiche comme un utilisateur et localisez le bien sur la carte. L’annonce sera enregistrée comme brouillon.'
                 : 'Votre annonce est vérifiée par RHEODYCE avant publication. Vous recevrez la décision dans Mes demandes.'
             }}
           </p>
@@ -511,7 +511,7 @@ export class PropertySubmissionFormPage implements OnDestroy {
           longitude: coordinates.lng,
           imageUrl: '',
           photos: [],
-          status: 'published',
+          status: 'draft',
           featured: false,
           verified: true,
           sensitiveInfo: '',
@@ -523,7 +523,7 @@ export class PropertySubmissionFormPage implements OnDestroy {
             this.photos().map((item) => item.file),
           );
         }
-        this.message.set('L’annonce a été créée et publiée dans le catalogue.');
+        this.message.set('L’annonce a été créée comme brouillon.');
         await this.router.navigateByUrl(`/admin/annonces/${property.id}`);
         return;
       }

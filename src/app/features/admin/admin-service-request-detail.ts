@@ -3,11 +3,13 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
+import { ServiceRequestService } from '../../core/services/service-request.service';
 import { AdminServiceRequestView } from '../../shared/models/admin.model';
 import {
   REQUEST_STATUS_LABELS,
   RequestStatus,
   SERVICE_TYPE_LABELS,
+  ServiceRequestDocument,
 } from '../../shared/models/service-request.model';
 @Component({
   selector: 'app-admin-service-request-detail',
@@ -50,6 +52,30 @@ import {
             <dd class="mt-1 font-semibold">{{ item.clientPhone }}</dd>
           </div>
         </dl>
+        @if (item.documents.length) {
+          <div class="mt-6">
+            <p class="text-xs font-bold uppercase tracking-[.16em] text-rheo-muted">
+              Pièces jointes
+            </p>
+            <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+              @for (document of item.documents; track document.path) {
+                <li
+                  class="flex items-center justify-between gap-3 rounded-xl border border-[#e4e6e1] p-3"
+                >
+                  <span class="min-w-0 truncate text-sm font-semibold">{{ document.name }}</span>
+                  <button
+                    type="button"
+                    [disabled]="openingDocument() === document.path"
+                    (click)="openDocument(document)"
+                    class="shrink-0 rounded-lg bg-[#111711] px-3 py-2 text-xs font-semibold text-white disabled:opacity-60"
+                  >
+                    {{ openingDocument() === document.path ? 'Ouverture…' : 'Ouvrir' }}
+                  </button>
+                </li>
+              }
+            </ul>
+          </div>
+        }
         <div class="mt-6 grid gap-4">
           <label class="text-sm font-semibold"
             >Statut<select
@@ -107,6 +133,7 @@ import {
 })
 export class AdminServiceRequestDetailPage {
   protected readonly admin = inject(AdminService);
+  private readonly requests = inject(ServiceRequestService);
   protected readonly SERVICE_TYPE_LABELS = SERVICE_TYPE_LABELS;
   protected readonly REQUEST_STATUS_LABELS = REQUEST_STATUS_LABELS;
   protected readonly statuses = RequestStatusValues;
@@ -120,6 +147,7 @@ export class AdminServiceRequestDetailPage {
   protected readonly loading = signal('');
   protected readonly error = signal('');
   protected readonly saved = signal(false);
+  protected readonly openingDocument = signal<string | null>(null);
   private markedAsRead = false;
   constructor() {
     effect(() => {
@@ -162,6 +190,16 @@ export class AdminServiceRequestDetailPage {
       this.error.set(e instanceof Error ? e.message : 'Notification impossible.');
     } finally {
       this.loading.set('');
+    }
+  }
+  protected async openDocument(document: ServiceRequestDocument): Promise<void> {
+    this.openingDocument.set(document.path);
+    try {
+      window.open(await this.requests.getDocumentUrl(document), '_blank', 'noopener,noreferrer');
+    } catch (error) {
+      this.error.set(error instanceof Error ? error.message : 'Ouverture du document impossible.');
+    } finally {
+      this.openingDocument.set(null);
     }
   }
 }
