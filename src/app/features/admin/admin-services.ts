@@ -15,25 +15,23 @@ import {
   SERVICE_TYPE_LABELS,
   ServiceType,
 } from '../../shared/models/service-request.model';
+import { AdminIcon, AdminIconName } from '../../shared/components/admin-icon/admin-icon';
 @Component({
   selector: 'app-admin-services',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AdminIcon],
   template: `<section>
     <header class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
       <div>
         <p class="text-sm font-semibold uppercase tracking-[.2em] text-rheo-muted">Services</p>
-        <h1 class="mt-2 text-3xl font-semibold">Catalogue et demandes.</h1>
-        <p class="mt-3 text-sm text-rheo-muted">
-          Gérez l’offre publique et orientez les demandes reçues.
-        </p>
+        <h1 class="mt-2 text-3xl font-semibold">Services</h1>
       </div>
       <button
         type="button"
-        class="w-fit rounded-xl bg-rheo-dark px-5 py-3 text-sm font-semibold text-white"
+        class="inline-flex w-fit items-center gap-2 rounded-xl bg-rheo-dark px-5 py-3 text-sm font-semibold text-white"
         (click)="newOffer()"
       >
-        ＋ Nouveau service
+        <app-admin-icon name="plus" className="size-5" />Nouveau service
       </button>
     </header>
     @if (editing()) {
@@ -54,17 +52,11 @@ import {
           </button>
         </div>
         <div class="mt-5 grid gap-4">
-          <div class="grid gap-4 sm:grid-cols-2">
-            <label class="text-sm font-semibold"
-              >Slug<input
-                [(ngModel)]="offerDraft.slug"
-                class="mt-2 h-12 w-full rounded-xl border border-[#dfe3dc] px-4 font-normal" /></label
-            ><label class="text-sm font-semibold"
-              >Icône<input
-                [(ngModel)]="offerDraft.icon"
-                class="mt-2 h-12 w-full rounded-xl border border-[#dfe3dc] px-4 font-normal"
-            /></label>
-          </div>
+          <label class="text-sm font-semibold"
+            >Slug<input
+              [(ngModel)]="offerDraft.slug"
+              class="mt-2 h-12 w-full rounded-xl border border-[#dfe3dc] px-4 font-normal"
+          /></label>
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="text-sm font-semibold"
               >Titre<input
@@ -138,9 +130,8 @@ import {
             (click)="editOffer(offer)"
             class="flex items-center gap-4 rounded-xl border border-[#edf0eb] p-4 text-left hover:border-rheo-accent"
           >
-            <span class="grid size-12 place-items-center rounded-xl bg-[#eef2e9] text-xl">{{
-              offer.icon
-            }}</span
+            <span class="grid size-12 place-items-center rounded-xl bg-[#eef2e9]"
+              ><app-admin-icon [name]="offerIcon(offer.slug)" className="size-6" /></span
             ><span class="min-w-0 flex-1"
               ><strong class="block truncate">{{ offer.title }}</strong
               ><small class="mt-1 block truncate text-rheo-muted">/{{ offer.slug }}</small></span
@@ -155,7 +146,7 @@ import {
     </section>
     <header class="mt-12">
       <p class="text-sm font-semibold uppercase tracking-[.2em] text-rheo-muted">Demandes reçues</p>
-      <h2 class="mt-2 text-2xl font-semibold">Suivi des dossiers.</h2>
+      <h2 class="mt-2 text-2xl font-semibold">Demandes reçues</h2>
     </header>
     <section class="mt-6 overflow-hidden rounded-2xl border border-[#e4e6e1] bg-white">
       <div class="flex flex-wrap gap-3 border-b border-[#edf0eb] p-4 sm:p-5">
@@ -163,7 +154,7 @@ import {
           [ngModel]="search()"
           (ngModelChange)="search.set($event)"
           class="h-11 min-w-[240px] flex-1 rounded-xl border border-[#dfe3dc] px-4 text-sm"
-          placeholder="⌕ Client, description, e-mail…"
+          placeholder="Client, description, e-mail…"
         /><select
           [ngModel]="filterType()"
           (ngModelChange)="filterType.set($event)"
@@ -189,9 +180,8 @@ import {
           <a
             [routerLink]="['/admin/services/demandes', request.id]"
             class="flex items-center gap-4 px-5 py-5 hover:bg-[#fafbf9] sm:px-6"
-            ><span
-              class="grid size-12 shrink-0 place-items-center rounded-xl bg-[#eef2e9] text-lg"
-              >{{ icon(request.serviceType) }}</span
+            ><span class="grid size-12 shrink-0 place-items-center rounded-xl bg-[#eef2e9]"
+              ><app-admin-icon [name]="icon(request.serviceType)" className="size-6" /></span
             ><span class="min-w-0 flex-1"
               ><strong class="block truncate">{{ request.description }}</strong
               ><span class="mt-1 block text-xs text-rheo-muted"
@@ -201,8 +191,8 @@ import {
             ><span
               class="hidden rounded-full bg-amber-50 px-3 py-1 text-[11px] font-semibold text-amber-800 sm:block"
               >{{ REQUEST_STATUS_LABELS[request.status] }}</span
-            ><span>→</span></a
-          >
+            ><app-admin-icon name="arrow-right" className="size-4"
+          /></a>
         } @empty {
           <p class="p-12 text-center text-sm text-rheo-muted">Aucune demande trouvée.</p>
         }
@@ -264,8 +254,11 @@ export class AdminServicesPage {
       this.offerLoading.set(false);
     }
   }
-  protected icon(t: ServiceType) {
-    return t === 'maintenance' ? '🛠' : t === 'decoration' ? '✦' : t === 'juridique' ? '⚖' : '🚚';
+  protected icon(t: ServiceType): AdminIconName {
+    return t === 'demenagement' ? 'truck' : 'tools';
+  }
+  protected offerIcon(slug: string): AdminIconName {
+    return slug.includes('demenagement') ? 'truck' : 'tools';
   }
 }
 function draft(): AdminServiceOfferDraft {
@@ -274,7 +267,7 @@ function draft(): AdminServiceOfferDraft {
     title: '',
     eyebrow: '',
     description: '',
-    icon: '✦',
+    icon: 'service',
     cta: 'Découvrir',
     displayOrder: 0,
     active: true,

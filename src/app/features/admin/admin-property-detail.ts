@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
 import { AdminProperty, AdminPropertyDraft } from '../../shared/models/admin.model';
+import { AdminIcon } from '../../shared/components/admin-icon/admin-icon';
 
 @Component({
   selector: 'app-admin-property-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AdminIcon],
   template: `
     <section class="mx-auto w-full max-w-6xl">
       <a
@@ -30,9 +31,9 @@ import { AdminProperty, AdminPropertyDraft } from '../../shared/models/admin.mod
           <a
             [routerLink]="['/annonces', item.id]"
             target="_blank"
-            class="inline-flex w-fit rounded-xl border border-[#dfe3dc] bg-white px-4 py-3 text-sm font-semibold"
-            >Voir sur le site ↗</a
-          >
+            class="inline-flex w-fit items-center gap-2 rounded-xl border border-[#dfe3dc] bg-white px-4 py-3 text-sm font-semibold"
+            >Voir sur le site <app-admin-icon name="external" className="size-4"
+          /></a>
         </header>
         @if (error()) {
           <p class="mt-5 rounded-xl bg-red-50 p-4 text-sm text-red-700">{{ error() }}</p>
@@ -91,7 +92,9 @@ import { AdminProperty, AdminPropertyDraft } from '../../shared/models/admin.mod
                 >Import en cours…</span
               >
             } @else {
-              <span>＋ Ajouter des photos</span>
+              <span class="inline-flex items-center gap-2"
+                ><app-admin-icon name="upload" className="size-5" />Ajouter des photos</span
+              >
             }
             <input
               type="file"
@@ -217,9 +220,10 @@ import { AdminProperty, AdminPropertyDraft } from '../../shared/models/admin.mod
                 [href]="mapUrl()"
                 target="_blank"
                 rel="noopener"
-                class="w-fit text-sm font-semibold text-[#657b18]"
-                >📍 Voir la position enregistrée sur la carte ↗</a
-              >
+                class="inline-flex w-fit items-center gap-2 text-sm font-semibold text-[#657b18]"
+                ><app-admin-icon name="pin" className="size-5" />Voir la position enregistrée sur la
+                carte <app-admin-icon name="external" className="size-4"
+              /></a>
             }
             <div class="flex flex-col gap-3 sm:flex-row">
               <button
@@ -281,10 +285,19 @@ export class AdminPropertyDetailPage {
   protected readonly error = signal('');
   protected readonly saved = signal(false);
   protected readonly lightbox = signal('');
+  private markedAsRead = false;
   constructor() {
     effect(() => {
       const p = this.property();
-      if (p) this.draft = { ...p, photos: [...p.photos], priceSuffix: p.priceSuffix ?? '' };
+      if (p) {
+        this.draft = { ...p, photos: [...p.photos], priceSuffix: p.priceSuffix ?? '' };
+        if (!p.readAt && !this.markedAsRead) {
+          this.markedAsRead = true;
+          void this.admin.markAsRead('properties', p.id).catch(() => {
+            this.markedAsRead = false;
+          });
+        }
+      }
     });
   }
   protected async save(): Promise<void> {

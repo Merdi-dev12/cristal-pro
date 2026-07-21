@@ -3,10 +3,11 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
 import { AdminContactMessage, ContactMessageStatus } from '../../shared/models/admin.model';
+import { AdminIcon } from '../../shared/components/admin-icon/admin-icon';
 @Component({
   selector: 'app-admin-contact-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, AdminIcon],
   template: `<section class="mx-auto w-full max-w-5xl">
     <a routerLink="/admin/contacts" class="text-sm font-semibold text-rheo-muted"
       >← Retour aux contacts</a
@@ -51,7 +52,7 @@ import { AdminContactMessage, ContactMessageStatus } from '../../shared/models/a
           <a
             [href]="'mailto:' + item.email"
             class="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl bg-rheo-accent px-5 text-sm font-bold"
-            >✉ Répondre par e-mail</a
+            ><app-admin-icon name="mail" className="size-5" />Répondre par e-mail</a
           ><button
             type="button"
             [disabled]="loading()"

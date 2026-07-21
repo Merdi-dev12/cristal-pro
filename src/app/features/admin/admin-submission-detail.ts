@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
 import { PropertySubmission, SubmissionStatus } from '../../shared/models/admin.model';
+import { AdminIcon } from '../../shared/components/admin-icon/admin-icon';
 
 @Component({
   selector: 'app-admin-submission-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AdminIcon],
   template: `
     <section class="mx-auto w-full max-w-6xl">
       <a
@@ -97,8 +98,9 @@ import { PropertySubmission, SubmissionStatus } from '../../shared/models/admin.
             target="_blank"
             rel="noopener"
             class="mt-4 inline-flex items-center gap-2 rounded-xl border border-[#dfe3dc] px-4 py-3 text-sm font-semibold hover:bg-[#f6f7f4]"
-            >📍 Voir la localisation sur la carte <span>↗</span></a
-          >
+            ><app-admin-icon name="pin" className="size-5" />Voir la localisation sur la carte
+            <app-admin-icon name="external" className="size-4"
+          /></a>
         </section>
 
         @if (item.documents.length) {
@@ -111,9 +113,11 @@ import { PropertySubmission, SubmissionStatus } from '../../shared/models/admin.
                   target="_blank"
                   rel="noopener"
                   class="flex items-center justify-between rounded-xl border border-[#e4e6e1] p-4 text-sm font-semibold hover:border-rheo-accent"
-                  ><span>📄 Document {{ index + 1 }}</span
-                  ><span>Ouvrir ↗</span></a
-                >
+                  ><span class="flex items-center gap-2"
+                    ><app-admin-icon name="file" className="size-5" />Document {{ index + 1 }}</span
+                  ><span class="flex items-center gap-1"
+                    >Ouvrir <app-admin-icon name="external" className="size-4" /></span
+                ></a>
               }
             </div>
           </section>
@@ -215,6 +219,18 @@ export class AdminSubmissionDetailPage {
   protected readonly loading = signal('');
   protected readonly error = signal('');
   protected message = '';
+  private markedAsRead = false;
+  constructor() {
+    effect(() => {
+      const item = this.submission();
+      if (item && !item.readAt && !this.markedAsRead) {
+        this.markedAsRead = true;
+        void this.admin.markAsRead('submissions', item.id).catch(() => {
+          this.markedAsRead = false;
+        });
+      }
+    });
+  }
   protected async decide(
     item: PropertySubmission,
     action: 'approve' | 'reject' | 'request_details',

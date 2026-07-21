@@ -11,10 +11,7 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
   template: `<section>
     <header>
       <p class="text-sm font-semibold uppercase tracking-[.2em] text-rheo-muted">Utilisateurs</p>
-      <h1 class="mt-2 text-3xl font-semibold">Comptes et abonnements.</h1>
-      <p class="mt-3 text-sm text-rheo-muted">
-        Recherchez un utilisateur et consultez son activité.
-      </p>
+      <h1 class="mt-2 text-3xl font-semibold">Utilisateurs</h1>
     </header>
     <section class="mt-8 overflow-hidden rounded-2xl border border-[#e4e6e1] bg-white">
       <div class="flex flex-wrap gap-3 border-b border-[#edf0eb] p-4 sm:p-5">
@@ -22,7 +19,7 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
           [ngModel]="search()"
           (ngModelChange)="search.set($event)"
           class="h-11 min-w-[240px] flex-1 rounded-xl border border-[#dfe3dc] px-4 text-sm"
-          placeholder="⌕ Nom, e-mail ou téléphone…"
+          placeholder="Nom, e-mail ou téléphone…"
         /><select
           [ngModel]="role()"
           (ngModelChange)="role.set($event)"

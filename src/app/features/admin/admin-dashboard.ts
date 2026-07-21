@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
+import { AdminIcon, AdminIconName } from '../../shared/components/admin-icon/admin-icon';
 import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, AdminIcon],
   template: `
     <section>
       <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -15,17 +16,12 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
           <p class="text-sm font-semibold uppercase tracking-[0.2em] text-rheo-muted">
             Vue d’ensemble
           </p>
-          <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Bonjour, équipe RHEODYCE.
-          </h1>
-          <p class="mt-3 max-w-2xl text-sm leading-6 text-rheo-muted">
-            Pilotez les annonces, les utilisateurs et les demandes depuis un seul espace.
-          </p>
+          <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Tableau de bord</h1>
         </div>
         <a
           routerLink="/admin/annonces/nouvelle"
           class="inline-flex w-fit items-center gap-2 rounded-xl bg-rheo-dark px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#323a31]"
-          >Créer une annonce <span aria-hidden="true">+</span></a
+          ><app-admin-icon name="plus" className="size-5" />Créer une annonce</a
         >
       </div>
 
@@ -44,11 +40,9 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
           >
             <div class="flex items-start justify-between">
               <p class="text-sm text-rheo-muted">{{ metric.label }}</p>
-              <span
-                class="flex size-8 items-center justify-center rounded-lg"
-                [class]="metric.tone"
-                >{{ metric.icon }}</span
-              >
+              <span class="flex size-9 items-center justify-center rounded-lg bg-[#f0f2ed]"
+                ><app-admin-icon [name]="metric.icon" className="size-5"
+              /></span>
             </div>
             <p class="mt-5 text-3xl font-semibold tracking-tight">{{ metric.value }}</p>
             <p class="mt-2 text-xs text-[#71806a]">{{ metric.caption }}</p>
@@ -70,7 +64,8 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
           @for (bar of activityBars(); track bar.label) {
             <div>
               <div class="mb-2 flex items-center justify-between text-xs">
-                <span class="font-semibold">{{ bar.icon }} {{ bar.label }}</span
+                <span class="flex items-center gap-2 font-semibold"
+                  ><app-admin-icon [name]="bar.icon" className="size-4" />{{ bar.label }}</span
                 ><span class="text-rheo-muted">{{ bar.value }}</span>
               </div>
               <div class="h-2.5 overflow-hidden rounded-full bg-[#edf0eb]">
@@ -105,8 +100,10 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
                 routerLink="/admin/services"
                 class="flex items-center gap-4 px-5 py-4 transition hover:bg-[#fafbf9] sm:px-6"
                 ><span
-                  class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#eef2e9] text-sm"
-                  >{{ serviceIcon(request.serviceType) }}</span
+                  class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#eef2e9]"
+                  ><app-admin-icon
+                    [name]="serviceIcon(request.serviceType)"
+                    className="size-5" /></span
                 ><span class="min-w-0 flex-1"
                   ><span class="block truncate text-sm font-semibold">{{
                     request.description
@@ -118,8 +115,8 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
                   class="hidden rounded-full px-3 py-1 text-[11px] font-semibold sm:inline-flex"
                   [class]="statusClass(request.status)"
                   >{{ request.status }}</span
-                ><span class="text-rheo-muted">›</span></a
-              >
+                ><app-admin-icon name="arrow-right" className="size-4 text-rheo-muted"
+              /></a>
             } @empty {
               <p class="p-8 text-sm text-rheo-muted">Aucune demande récente.</p>
             }
@@ -207,7 +204,7 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
         <a
           routerLink="/admin/visites"
           class="group rounded-2xl border border-[#e4e6e1] bg-white p-5 transition hover:-translate-y-0.5 hover:border-rheo-accent"
-          ><span class="text-2xl">◎</span>
+          ><app-admin-icon name="calendar" className="size-7" />
           <h3 class="mt-4 font-semibold">Traiter les visites</h3>
           <p class="mt-1 text-xs text-rheo-muted">
             {{ admin.stats().pendingVisits }} en attente
@@ -215,25 +212,25 @@ import { SERVICE_TYPE_LABELS } from '../../shared/models/service-request.model';
         ><a
           routerLink="/admin/utilisateurs"
           class="group rounded-2xl border border-[#e4e6e1] bg-white p-5 transition hover:-translate-y-0.5 hover:border-rheo-accent"
-          ><span class="text-2xl">♙</span>
+          ><app-admin-icon name="users" className="size-7" />
           <h3 class="mt-4 font-semibold">Gérer les utilisateurs</h3>
           <p class="mt-1 text-xs text-rheo-muted">Abonnements et historique</p></a
         ><a
           routerLink="/admin/services"
           class="group rounded-2xl border border-[#e4e6e1] bg-white p-5 transition hover:-translate-y-0.5 hover:border-rheo-accent"
-          ><span class="text-2xl">▣</span>
+          ><app-admin-icon name="tools" className="size-7" />
           <h3 class="mt-4 font-semibold">Affecter un partenaire</h3>
           <p class="mt-1 text-xs text-rheo-muted">Suivre le traitement</p></a
         ><a
           routerLink="/admin/demenagements"
           class="group rounded-2xl border border-[#e4e6e1] bg-white p-5 transition hover:-translate-y-0.5 hover:border-rheo-accent"
-          ><span class="text-2xl">↗</span>
+          ><app-admin-icon name="truck" className="size-7" />
           <h3 class="mt-4 font-semibold">Déménagements</h3>
           <p class="mt-1 text-xs text-rheo-muted">Partenaires et itinéraires</p></a
         ><a
           routerLink="/admin/annonces"
           class="group rounded-2xl border border-[#e4e6e1] bg-white p-5 transition hover:-translate-y-0.5 hover:border-rheo-accent"
-          ><span class="text-2xl">⌑</span>
+          ><app-admin-icon name="home" className="size-7" />
           <h3 class="mt-4 font-semibold">Gérer les annonces</h3>
           <p class="mt-1 text-xs text-rheo-muted">Publication et vérification</p></a
         >
@@ -249,40 +246,53 @@ export class AdminDashboardPage {
       label: 'Annonces',
       value: this.admin.stats().properties,
       caption: 'biens dans le catalogue',
-      icon: '⌑',
-      tone: 'bg-[#edf5d6] text-[#657b18]',
+      icon: 'home' as AdminIconName,
     },
     {
       label: 'Utilisateurs',
       value: this.admin.stats().users,
       caption: 'comptes inscrits',
-      icon: '♙',
-      tone: 'bg-[#e8f1fb] text-[#28639a]',
+      icon: 'users' as AdminIconName,
     },
     {
       label: 'Abonnés',
       value: this.admin.stats().subscribers,
       caption: 'accès premium actif',
-      icon: '★',
-      tone: 'bg-[#fff0db] text-[#b85b00]',
+      icon: 'star' as AdminIconName,
     },
     {
       label: 'Demandes',
       value: this.admin.stats().requests,
       caption: 'visites et services',
-      icon: '▣',
-      tone: 'bg-[#eee9fb] text-[#7050a2]',
+      icon: 'clipboard' as AdminIconName,
     },
   ];
   protected totalActivity(): number {
     return this.activityBars().reduce((sum, item) => sum + item.value, 0);
   }
-  protected activityBars(): { label: string; value: number; percent: number; icon: string }[] {
+  protected activityBars(): {
+    label: string;
+    value: number;
+    percent: number;
+    icon: AdminIconName;
+  }[] {
     const values = [
-      { label: 'Visites', value: this.admin.visits().length, icon: '📅' },
-      { label: 'Services', value: this.admin.serviceRequests().length, icon: '🛠' },
-      { label: 'Contacts', value: this.admin.contactMessages().length, icon: '✉' },
-      { label: 'Soumissions', value: this.admin.submissions().length, icon: '📋' },
+      { label: 'Visites', value: this.admin.visits().length, icon: 'calendar' as AdminIconName },
+      {
+        label: 'Services',
+        value: this.admin.serviceRequests().length,
+        icon: 'tools' as AdminIconName,
+      },
+      {
+        label: 'Contacts',
+        value: this.admin.contactMessages().length,
+        icon: 'mail' as AdminIconName,
+      },
+      {
+        label: 'Soumissions',
+        value: this.admin.submissions().length,
+        icon: 'clipboard' as AdminIconName,
+      },
     ];
     const max = Math.max(...values.map((item) => item.value), 1);
     return values.map((item) => ({
@@ -291,14 +301,8 @@ export class AdminDashboardPage {
     }));
   }
 
-  protected serviceIcon(type: string): string {
-    return type === 'maintenance'
-      ? '⌁'
-      : type === 'decoration'
-        ? '✦'
-        : type === 'juridique'
-          ? '§'
-          : '↗';
+  protected serviceIcon(type: string): AdminIconName {
+    return type === 'demenagement' ? 'truck' : 'tools';
   }
   protected statusClass(status: string): string {
     return status === 'terminée'

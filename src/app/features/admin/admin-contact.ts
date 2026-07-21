@@ -4,20 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
 import { ContactMessageStatus } from '../../shared/models/admin.model';
+import { AdminIcon } from '../../shared/components/admin-icon/admin-icon';
 @Component({
   selector: 'app-admin-contact',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AdminIcon],
   template: ` <section>
     <header class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
       <div>
         <p class="text-sm font-semibold uppercase tracking-[.2em] text-rheo-muted">
           Boîte de réception
         </p>
-        <h1 class="mt-2 text-3xl font-semibold">Demandes de contact.</h1>
-        <p class="mt-3 text-sm text-rheo-muted">
-          Retrouvez rapidement un message et traitez-le dans une page dédiée.
-        </p>
+        <h1 class="mt-2 text-3xl font-semibold">Demandes de contact</h1>
       </div>
       <div class="rounded-xl border border-[#e1e5dc] bg-white px-4 py-3 text-sm">
         <strong>{{ unreadCount() }}</strong> <span class="text-rheo-muted">nouvelle(s)</span>
@@ -26,7 +24,8 @@ import { ContactMessageStatus } from '../../shared/models/admin.model';
     <section class="mt-8 overflow-hidden rounded-2xl border border-[#e4e6e1] bg-white">
       <div class="flex flex-wrap gap-3 border-b border-[#edf0eb] p-4 sm:p-5">
         <label class="relative min-w-[240px] flex-1"
-          ><span class="absolute left-3 top-3">⌕</span
+          ><span class="absolute left-3 top-3"
+            ><app-admin-icon name="search" className="size-5" /></span
           ><input
             [ngModel]="search()"
             (ngModelChange)="search.set($event)"
@@ -65,8 +64,10 @@ import { ContactMessageStatus } from '../../shared/models/admin.model';
               ><span class="mt-2 block truncate text-sm text-rheo-muted">{{
                 item.message
               }}</span></span
-            ><span class="hidden self-center font-semibold text-[#657b18] sm:block">Lire →</span></a
-          >
+            ><span
+              class="hidden items-center gap-1 self-center font-semibold text-[#657b18] sm:flex"
+              >Lire <app-admin-icon name="arrow-right" className="size-4" /></span
+          ></a>
         } @empty {
           <p class="p-12 text-center text-sm text-rheo-muted">Aucun message trouvé.</p>
         }

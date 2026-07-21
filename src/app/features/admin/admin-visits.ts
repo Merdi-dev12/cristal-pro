@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
 import { VisitStatus } from '../../shared/models/admin.model';
+import { AdminIcon } from '../../shared/components/admin-icon/admin-icon';
 
 @Component({
   selector: 'app-admin-visits',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AdminIcon],
   template: `
     <section>
       <header class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -16,9 +17,9 @@ import { VisitStatus } from '../../shared/models/admin.model';
           <p class="text-sm font-semibold uppercase tracking-[.2em] text-rheo-muted">
             Demandes de visite
           </p>
-          <h1 class="mt-2 text-3xl font-semibold tracking-tight">Organiser les rendez-vous.</h1>
+          <h1 class="mt-2 text-3xl font-semibold tracking-tight">Demandes de visite</h1>
           <p class="mt-3 max-w-2xl text-sm leading-6 text-rheo-muted">
-            Recherchez une demande puis ouvrez son suivi dans une page dédiée.
+            Recherchez par client, bien ou statut.
           </p>
         </div>
         <div class="rounded-xl border border-[#e1e5dc] bg-white px-4 py-3 text-sm">
@@ -29,7 +30,8 @@ import { VisitStatus } from '../../shared/models/admin.model';
       <section class="mt-8 overflow-hidden rounded-2xl border border-[#e4e6e1] bg-white">
         <div class="flex flex-wrap gap-3 border-b border-[#edf0eb] p-4 sm:p-5">
           <label class="relative min-w-[240px] flex-1"
-            ><span class="absolute left-3 top-3 text-rheo-muted">⌕</span
+            ><span class="absolute left-3 top-3 text-rheo-muted"
+              ><app-admin-icon name="search" className="size-5" /></span
             ><input
               [ngModel]="search()"
               (ngModelChange)="search.set($event)"
@@ -64,8 +66,7 @@ import { VisitStatus } from '../../shared/models/admin.model';
                 ><img
                   [src]="visit.propertyImageUrl || '/assets/hero_img.png'"
                   alt=""
-                  class="size-16 shrink-0 rounded-xl object-cover"
-                /><span class="min-w-0 flex-1"
+                  class="size-16 shrink-0 rounded-xl object-cover" /><span class="min-w-0 flex-1"
                   ><span class="flex flex-wrap gap-2"
                     ><strong class="truncate text-sm sm:text-base">{{ visit.userName }}</strong
                     ><span
@@ -76,13 +77,17 @@ import { VisitStatus } from '../../shared/models/admin.model';
                   ><span class="mt-1 block truncate text-sm text-rheo-muted"
                     >{{ visit.propertyTitle }} · {{ visit.propertyLocation }}</span
                   ><span class="mt-2 block text-xs text-[#7a8375]"
-                    >📅 {{ visit.requestedDate | date: 'dd MMMM yyyy' }} à
-                    {{ visit.requestedTime }}</span
+                    ><span class="inline-flex items-center gap-1.5"
+                      ><app-admin-icon name="calendar" className="size-4" />{{
+                        visit.requestedDate | date: 'dd MMMM yyyy'
+                      }}
+                      à {{ visit.requestedTime }}</span
+                    ></span
                   ></span
-                ><span class="hidden text-sm font-semibold text-[#657b18] sm:block"
-                  >Ouvrir →</span
-                ></a
-              >
+                ><span
+                  class="hidden items-center gap-1 text-sm font-semibold text-[#657b18] sm:flex"
+                  >Ouvrir <app-admin-icon name="arrow-right" className="size-4" /></span
+              ></a>
             } @empty {
               <div class="p-12 text-center text-sm text-rheo-muted">
                 Aucune visite ne correspond à la recherche.

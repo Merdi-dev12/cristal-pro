@@ -120,6 +120,7 @@ export class AdminServiceRequestDetailPage {
   protected readonly loading = signal('');
   protected readonly error = signal('');
   protected readonly saved = signal(false);
+  private markedAsRead = false;
   constructor() {
     effect(() => {
       const r = this.request();
@@ -127,6 +128,12 @@ export class AdminServiceRequestDetailPage {
         this.status = r.status;
         this.assigned = r.assignedTo ?? '';
         this.notes = r.notes ?? '';
+        if (!r.readAt && !this.markedAsRead) {
+          this.markedAsRead = true;
+          void this.admin.markAsRead('services', r.id).catch(() => {
+            this.markedAsRead = false;
+          });
+        }
       }
     });
   }

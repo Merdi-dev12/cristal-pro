@@ -30,6 +30,7 @@ export interface VisitRequest {
   message: string;
   internalNote: string;
   notificationPrepared: boolean;
+  readAt?: string;
   createdAt: string;
 }
 
@@ -55,6 +56,7 @@ export interface AdminProperty {
   longitude?: number;
   sensitiveInfo: string;
   ownerName: string;
+  readAt?: string;
   createdAt: string;
 }
 
@@ -113,6 +115,7 @@ export interface PropertySubmission {
   submittedAt: string;
   decisions: SubmissionDecision[];
   publishedPropertyId?: string;
+  readAt?: string;
 }
 
 export interface AdminDashboardStats {
@@ -145,6 +148,7 @@ export interface AdminContactMessage {
 
 export interface AdminServiceRequestView extends ServiceRequest {
   notificationPrepared: boolean;
+  readAt?: string;
 }
 
 export interface AdminServiceOffer {

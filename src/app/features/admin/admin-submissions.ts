@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
 import { SubmissionStatus } from '../../shared/models/admin.model';
+import { AdminIcon } from '../../shared/components/admin-icon/admin-icon';
 
 @Component({
   selector: 'app-admin-submissions',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AdminIcon],
   template: `
     <section>
       <header class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -16,10 +17,9 @@ import { SubmissionStatus } from '../../shared/models/admin.model';
           <p class="text-sm font-semibold uppercase tracking-[0.2em] text-rheo-muted">
             Soumissions de biens
           </p>
-          <h1 class="mt-2 text-3xl font-semibold tracking-tight">Vérifier avant de publier.</h1>
+          <h1 class="mt-2 text-3xl font-semibold tracking-tight">Soumissions à vérifier</h1>
           <p class="mt-3 max-w-2xl text-sm leading-6 text-rheo-muted">
-            Chaque dossier s’ouvre dans une page complète pour examiner confortablement les images
-            et les documents.
+            Consultez les informations, les images et les documents avant publication.
           </p>
         </div>
         <div class="rounded-xl border border-[#e1e5dc] bg-white px-4 py-3 text-sm">
@@ -33,7 +33,7 @@ import { SubmissionStatus } from '../../shared/models/admin.model';
           <label class="relative min-w-[240px] flex-1"
             ><span
               class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-rheo-muted"
-              >⌕</span
+              ><app-admin-icon name="search" className="size-5" /></span
             ><input
               [ngModel]="search()"
               (ngModelChange)="search.set($event)"
@@ -72,7 +72,9 @@ import { SubmissionStatus } from '../../shared/models/admin.model';
                   @for (photo of submission.photos.slice(0, 4); track photo) {
                     <img [src]="photo" alt="" class="h-full min-h-0 w-full object-cover" />
                   } @empty {
-                    <span class="col-span-2 grid place-items-center text-2xl">🏠</span>
+                    <span class="col-span-2 grid place-items-center"
+                      ><app-admin-icon name="home" className="size-7"
+                    /></span>
                   }
                 </div>
                 <span class="min-w-0"
@@ -92,12 +94,14 @@ import { SubmissionStatus } from '../../shared/models/admin.model';
                 >
                 <span class="flex items-center gap-2 text-xs font-semibold text-[#657b18]"
                   >Examiner
-                  <span class="text-lg transition group-hover:translate-x-1">→</span></span
-                >
+                  <app-admin-icon
+                    name="arrow-right"
+                    className="size-4 transition group-hover:translate-x-1"
+                /></span>
               </a>
             } @empty {
               <div class="p-12 text-center">
-                <span class="text-4xl">⌕</span>
+                <app-admin-icon name="search" className="mx-auto size-8" />
                 <p class="mt-3 text-sm font-semibold">Aucun dossier trouvé</p>
                 <p class="mt-1 text-xs text-rheo-muted">Modifiez la recherche ou les filtres.</p>
               </div>

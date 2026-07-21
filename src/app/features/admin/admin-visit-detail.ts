@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
 import { VisitRequest, VisitStatus } from '../../shared/models/admin.model';
+import { AdminIcon } from '../../shared/components/admin-icon/admin-icon';
 
 @Component({
   selector: 'app-admin-visit-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AdminIcon],
   template: `
     <section class="mx-auto w-full max-w-5xl">
       <a
@@ -66,9 +67,9 @@ import { VisitRequest, VisitStatus } from '../../shared/models/admin.model';
                 <p class="mt-1 font-semibold">{{ item.propertyLocation }}</p>
                 <a
                   [routerLink]="['/admin/annonces', item.propertyId]"
-                  class="mt-1 block text-sm text-[#657b18]"
-                  >Voir l’annonce →</a
-                >
+                  class="mt-1 inline-flex items-center gap-1 text-sm text-[#657b18]"
+                  >Voir l’annonce <app-admin-icon name="arrow-right" className="size-4"
+                /></a>
               </div>
             </div>
             @if (item.message) {
@@ -148,12 +149,19 @@ export class AdminVisitDetailPage {
   protected readonly saved = signal(false);
   protected draftStatus: VisitStatus = 'en attente';
   protected draftNote = '';
+  private markedAsRead = false;
   constructor() {
     effect(() => {
       const item = this.visit();
       if (item) {
         this.draftStatus = item.status;
         this.draftNote = item.internalNote;
+        if (!item.readAt && !this.markedAsRead) {
+          this.markedAsRead = true;
+          void this.admin.markAsRead('visits', item.id).catch(() => {
+            this.markedAsRead = false;
+          });
+        }
       }
     });
   }

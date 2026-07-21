@@ -1,6 +1,19 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, computed, inject, signal } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  ViewChild,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../core/services/auth.service';
 import { RheodyceDataService } from '../../../core/services/rheodyce-data.service';
 import { Property } from '../../../shared/models/property.model';
@@ -44,7 +57,7 @@ interface CostItem {
 @Component({
   selector: 'app-property-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, PropertyPricePipe, CategoryLabelPipe, SubscriberModal],
+  imports: [CommonModule, RouterLink, PropertyPricePipe, CategoryLabelPipe],
   templateUrl: './property-detail.html',
   styleUrl: './property-detail.css',
 })
@@ -97,7 +110,12 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
     const property = this.property();
     if (!property) return [];
 
-    const images = [property.imageUrl, ...(property.photos ?? []), '/assets/hero_img_1.jpg', '/assets/hero_img.png'].filter(Boolean);
+    const images = [
+      property.imageUrl,
+      ...(property.photos ?? []),
+      '/assets/hero_img_1.jpg',
+      '/assets/hero_img.png',
+    ].filter(Boolean);
     return [...new Set(images)].slice(0, 6);
   });
 
@@ -107,16 +125,39 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
 
     if (property.category === 'terrain') {
       return [
-        { title: 'Parcelle exploitable', description: 'Terrain situé dans une zone suivie, avec une lecture claire du potentiel de valorisation.' },
-        { title: 'Accès identifié', description: 'Repères de localisation préparés pour faciliter la visite et les vérifications terrain.' },
-        { title: 'Dossier à sécuriser', description: 'Accompagnement possible pour contrôler les informations cadastrales et juridiques.' },
+        {
+          title: 'Parcelle exploitable',
+          description:
+            'Terrain situé dans une zone suivie, avec une lecture claire du potentiel de valorisation.',
+        },
+        {
+          title: 'Accès identifié',
+          description:
+            'Repères de localisation préparés pour faciliter la visite et les vérifications terrain.',
+        },
+        {
+          title: 'Dossier à sécuriser',
+          description:
+            'Accompagnement possible pour contrôler les informations cadastrales et juridiques.',
+        },
       ];
     }
 
     return [
-      { title: 'Plan lisible', description: 'Des volumes simples à projeter, avec une circulation fluide entre les espaces de vie.' },
-      { title: 'Quartier utile', description: 'Proximité des axes, services quotidiens et points de repère importants.' },
-      { title: 'Visite cadrée', description: 'Coordination RHEODYCE pour éviter les contacts dispersés et les visites inutiles.' },
+      {
+        title: 'Plan lisible',
+        description:
+          'Des volumes simples à projeter, avec une circulation fluide entre les espaces de vie.',
+      },
+      {
+        title: 'Quartier utile',
+        description: 'Proximité des axes, services quotidiens et points de repère importants.',
+      },
+      {
+        title: 'Visite cadrée',
+        description:
+          'Coordination RHEODYCE pour éviter les contacts dispersés et les visites inutiles.',
+      },
     ];
   });
 
@@ -125,10 +166,26 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
     if (!property) return [];
 
     if (property.category === 'terrain') {
-      return ['Accès route', 'Zone habitée', 'Repères géographiques', 'Vérification documentaire', 'Potentiel construction', 'Visite accompagnée'];
+      return [
+        'Accès route',
+        'Zone habitée',
+        'Repères géographiques',
+        'Vérification documentaire',
+        'Potentiel construction',
+        'Visite accompagnée',
+      ];
     }
 
-    return ['Salon lumineux', 'Cuisine équipée', 'Accès sécurisé', 'Eau disponible', 'Accès véhicule', 'Quartier résidentiel', 'Bonne ventilation', 'Proche commodités'];
+    return [
+      'Salon lumineux',
+      'Cuisine équipée',
+      'Accès sécurisé',
+      'Eau disponible',
+      'Accès véhicule',
+      'Quartier résidentiel',
+      'Bonne ventilation',
+      'Proche commodités',
+    ];
   });
 
   protected readonly roomPreview = computed<RoomPreview[]>(() => {
@@ -141,7 +198,11 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
 
     if (property.category === 'terrain') {
       return [
-        { name: 'Vue principale', detail: `${property.surface} m² exploitables`, image: property.imageUrl },
+        {
+          name: 'Vue principale',
+          detail: `${property.surface} m² exploitables`,
+          image: property.imageUrl,
+        },
         { name: 'Environnement', detail: property.location, image: second },
         { name: 'Projection', detail: 'Usage résidentiel ou investissement', image: third },
       ];
@@ -149,7 +210,11 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
 
     return [
       { name: 'Séjour', detail: 'Espace de réception lumineux', image: property.imageUrl },
-      { name: 'Chambres', detail: `${property.bedrooms} chambre${property.bedrooms > 1 ? 's' : ''} exploitable${property.bedrooms > 1 ? 's' : ''}`, image: second },
+      {
+        name: 'Chambres',
+        detail: `${property.bedrooms} chambre${property.bedrooms > 1 ? 's' : ''} exploitable${property.bedrooms > 1 ? 's' : ''}`,
+        image: second,
+      },
       { name: 'Extérieur', detail: 'Accès et environnement du bien', image: third },
     ];
   });
@@ -168,7 +233,12 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
   protected readonly nearbyPlaces = computed<string[]>(() => {
     const property = this.property();
     if (!property) return [];
-    return [`Centre de ${property.location}`, 'Axes principaux', 'Commerces utiles', 'Services administratifs'];
+    return [
+      `Centre de ${property.location}`,
+      'Axes principaux',
+      'Commerces utiles',
+      'Services administratifs',
+    ];
   });
 
   protected readonly similarProperties = computed<Property[]>(() => {
@@ -176,7 +246,11 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
     if (!property) return [];
 
     return this.data.properties
-      .filter((item) => item.id !== property.id && (item.type === property.type || item.category === property.category))
+      .filter(
+        (item) =>
+          item.id !== property.id &&
+          (item.type === property.type || item.category === property.category),
+      )
       .slice(0, 3);
   });
 
@@ -324,11 +398,15 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
 
     try {
       const leaflet = await this.loadLeaflet();
-      this.map = leaflet.map(element, { zoomControl: true }).setView([item.latitude, item.longitude], 14);
-      leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap',
-        maxZoom: 19,
-      }).addTo(this.map);
+      this.map = leaflet
+        .map(element, { zoomControl: true })
+        .setView([item.latitude, item.longitude], 14);
+      leaflet
+        .tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap',
+          maxZoom: 19,
+        })
+        .addTo(this.map);
       leaflet.marker([item.latitude, item.longitude]).addTo(this.map).bindTooltip(item.location);
       window.setTimeout(() => this.map?.invalidateSize(), 0);
     } catch {
@@ -340,7 +418,8 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
     const existing = (window as Window & { L?: LeafletNamespace }).L;
     if (existing) return Promise.resolve(existing);
 
-    const pending = (window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> }).__rheodyceLeaflet;
+    const pending = (window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> })
+      .__rheodyceLeaflet;
     if (pending) return pending;
 
     const promise = new Promise<LeafletNamespace>((resolve, reject) => {
@@ -354,7 +433,8 @@ export class PropertyDetailPage implements AfterViewInit, OnDestroy {
       script.onerror = () => reject(new Error('Leaflet indisponible'));
       document.head.appendChild(script);
     });
-    (window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> }).__rheodyceLeaflet = promise;
+    (window as Window & { __rheodyceLeaflet?: Promise<LeafletNamespace> }).__rheodyceLeaflet =
+      promise;
     return promise;
   }
 }

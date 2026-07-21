@@ -19,6 +19,8 @@ import {
 import { PropertyCategory, PropertyType } from '../../shared/models/property.model';
 import { RequestStatus, ServiceType } from '../../shared/models/service-request.model';
 
+export type AdminReadableResource = 'visits' | 'services' | 'submissions' | 'properties';
+
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private readonly supabase = inject(SupabaseClientService).client;
@@ -122,11 +124,35 @@ export class AdminService {
 
   async updateContactMessage(id: string, status: ContactMessageStatus): Promise<void> {
     const updatedAt = new Date().toISOString();
-    await this.update('contact_messages', id, { status, updated_at: updatedAt });
+    const previous = this.contactMessages().find((item) => item.id === id);
     this.contactMessages.update((items) =>
       items.map((item) => (item.id === id ? { ...item, status, updatedAt } : item)),
     );
-    this.actionMessage.set('La demande de contact a été mise à jour.');
+    try {
+      await this.update('contact_messages', id, { status, updated_at: updatedAt });
+      this.actionMessage.set('La demande de contact a été mise à jour.');
+    } catch (error) {
+      if (previous) {
+        this.contactMessages.update((items) =>
+          items.map((item) => (item.id === id ? previous : item)),
+        );
+      }
+      throw error;
+    }
+  }
+
+  async markAsRead(resource: AdminReadableResource, id: string): Promise<void> {
+    const readAt = new Date().toISOString();
+    const previousReadAt = this.readAt(resource, id);
+    if (previousReadAt) return;
+
+    this.setReadAt(resource, id, readAt);
+    try {
+      await this.update(this.tableFor(resource), id, { read_at: readAt });
+    } catch (error) {
+      if (this.readAt(resource, id) === readAt) this.setReadAt(resource, id, undefined);
+      throw error;
+    }
   }
 
   async toggleSubscription(user: AdminUser): Promise<void> {
@@ -351,6 +377,51 @@ export class AdminService {
     const { error } = await this.supabase.from(table).update(payload).eq('id', id);
     if (error) throw error;
   }
+
+  private tableFor(resource: AdminReadableResource): string {
+    switch (resource) {
+      case 'visits':
+        return 'visit_requests';
+      case 'services':
+        return 'service_requests';
+      case 'submissions':
+        return 'property_submissions';
+      case 'properties':
+        return 'properties';
+    }
+  }
+
+  private readAt(resource: AdminReadableResource, id: string): string | undefined {
+    switch (resource) {
+      case 'visits':
+        return this.visits().find((item) => item.id === id)?.readAt;
+      case 'services':
+        return this.serviceRequests().find((item) => item.id === id)?.readAt;
+      case 'submissions':
+        return this.submissions().find((item) => item.id === id)?.readAt;
+      case 'properties':
+        return this.properties().find((item) => item.id === id)?.readAt;
+    }
+  }
+
+  private setReadAt(resource: AdminReadableResource, id: string, readAt: string | undefined): void {
+    const updateItem = <T extends { id: string; readAt?: string }>(items: T[]): T[] =>
+      items.map((item) => (item.id === id ? { ...item, readAt } : item));
+    switch (resource) {
+      case 'visits':
+        this.visits.update(updateItem);
+        break;
+      case 'services':
+        this.serviceRequests.update(updateItem);
+        break;
+      case 'submissions':
+        this.submissions.update(updateItem);
+        break;
+      case 'properties':
+        this.properties.update(updateItem);
+        break;
+    }
+  }
 }
 
 function mapUser(row: Record<string, unknown>): AdminUser {
@@ -390,6 +461,7 @@ function mapProperty(row: Record<string, unknown>): AdminProperty {
     longitude: row['longitude'] == null ? undefined : Number(row['longitude']),
     sensitiveInfo: '',
     ownerName: String(row['owner_name'] ?? '—'),
+    readAt: row['read_at'] ? String(row['read_at']) : undefined,
     createdAt: String(row['created_at'] ?? ''),
   };
 }
@@ -416,6 +488,7 @@ function mapServiceRequest(row: Record<string, unknown>): AdminServiceRequestVie
     updatedAt: new Date(String(row['updated_at'])),
     completedAt: row['completed_at'] ? new Date(String(row['completed_at'])) : undefined,
     notificationPrepared: Boolean(row['notification_prepared']),
+    readAt: row['read_at'] ? String(row['read_at']) : undefined,
   };
 }
 function mapServiceOffer(row: Record<string, unknown>): AdminServiceOffer {
@@ -454,6 +527,7 @@ function mapVisit(
     message: String(row['message'] ?? ''),
     internalNote: String(row['internal_note'] ?? ''),
     notificationPrepared: Boolean(row['notification_prepared']),
+    readAt: row['read_at'] ? String(row['read_at']) : undefined,
     createdAt: String(row['created_at']),
   };
 }
@@ -478,6 +552,7 @@ function mapSubmission(row: Record<string, unknown>): PropertySubmission {
     rejectionReason: String(row['rejection_reason'] ?? ''),
     submittedAt: String(row['created_at']),
     decisions: [],
+    readAt: row['read_at'] ? String(row['read_at']) : undefined,
   };
 }
 function mapContactMessage(row: Record<string, unknown>): AdminContactMessage {

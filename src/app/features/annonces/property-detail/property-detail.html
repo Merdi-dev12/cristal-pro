@@ -3,18 +3,40 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <nav class="topbar" aria-label="Navigation annonce">
         <a routerLink="/annonces" class="back-link">
-          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6" /></svg>
+          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19 12H5m6-6-6 6 6 6" />
+          </svg>
           Retour aux annonces
         </a>
         <div class="top-actions">
-          <button type="button" class="icon-button" aria-label="Ajouter aux favoris" (click)="onAction()">
-            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5.5-8.8 10-8.8 10s-8.8-4.5-8.8-10A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z" /></svg>
+          <button
+            type="button"
+            class="icon-button"
+            aria-label="Ajouter aux favoris"
+            (click)="onAction()"
+          >
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M20.8 8.8c0 5.5-8.8 10-8.8 10s-8.8-4.5-8.8-10A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z"
+              />
+            </svg>
           </button>
-          <button type="button" class="icon-button" aria-label="Partager l'annonce" (click)="shareProperty(item)">
-            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" /></svg>
+          <button
+            type="button"
+            class="icon-button"
+            aria-label="Partager l'annonce"
+            (click)="shareProperty(item)"
+          >
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"
+              />
+            </svg>
           </button>
           @if (shareFeedback()) {
-            <span class="share-feedback" role="status" aria-live="polite">{{ shareFeedback() }}</span>
+            <span class="share-feedback" role="status" aria-live="polite">{{
+              shareFeedback()
+            }}</span>
           }
         </div>
       </nav>
@@ -26,7 +48,9 @@
             <span class="status-pill muted">{{ item.category | categoryLabel }}</span>
             @if (item.verified) {
               <span class="verified-pill">
-                <svg class="small-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>
+                <svg class="small-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m5 12 4 4L19 6" />
+                </svg>
                 Bien vérifié
               </span>
             }
@@ -36,8 +60,14 @@
             <div>
               <h1>{{ item.title }}</h1>
               <p class="hero-address">
-                <svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
-                {{ item.location }}@if (isSubscriber()) { <span> · {{ item.address || 'Adresse exacte disponible' }}</span> }
+                <svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+                {{ item.location }}
+                @if (isSubscriber()) {
+                  <span> · {{ item.address || 'Adresse exacte disponible' }}</span>
+                }
               </p>
             </div>
             <div class="price-block">
@@ -53,7 +83,9 @@
             }
             <span>{{ item.surface }} m²</span>
             <span>{{ item.category | categoryLabel }}</span>
-            <span>{{ item.type === 'location' ? 'Disponible sur dossier' : 'Dossier de vente à vérifier' }}</span>
+            <span>{{
+              item.type === 'location' ? 'Disponible sur dossier' : 'Dossier de vente à vérifier'
+            }}</span>
           </div>
         </div>
       </section>
@@ -68,12 +100,49 @@
         </div>
         <div class="gallery-side">
           @for (image of gallery(); track image) {
-            <button type="button" class="gallery-thumb" [class.active]="selectedImage() === $index" (click)="selectedImage.set($index)">
+            <button
+              type="button"
+              class="gallery-thumb"
+              [class.active]="selectedImage() === $index"
+              (click)="selectedImage.set($index)"
+            >
               <img [src]="image" [alt]="item.title + ' vue ' + ($index + 1)" />
             </button>
           }
         </div>
       </section>
+
+      @if (!isSubscriber()) {
+        <section
+          class="mx-auto my-8 max-w-3xl rounded-[2rem] border border-rheo-border bg-white px-6 py-8 text-center shadow-sm sm:px-10"
+        >
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rheo-muted">
+            Accès Premium
+          </p>
+          <h2 class="mt-3 text-2xl font-semibold text-rheo-dark">
+            Continuez la lecture avec RHEODYCE Premium
+          </h2>
+          <p class="mx-auto mt-3 max-w-2xl text-sm leading-6 text-rheo-muted">
+            Débloquez l’adresse exacte, les coordonnées du propriétaire et l’organisation de votre
+            visite.
+          </p>
+          <div class="mt-6 flex flex-wrap justify-center gap-3">
+            <button
+              type="button"
+              class="rounded-full bg-rheo-dark px-6 py-3 text-sm font-semibold text-white"
+              (click)="openSubscription()"
+            >
+              Voir les abonnements
+            </button>
+            <a
+              routerLink="/"
+              class="rounded-full border border-rheo-border px-6 py-3 text-sm font-semibold text-rheo-dark"
+            >
+              Retour à l’accueil
+            </a>
+          </div>
+        </section>
+      }
 
       <div class="detail-layout">
         <article class="detail-content">
@@ -83,7 +152,10 @@
               <h2>Ce qu'il faut comprendre avant de visiter</h2>
             </div>
             <p class="description">
-              {{ item.description || 'Découvrez ce bien sélectionné par RHEODYCE, dans un quartier recherché et proche des commodités essentielles.' }}
+              {{
+                item.description ||
+                  'Découvrez ce bien sélectionné par RHEODYCE, dans un quartier recherché et proche des commodités essentielles.'
+              }}
             </p>
             <div class="highlight-grid">
               @for (highlight of highlights(); track highlight.title) {
@@ -100,9 +172,13 @@
             <div class="section-heading">
               <div>
                 <p class="section-kicker">Espaces</p>
-                <h2>{{ item.category === 'terrain' ? 'Projection du terrain' : 'Aperçu des pièces' }}</h2>
+                <h2>
+                  {{ item.category === 'terrain' ? 'Projection du terrain' : 'Aperçu des pièces' }}
+                </h2>
               </div>
-              <button type="button" class="text-action" (click)="onAction()">Voir le dossier complet</button>
+              <button type="button" class="text-action" (click)="onAction()">
+                Voir le dossier complet
+              </button>
             </div>
             <div class="room-grid">
               @for (room of roomPreview(); track room.name) {
@@ -127,7 +203,9 @@
             <div class="amenity-grid">
               @for (amenity of amenities(); track amenity) {
                 <span>
-                  <svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>
+                  <svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m5 12 4 4L19 6" />
+                  </svg>
                   {{ amenity }}
                 </span>
               }
@@ -139,8 +217,9 @@
               <p class="section-kicker">Localisation</p>
               <h2>{{ item.location }}</h2>
               <p class="muted-copy">
-                La localisation publique reste volontairement générale. L'adresse exacte, les coordonnées du bailleur
-                et les instructions de visite sont débloquées après abonnement.
+                La localisation publique reste volontairement générale. L'adresse exacte, les
+                coordonnées du bailleur et les instructions de visite sont débloquées après
+                abonnement.
               </p>
               <div class="nearby-list">
                 @for (place of nearbyPlaces(); track place) {
@@ -150,11 +229,18 @@
             </div>
             @if (hasCoordinates()) {
               <div class="map-card">
-                <div #propertyMap class="property-map" aria-label="Carte de localisation du bien"></div>
+                <div
+                  #propertyMap
+                  class="property-map"
+                  aria-label="Carte de localisation du bien"
+                ></div>
               </div>
             } @else {
               <div class="location-placeholder">
-                <svg class="placeholder-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
+                <svg class="placeholder-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
                 <span>Position exacte réservée aux abonnés</span>
               </div>
             }
@@ -175,7 +261,10 @@
                     <img [src]="similar.imageUrl" [alt]="similar.title" />
                     <div>
                       <strong>{{ similar.title }}</strong>
-                      <span>{{ similar.location }} · {{ similar.price | propertyPrice: similar.priceSuffix }}</span>
+                      <span
+                        >{{ similar.location }} ·
+                        {{ similar.price | propertyPrice: similar.priceSuffix }}</span
+                      >
                     </div>
                   </a>
                 }
@@ -198,11 +287,18 @@
             </div>
             <button type="button" class="primary-action" (click)="onAction()">
               Demander une visite
-              <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+              <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
             </button>
-            <button type="button" class="secondary-action" (click)="onAction()">Débloquer les coordonnées</button>
+            <button type="button" class="secondary-action" (click)="onAction()">
+              Débloquer les coordonnées
+            </button>
             <p class="safe-note">
-              <svg class="small-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="m9 12 2 2 4-4" /></svg>
+              <svg class="small-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="8" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
               RHEODYCE vérifie l'annonce avant mise en relation.
             </p>
           </div>
@@ -212,15 +308,21 @@
             <div class="owner-head">
               <div class="owner-avatar">R</div>
               <div>
-                <strong>{{ item.type === 'location' ? 'Propriétaire bailleur' : 'Mandataire vendeur' }}</strong>
-                <span>{{ item.verified ? 'Identité contrôlée par RHEODYCE' : 'Profil en cours de contrôle' }}</span>
+                <strong>{{
+                  item.type === 'location' ? 'Propriétaire bailleur' : 'Mandataire vendeur'
+                }}</strong>
+                <span>{{
+                  item.verified ? 'Identité contrôlée par RHEODYCE' : 'Profil en cours de contrôle'
+                }}</span>
               </div>
             </div>
 
             <div class="owner-list">
               <div>
                 <span>Nom</span>
-                <strong>{{ isSubscriber() ? 'Disponible dans le dossier' : 'Réservé aux abonnés' }}</strong>
+                <strong>{{
+                  isSubscriber() ? 'Disponible dans le dossier' : 'Réservé aux abonnés'
+                }}</strong>
               </div>
               <div>
                 <span>Contact direct</span>
@@ -228,7 +330,9 @@
               </div>
               <div>
                 <span>Rôle</span>
-                <strong>{{ item.type === 'location' ? 'Gestion location' : 'Décision vente' }}</strong>
+                <strong>{{
+                  item.type === 'location' ? 'Gestion location' : 'Décision vente'
+                }}</strong>
               </div>
               <div>
                 <span>Visite</span>
@@ -237,24 +341,24 @@
             </div>
 
             <p class="owner-note">
-              Les échanges passent d'abord par RHEODYCE pour limiter les faux contacts, vérifier le contexte du bien et
-              cadrer la visite avant mise en relation complète.
+              Les échanges passent d'abord par RHEODYCE pour limiter les faux contacts, vérifier le
+              contexte du bien et cadrer la visite avant mise en relation complète.
             </p>
           </div>
         </aside>
       </div>
     </div>
   </main>
-
-  @if (showSubscriberModal()) {
-    <app-subscriber-modal (close)="closeModal()" (login)="onLogin()" />
-  }
 } @else {
   <main class="flex min-h-screen items-center justify-center bg-[#f8f8f6] px-6 pt-24 text-center">
     <div>
       <p class="text-sm uppercase tracking-[0.2em] text-rheo-muted">Annonce introuvable</p>
       <h1 class="mt-3 text-3xl font-semibold">Ce bien n'est plus disponible.</h1>
-      <a routerLink="/annonces" class="mt-6 inline-flex rounded-full bg-rheo-dark px-5 py-3 text-sm font-semibold text-white">Voir les annonces</a>
+      <a
+        routerLink="/annonces"
+        class="mt-6 inline-flex rounded-full bg-rheo-dark px-5 py-3 text-sm font-semibold text-white"
+        >Voir les annonces</a
+      >
     </div>
   </main>
 }

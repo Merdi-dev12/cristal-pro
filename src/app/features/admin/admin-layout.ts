@@ -3,11 +3,12 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AdminService } from '../../core/services/admin.service';
 import { AuthService } from '../../core/services/auth.service';
+import { AdminIcon, AdminIconName } from '../../shared/components/admin-icon/admin-icon';
 
 interface AdminNavItem {
   path: string;
   label: string;
-  icon: string;
+  icon: AdminIconName;
   exact?: boolean;
   badge?: 'visits' | 'services' | 'contacts' | 'submissions' | 'properties';
 }
@@ -15,7 +16,7 @@ interface AdminNavItem {
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, AdminIcon],
   template: `
     <div class="min-h-screen bg-[#f3f4f2] text-rheo-dark">
       <div class="flex min-h-screen">
@@ -76,11 +77,9 @@ interface AdminNavItem {
                     class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark"
                     (click)="closeMenu()"
                   >
-                    <span
-                      class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs font-bold"
-                      aria-hidden="true"
-                      >{{ item.icon }}</span
-                    >
+                    <span class="flex size-8 items-center justify-center rounded-lg bg-[#f0f2ed]"
+                      ><app-admin-icon [name]="item.icon" className="size-5"
+                    /></span>
                     <span>{{ item.label }}</span>
                     @if (item.badge && badgeCount(item.badge) > 0) {
                       <span
@@ -102,10 +101,8 @@ interface AdminNavItem {
                   routerLink="/annonces"
                   class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark"
                   (click)="closeMenu()"
-                  ><span
-                    class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs"
-                    aria-hidden="true"
-                    >↗</span
+                  ><span class="flex size-8 items-center justify-center rounded-lg bg-[#f0f2ed]"
+                    ><app-admin-icon name="external" className="size-5" /></span
                   >Voir le site</a
                 >
               </li>
@@ -114,10 +111,8 @@ interface AdminNavItem {
                   routerLink="/contact"
                   class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[#626a60] transition hover:bg-white hover:text-rheo-dark"
                   (click)="closeMenu()"
-                  ><span
-                    class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs"
-                    aria-hidden="true"
-                    >?</span
+                  ><span class="flex size-8 items-center justify-center rounded-lg bg-[#f0f2ed]"
+                    ><app-admin-icon name="support" className="size-5" /></span
                   >Support</a
                 >
               </li>
@@ -131,10 +126,8 @@ interface AdminNavItem {
               (click)="signOut()"
               [disabled]="signingOut()"
             >
-              <span
-                class="flex size-7 items-center justify-center rounded-lg bg-[#ebeee9] text-xs"
-                aria-hidden="true"
-                >↪</span
+              <span class="flex size-8 items-center justify-center rounded-lg bg-[#f0f2ed]"
+                ><app-admin-icon name="logout" className="size-5" /></span
               >{{ signingOut() ? 'Déconnexion…' : 'Se déconnecter' }}
             </button>
           </div>
@@ -167,33 +160,12 @@ interface AdminNavItem {
               >
                 ☰
               </button>
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-rheo-muted">
-                  Panel admin
-                </p>
-                <p class="mt-0.5 text-sm font-semibold">Opérations RHEODYCE</p>
-              </div>
+              <p class="text-sm font-semibold">Administration</p>
             </div>
-            <div class="flex items-center gap-3">
-              <span
-                class="relative flex size-10 items-center justify-center rounded-full border border-[#dfe3dc] bg-white"
-                aria-label="Nouvelles informations"
-                >🔔
-                @if (totalBadge() > 0) {
-                  <span
-                    class="absolute -right-1 -top-1 inline-flex min-w-5 items-center justify-center rounded-full bg-rheo-accent px-1 text-[9px] font-extrabold"
-                    >{{ totalBadge() > 99 ? '99+' : totalBadge() }}</span
-                  >
-                }
-              </span>
-              <span
-                class="hidden rounded-full border border-[#dfe3dc] bg-white px-4 py-2 text-xs text-rheo-muted sm:inline-flex"
-                >Données sécurisées</span
-              ><span
-                class="flex size-10 items-center justify-center rounded-full bg-rheo-accent text-sm font-bold"
-                >ER</span
-              >
-            </div>
+            <span
+              class="flex size-10 items-center justify-center rounded-full bg-rheo-accent text-sm font-bold"
+              >ER</span
+            >
           </header>
           <div class="px-4 py-7 sm:px-8 sm:py-9 lg:px-10"><router-outlet></router-outlet></div>
           @if (admin.loadError()) {
@@ -232,29 +204,36 @@ export class AdminLayoutPage {
   protected readonly menuOpen = signal(false);
   protected readonly signingOut = signal(false);
   private readonly badges = computed(() => ({
-    visits: this.admin.visits().filter((item) => item.status === 'en attente').length,
+    visits: this.admin.visits().filter((item) => item.status === 'en attente' && !item.readAt)
+      .length,
     services: this.admin
       .serviceRequests()
-      .filter((item) => item.status !== 'terminée' && item.status !== 'annulée').length,
+      .filter((item) => item.status !== 'terminée' && item.status !== 'annulée' && !item.readAt)
+      .length,
     contacts: this.admin.contactMessages().filter((item) => item.status === 'new').length,
     submissions: this.admin
       .submissions()
-      .filter((item) => item.status === 'en attente' || item.status === 'informations requises')
+      .filter(
+        (item) =>
+          (item.status === 'en attente' || item.status === 'informations requises') && !item.readAt,
+      ).length,
+    properties: this.admin.properties().filter((item) => item.status === 'draft' && !item.readAt)
       .length,
-    properties: this.admin.properties().filter((item) => item.status === 'draft').length,
   }));
-  protected readonly totalBadge = computed(() =>
-    Object.values(this.badges()).reduce((total, count) => total + count, 0),
-  );
   protected readonly navItems: AdminNavItem[] = [
-    { path: '/admin', label: 'Vue d’ensemble', icon: '▦', exact: true },
-    { path: '/admin/visites', label: 'Demandes de visite', icon: '📅', badge: 'visits' },
-    { path: '/admin/utilisateurs', label: 'Utilisateurs', icon: '👥' },
-    { path: '/admin/services', label: 'Demandes de services', icon: '🛠', badge: 'services' },
-    { path: '/admin/contacts', label: 'Demandes de contact', icon: '✉', badge: 'contacts' },
-    { path: '/admin/demenagements', label: 'Déménagements', icon: '🚚' },
-    { path: '/admin/soumissions', label: 'Soumissions de biens', icon: '📋', badge: 'submissions' },
-    { path: '/admin/annonces', label: 'Annonces', icon: '🏠', badge: 'properties' },
+    { path: '/admin', label: 'Vue d’ensemble', icon: 'dashboard', exact: true },
+    { path: '/admin/visites', label: 'Demandes de visite', icon: 'calendar', badge: 'visits' },
+    { path: '/admin/utilisateurs', label: 'Utilisateurs', icon: 'users' },
+    { path: '/admin/services', label: 'Demandes de services', icon: 'tools', badge: 'services' },
+    { path: '/admin/contacts', label: 'Demandes de contact', icon: 'mail', badge: 'contacts' },
+    { path: '/admin/demenagements', label: 'Déménagements', icon: 'truck' },
+    {
+      path: '/admin/soumissions',
+      label: 'Soumissions de biens',
+      icon: 'clipboard',
+      badge: 'submissions',
+    },
+    { path: '/admin/annonces', label: 'Annonces', icon: 'home', badge: 'properties' },
   ];
 
   constructor() {

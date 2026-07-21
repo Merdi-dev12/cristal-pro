@@ -16,10 +16,9 @@ import { MovingRequest, MovingRequestStatus } from '../../shared/models/moving-r
           <p class="text-sm font-semibold uppercase tracking-[0.2em] text-rheo-muted">
             Opérations terrain
           </p>
-          <h1 class="mt-2 text-3xl font-semibold tracking-tight">Déménagements.</h1>
+          <h1 class="mt-2 text-3xl font-semibold tracking-tight">Déménagements</h1>
           <p class="mt-3 max-w-2xl text-sm leading-6 text-rheo-muted">
-            Suivez les itinéraires, affectez un partenaire et accompagnez chaque demande jusqu’à la
-            clôture.
+            Affectez un partenaire et mettez à jour le statut de chaque demande.
           </p>
         </div>
         <a
@@ -48,7 +47,7 @@ import { MovingRequest, MovingRequestStatus } from '../../shared/models/moving-r
           [ngModel]="search()"
           (ngModelChange)="search.set($event)"
           class="h-11 min-w-[240px] flex-1 rounded-xl border border-[#dfe3dc] px-4 text-sm"
-          placeholder="⌕ Adresse, demandeur ou partenaire…"
+          placeholder="Adresse, demandeur ou partenaire…"
         /><select
           [ngModel]="filterStatus()"
           (ngModelChange)="filterStatus.set($event)"

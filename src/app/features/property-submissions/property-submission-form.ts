@@ -6,6 +6,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { AdminService } from '../../core/services/admin.service';
 import { PropertySubmissionService } from '../../core/services/property-submission.service';
 import { PropertyCategory, PropertyType } from '../../shared/models/property.model';
+import { AdminIcon } from '../../shared/components/admin-icon/admin-icon';
 
 interface SelectedPhoto {
   file: File;
@@ -44,7 +45,7 @@ interface LeafletNamespace {
 @Component({
   selector: 'app-property-submission-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AdminIcon],
   template: `
     <section [class]="isAdmin ? 'pb-12' : 'min-h-screen bg-rheo-bg pb-20 pt-28'">
       <div [class]="isAdmin ? 'w-full' : 'mx-auto max-w-4xl px-4 sm:px-6 lg:px-8'">
@@ -254,7 +255,7 @@ interface LeafletNamespace {
               <label
                 class="flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#d8ddd4] bg-[#fafbf9] px-5 py-6 text-center transition hover:border-rheo-accent hover:bg-[#fbfdeb]"
               >
-                <span class="text-2xl" aria-hidden="true">＋</span
+                <app-admin-icon name="plus" className="size-7" />
                 ><strong class="mt-2 text-sm">Choisir des images</strong
                 ><span class="mt-1 text-xs text-rheo-muted"
                   >Vous pouvez en sélectionner plusieurs à la fois</span
