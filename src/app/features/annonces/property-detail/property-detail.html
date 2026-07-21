@@ -1,326 +1,260 @@
 @if (property(); as item) {
-  <main class="property-detail min-h-screen bg-[#f8f8f6] pb-20 pt-28">
+  <main class="property-detail min-h-screen bg-[#f6f7f3] pb-20 pt-28">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="mb-5 flex items-center justify-between gap-4">
+      <nav class="topbar" aria-label="Navigation annonce">
         <a routerLink="/annonces" class="back-link">
-          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M19 12H5m6-6-6 6 6 6" />
-          </svg>
+          <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6" /></svg>
           Retour aux annonces
         </a>
-        <div class="relative flex gap-2">
-          <button
-            type="button"
-            class="icon-button"
-            aria-label="Ajouter aux favoris"
-            (click)="onAction()"
-          >
-            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M20.8 8.8c0 5.5-8.8 10-8.8 10s-8.8-4.5-8.8-10A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z"
-              />
-            </svg>
+        <div class="top-actions">
+          <button type="button" class="icon-button" aria-label="Ajouter aux favoris" (click)="onAction()">
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5.5-8.8 10-8.8 10s-8.8-4.5-8.8-10A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z" /></svg>
           </button>
-          <button
-            type="button"
-            class="icon-button"
-            aria-label="Partager l'annonce"
-            (click)="shareProperty(item)"
-          >
-            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"
-              />
-            </svg>
+          <button type="button" class="icon-button" aria-label="Partager l'annonce" (click)="shareProperty(item)">
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" /></svg>
           </button>
           @if (shareFeedback()) {
-            <span
-              class="absolute right-0 top-12 z-10 whitespace-nowrap rounded-lg bg-rheo-dark px-3 py-2 text-xs font-semibold text-white shadow-lg"
-              role="status"
-              aria-live="polite"
-              >{{ shareFeedback() }}</span
-            >
+            <span class="share-feedback" role="status" aria-live="polite">{{ shareFeedback() }}</span>
           }
         </div>
-      </div>
+      </nav>
 
-      <section class="gallery-grid" [class.gallery-single]="gallery().length <= 1">
-        <div class="gallery-main">
-          <img [src]="gallery()[selectedImage()]" [alt]="item.title" />
-          <div class="image-count">{{ selectedImage() + 1 }} / {{ gallery().length }} photos</div>
-        </div>
-        @if (gallery().length > 1) {
-          <div class="gallery-side">
-            @for (image of gallery().slice(1, 3); track image) {
-              <button
-                type="button"
-                class="gallery-thumb"
-                [class.active]="selectedImage() === $index + 1"
-                (click)="selectedImage.set($index + 1)"
-              >
-                <img [src]="image" [alt]="item.title + ' vue ' + ($index + 2)" />
-                @if ($last && gallery().length > 2) {
-                  <span>Voir toutes les photos</span>
-                }
-              </button>
+      <section class="listing-hero">
+        <div class="hero-copy">
+          <div class="eyebrow-row">
+            <span class="status-pill">{{ propertyTypeLabel(item) }}</span>
+            <span class="status-pill muted">{{ item.category | categoryLabel }}</span>
+            @if (item.verified) {
+              <span class="verified-pill">
+                <svg class="small-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>
+                Bien vérifié
+              </span>
             }
           </div>
-        }
+
+          <div class="title-row">
+            <div>
+              <h1>{{ item.title }}</h1>
+              <p class="hero-address">
+                <svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
+                {{ item.location }}@if (isSubscriber()) { <span> · {{ item.address || 'Adresse exacte disponible' }}</span> }
+              </p>
+            </div>
+            <div class="price-block">
+              <span>{{ item.type === 'location' ? 'Loyer demandé' : 'Prix demandé' }}</span>
+              <strong>{{ item.price | propertyPrice: item.priceSuffix }}</strong>
+            </div>
+          </div>
+
+          <div class="fact-line" aria-label="Caractéristiques du bien">
+            @if (item.category !== 'terrain') {
+              <span>{{ item.bedrooms }} chambre{{ item.bedrooms > 1 ? 's' : '' }}</span>
+              <span>{{ item.bathrooms }} salle{{ item.bathrooms > 1 ? 's' : '' }} d'eau</span>
+            }
+            <span>{{ item.surface }} m²</span>
+            <span>{{ item.category | categoryLabel }}</span>
+            <span>{{ item.type === 'location' ? 'Disponible sur dossier' : 'Dossier de vente à vérifier' }}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="gallery-shell">
+        <div class="gallery-main">
+          <img [src]="gallery()[selectedImage()]" [alt]="item.title" />
+          <div class="gallery-tools">
+            <span>{{ selectedImage() + 1 }} / {{ gallery().length }} photos</span>
+            <button type="button" (click)="onAction()">Photos complètes</button>
+          </div>
+        </div>
+        <div class="gallery-side">
+          @for (image of gallery(); track image) {
+            <button type="button" class="gallery-thumb" [class.active]="selectedImage() === $index" (click)="selectedImage.set($index)">
+              <img [src]="image" [alt]="item.title + ' vue ' + ($index + 1)" />
+            </button>
+          }
+        </div>
       </section>
 
       <div class="detail-layout">
         <article class="detail-content">
-          <div class="eyebrow-row">
-            <span class="status-pill">{{ propertyTypeLabel(item) }}</span>
-            @if (item.verified) {
-              <span class="verified-pill"
-                ><svg class="small-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="m5 12 4 4L19 6" />
-                </svg>
-                Bien vérifié</span
-              >
-            }
-          </div>
-          <h1>{{ item.title }}</h1>
-          <p class="location">
-            <svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-              <circle cx="12" cy="10" r="2.5" />
-            </svg>
-            {{ isSubscriber() ? item.address || item.location : item.location }}
-          </p>
-
-          <div class="facts-row">
-            @if (item.category !== 'terrain') {
-              <span
-                ><svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d="M4 11h16v8H4v-8Zm2-5h12a2 2 0 0 1 2 2v3H4V8a2 2 0 0 1 2-2Zm1 8h4m2 0h4"
-                  />
-                </svg>
-                {{ item.bedrooms }} chambre{{ item.bedrooms > 1 ? 's' : '' }}</span
-              >
-              <span
-                ><svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 11h14v3a5 5 0 0 1-5 5h-4a5 5 0 0 1-5-5v-3Zm0 0V7a2 2 0 0 1 2-2h2" />
-                  <path d="M7 19v2m10-2v2" />
-                </svg>
-                {{ item.bathrooms }} salle{{ item.bathrooms > 1 ? 's' : '' }} de bain</span
-              >
-            }
-            <span
-              ><svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 4h16v16H4zM8 4v4m8-4v4M4 8h4m8 0h4M8 20v-4m8 4v-4M4 16h4m8 0h4" />
-              </svg>
-              {{ item.surface }} m²</span
-            >
-            <span
-              ><svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m12 3 8 9-8 9-8-9 8-9Z" />
-                <path d="m9 12 2 2 4-4" />
-              </svg>
-              {{ categoryLabel(item) }}</span
-            >
-          </div>
-
-          <div class="divider"></div>
-          <h2>À propos de ce bien</h2>
-          <p class="description">
-            {{
-              item.description ||
-                'Découvrez ce bien sélectionné par Rheodyce, dans un quartier recherché et proche des commodités essentielles.'
-            }}
-          </p>
-
-          @if (isSubscriber()) {
-            <div class="divider"></div>
-            <h2>Points forts</h2>
-            <div class="amenities">
-              <span
-                ><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="m3 11 9-8 9 8v9H3v-9Zm5 9v-6h8v6" />
-                </svg>
-                Espaces lumineux</span
-              >
-              <span
-                ><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <circle cx="12" cy="12" r="8" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-                Quartier recherché</span
-              >
-              <span
-                ><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 21s7-5 7-12a7 7 0 1 0-14 0c0 7 7 12 7 12Z" />
-                  <path d="m9 10 2 2 4-4" />
-                </svg>
-                Accès sécurisé</span
-              >
-              <span
-                ><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 5h14v14H5zM9 9h6v6H9z" />
-                </svg>
-                Surface optimisée</span
-              >
-              <span
-                ><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 21s7-5 7-12a7 7 0 1 0-14 0c0 7 7 12 7 12Z" />
-                  <circle cx="12" cy="9" r="2.5" />
-                </svg>
-                Proche commodités</span
-              >
-              <span
-                ><svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="m5 12 4 4L19 6" />
-                </svg>
-                Vérifié par Rheodyce</span
-              >
+          <section class="content-section intro-section">
+            <div>
+              <p class="section-kicker">Lecture rapide</p>
+              <h2>Ce qu'il faut comprendre avant de visiter</h2>
             </div>
-          } @else {
-            <section
-              class="relative mt-2 min-h-[390px] overflow-hidden"
-              aria-labelledby="paywall-title"
-            >
-              <div
-                class="pointer-events-none min-h-[290px] select-none opacity-[.58] blur-[5px] [mask-image:linear-gradient(to_bottom,#000_20%,transparent_95%)]"
-                aria-hidden="true"
-              >
-                <div class="divider"></div>
-                <h2>Localisation précise et points forts</h2>
-                <div class="amenities">
-                  <span>Adresse complète du bien</span><span>Coordonnées du contact</span>
-                  <span>Organisation des visites</span><span>Localisation sur la carte</span>
-                  <span>Disponibilité confirmée</span><span>Accompagnement Rheodyce</span>
+            <p class="description">
+              {{ item.description || 'Découvrez ce bien sélectionné par RHEODYCE, dans un quartier recherché et proche des commodités essentielles.' }}
+            </p>
+            <div class="highlight-grid">
+              @for (highlight of highlights(); track highlight.title) {
+                <div class="highlight-card">
+                  <span></span>
+                  <h3>{{ highlight.title }}</h3>
+                  <p>{{ highlight.description }}</p>
                 </div>
+              }
+            </div>
+          </section>
+
+          <section class="content-section">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Espaces</p>
+                <h2>{{ item.category === 'terrain' ? 'Projection du terrain' : 'Aperçu des pièces' }}</h2>
               </div>
-              <div
-                class="absolute inset-x-0 bottom-0 z-[2] rounded-[1.25rem] border border-rheo-border bg-white/95 p-7 text-center shadow-[0_20px_60px_rgb(39_50_39/0.12)] backdrop-blur-xl"
-              >
-                <span
-                  class="mx-auto grid size-11 place-items-center rounded-full bg-rheo-accent text-xl"
-                  aria-hidden="true"
-                  >🔒</span
-                >
-                <p class="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-rheo-muted">
-                  Contenu réservé
-                </p>
-                <h2 id="paywall-title" class="mt-2 text-2xl font-semibold">
-                  Continuez la lecture avec RHEODYCE Premium
-                </h2>
-                <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-rheo-muted">
-                  Abonnez-vous pour voir l’adresse exacte, la carte, les coordonnées et organiser
-                  une visite.
-                </p>
-                <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-                  <button
-                    type="button"
-                    class="rounded-full bg-rheo-accent px-6 py-3 text-sm font-bold text-rheo-dark transition hover:bg-rheo-accent-hover"
-                    (click)="openSubscription()"
-                  >
-                    Voir les abonnements
-                  </button>
-                  <a
-                    routerLink="/"
-                    class="rounded-full border border-rheo-border bg-white px-6 py-3 text-sm font-semibold text-rheo-dark transition hover:border-rheo-dark"
-                  >
-                    Retour à l’accueil
-                  </a>
+              <button type="button" class="text-action" (click)="onAction()">Voir le dossier complet</button>
+            </div>
+            <div class="room-grid">
+              @for (room of roomPreview(); track room.name) {
+                <figure class="room-card">
+                  <img [src]="room.image" [alt]="room.name" />
+                  <figcaption>
+                    <strong>{{ room.name }}</strong>
+                    <span>{{ room.detail }}</span>
+                  </figcaption>
+                </figure>
+              }
+            </div>
+          </section>
+
+          <section class="content-section">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Équipements</p>
+                <h2>Informations utiles avant visite</h2>
+              </div>
+            </div>
+            <div class="amenity-grid">
+              @for (amenity of amenities(); track amenity) {
+                <span>
+                  <svg class="amenity-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>
+                  {{ amenity }}
+                </span>
+              }
+            </div>
+          </section>
+
+          <section class="content-section split-section">
+            <div>
+              <p class="section-kicker">Localisation</p>
+              <h2>{{ item.location }}</h2>
+              <p class="muted-copy">
+                La localisation publique reste volontairement générale. L'adresse exacte, les coordonnées du bailleur
+                et les instructions de visite sont débloquées après abonnement.
+              </p>
+              <div class="nearby-list">
+                @for (place of nearbyPlaces(); track place) {
+                  <span>{{ place }}</span>
+                }
+              </div>
+            </div>
+            @if (hasCoordinates()) {
+              <div class="map-card">
+                <div #propertyMap class="property-map" aria-label="Carte de localisation du bien"></div>
+              </div>
+            } @else {
+              <div class="location-placeholder">
+                <svg class="placeholder-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
+                <span>Position exacte réservée aux abonnés</span>
+              </div>
+            }
+          </section>
+
+          @if (similarProperties().length) {
+            <section class="content-section">
+              <div class="section-heading">
+                <div>
+                  <p class="section-kicker">À comparer</p>
+                  <h2>Biens proches de cette recherche</h2>
                 </div>
+                <a routerLink="/annonces" class="text-action">Tout voir</a>
+              </div>
+              <div class="similar-grid">
+                @for (similar of similarProperties(); track similar.id) {
+                  <a class="similar-card" [routerLink]="['/annonces', similar.id]">
+                    <img [src]="similar.imageUrl" [alt]="similar.title" />
+                    <div>
+                      <strong>{{ similar.title }}</strong>
+                      <span>{{ similar.location }} · {{ similar.price | propertyPrice: similar.priceSuffix }}</span>
+                    </div>
+                  </a>
+                }
               </div>
             </section>
           }
         </article>
 
         <aside class="booking-column">
-          @if (isSubscriber()) {
-            <div class="booking-card">
-              <p class="price">{{ item.price | propertyPrice: item.priceSuffix }}</p>
-              <p class="price-note">Prix indiqué par le propriétaire</p>
-              <div class="booking-meta"><span>Disponibilité</span><strong>À confirmer</strong></div>
-              <div class="booking-meta"><span>Visite</span><strong>Sur rendez-vous</strong></div>
-              <button type="button" class="primary-action" (click)="onAction()">
-                Demander une visite
-                <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 12h14m-6-6 6 6-6 6" />
-                </svg>
-              </button>
-              <p class="safe-note">
-                <svg class="small-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <circle cx="12" cy="12" r="8" />
-                  <path d="m9 12 2 2 4-4" />
-                </svg>
-                Votre demande est traitée en toute sécurité par Rheodyce.
-              </p>
-            </div>
-            <div class="contact-card">
-              <div class="avatar">R</div>
-              <div><strong>Équipe Rheodyce</strong><span>Conseiller immobilier</span></div>
-              <button
-                type="button"
-                class="contact-icon"
-                aria-label="Contacter Rheodyce"
-                (click)="onAction()"
-              >
-                <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d="M7 4h3l1.5 4-2 1.5a13 13 0 0 0 5 5l1.5-2 4 1.5v3c0 1-1 2-3 2C10.5 19 5 13.5 5 7c0-2 1-3 2-3Z"
-                  />
-                </svg>
-              </button>
-            </div>
-            @if (hasCoordinates()) {
-              <section class="map-card">
-                <div class="map-heading">
-                  <div>
-                    <p>Localisation</p>
-                    <span>{{ item.location }}</span>
-                  </div>
-                  <svg class="detail-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                    <circle cx="12" cy="10" r="2.5" />
-                  </svg>
+          <div class="booking-card">
+            <p class="card-kicker">Mise en relation</p>
+            <p class="price">{{ item.price | propertyPrice: item.priceSuffix }}</p>
+            <div class="cost-list">
+              @for (cost of costBreakdown(); track cost.label) {
+                <div>
+                  <span>{{ cost.label }}</span>
+                  <strong>{{ cost.value }}</strong>
                 </div>
-                <div
-                  #propertyMap
-                  class="property-map"
-                  aria-label="Carte de localisation du bien"
-                ></div>
-              </section>
-            }
-          } @else {
-            <div class="booking-card overflow-hidden">
-              <p class="price">{{ item.price | propertyPrice: item.priceSuffix }}</p>
-              <p class="price-note">Prix indiqué par le propriétaire</p>
-              <div class="select-none blur-[6px]" aria-hidden="true">
-                <div class="booking-meta">
-                  <span>Disponibilité</span><strong>À confirmer</strong>
-                </div>
-                <div class="booking-meta"><span>Visite</span><strong>Sur rendez-vous</strong></div>
-                <div class="primary-action">Demander une visite</div>
+              }
+            </div>
+            <button type="button" class="primary-action" (click)="onAction()">
+              Demander une visite
+              <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+            </button>
+            <button type="button" class="secondary-action" (click)="onAction()">Débloquer les coordonnées</button>
+            <p class="safe-note">
+              <svg class="small-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="m9 12 2 2 4-4" /></svg>
+              RHEODYCE vérifie l'annonce avant mise en relation.
+            </p>
+          </div>
+
+          <div class="owner-card">
+            <p class="card-kicker">Interlocuteur du bien</p>
+            <div class="owner-head">
+              <div class="owner-avatar">R</div>
+              <div>
+                <strong>{{ item.type === 'location' ? 'Propriétaire bailleur' : 'Mandataire vendeur' }}</strong>
+                <span>{{ item.verified ? 'Identité contrôlée par RHEODYCE' : 'Profil en cours de contrôle' }}</span>
               </div>
-              <button
-                type="button"
-                class="mt-5 w-full rounded-full border border-rheo-accent bg-rheo-accent/20 px-4 py-3 text-xs font-bold text-rheo-dark"
-                (click)="openSubscription()"
-              >
-                🔒 Débloquer les informations
-              </button>
             </div>
-          }
+
+            <div class="owner-list">
+              <div>
+                <span>Nom</span>
+                <strong>{{ isSubscriber() ? 'Disponible dans le dossier' : 'Réservé aux abonnés' }}</strong>
+              </div>
+              <div>
+                <span>Contact direct</span>
+                <strong>{{ isSubscriber() ? 'Téléphone et WhatsApp' : 'Masqué' }}</strong>
+              </div>
+              <div>
+                <span>Rôle</span>
+                <strong>{{ item.type === 'location' ? 'Gestion location' : 'Décision vente' }}</strong>
+              </div>
+              <div>
+                <span>Visite</span>
+                <strong>Planifiée via RHEODYCE</strong>
+              </div>
+            </div>
+
+            <p class="owner-note">
+              Les échanges passent d'abord par RHEODYCE pour limiter les faux contacts, vérifier le contexte du bien et
+              cadrer la visite avant mise en relation complète.
+            </p>
+          </div>
         </aside>
       </div>
     </div>
   </main>
+
+  @if (showSubscriberModal()) {
+    <app-subscriber-modal (close)="closeModal()" (login)="onLogin()" />
+  }
 } @else {
   <main class="flex min-h-screen items-center justify-center bg-[#f8f8f6] px-6 pt-24 text-center">
     <div>
       <p class="text-sm uppercase tracking-[0.2em] text-rheo-muted">Annonce introuvable</p>
       <h1 class="mt-3 text-3xl font-semibold">Ce bien n'est plus disponible.</h1>
-      <a
-        routerLink="/annonces"
-        class="mt-6 inline-flex rounded-full bg-rheo-dark px-5 py-3 text-sm font-semibold text-white"
-        >Voir les annonces</a
-      >
+      <a routerLink="/annonces" class="mt-6 inline-flex rounded-full bg-rheo-dark px-5 py-3 text-sm font-semibold text-white">Voir les annonces</a>
     </div>
   </main>
 }
