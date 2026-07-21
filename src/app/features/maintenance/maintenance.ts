@@ -28,7 +28,7 @@ import { RouterLink } from '@angular/router';
             }
           </div>
         </div>
-        <a routerLink="/services/maintenance/demande" class="mt-8 inline-flex rounded-[18px] bg-rheo-accent px-6 py-3 text-sm font-bold text-rheo-dark transition hover:bg-rheo-accent-hover">Demander une intervention →</a>
+        <a routerLink="/services/maintenance/demande" class="mt-8 inline-flex rounded-[18px] bg-rheo-accent px-6 py-3 text-sm font-bold text-rheo-dark transition hover:bg-rheo-accent-hover">Créer une demande d’intervention →</a>
       </div>
     </section>
   `,

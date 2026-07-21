@@ -61,6 +61,7 @@ describe('PropertyDetailPage', () => {
   it('shows a preview and the subscription CTA to a non-subscriber', () => {
     const page = fixture.nativeElement as HTMLElement;
 
+    expect(page.querySelector('button[aria-label="Ajouter aux favoris"]')).toBeNull();
     expect(page.textContent).toContain(property.title);
     expect(page.textContent).toContain('Continuez la lecture avec RHEODYCE Premium');
     expect(page.textContent).toContain('Voir les abonnements');

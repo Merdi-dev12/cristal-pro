@@ -120,12 +120,12 @@
                 <p class="mt-3 max-w-lg text-sm leading-6 text-white/75">
                   {{ service.description }}
                 </p>
-                <button
-                  type="button"
+                <a
+                  [routerLink]="['/services', service.id, 'demande']"
                   class="mt-6 rounded-[14px] bg-white px-5 py-2.5 text-sm font-bold text-black transition hover:bg-rheo-accent"
                 >
-                  {{ service.cta }}
-                </button>
+                  Créer une demande →
+                </a>
               </div>
             </article>
           }

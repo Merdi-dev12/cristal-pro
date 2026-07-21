@@ -41,6 +41,92 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Keep every native select aligned with the dropdowns used in the home hero.
+   Browsers supporting customizable selects also receive the same floating menu. */
+select:not([multiple]) {
+  appearance: none;
+  min-height: 2.75rem;
+  border: 1px solid #d7e0ed;
+  border-radius: 0.75rem;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='m6 9 6 6 6-6' stroke='%238b98ad' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+  padding-inline: 1rem 2.75rem;
+  color: #071d49;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+select:not([multiple]):hover {
+  border-color: #b8c3d2;
+}
+
+select:not([multiple]):focus {
+  outline: none;
+  border-color: #0f172a;
+  box-shadow: 0 0 0 4px rgb(15 23 42 / 0.05);
+}
+
+select:not([multiple]):disabled {
+  background-color: #f8fafc;
+  color: #8b98ad;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+select:not([multiple]) option {
+  background: #fff;
+  color: #071d49;
+  font-weight: 500;
+}
+
+@supports (appearance: base-select) {
+  select:not([multiple]),
+  ::picker(select) {
+    appearance: base-select;
+  }
+
+  select:not([multiple])::picker-icon {
+    display: none;
+  }
+
+  ::picker(select) {
+    max-height: 18rem;
+    margin-top: 0.5rem;
+    padding: 0.375rem;
+    overflow-y: auto;
+    border: 1px solid #d7e0ed;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0 12px 30px rgb(15 23 42 / 0.08);
+  }
+
+  select:not([multiple]) option {
+    min-height: 2.5rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.5rem;
+    transition: background-color 150ms ease;
+  }
+
+  select:not([multiple]) option:hover,
+  select:not([multiple]) option:focus,
+  select:not([multiple]) option:checked {
+    background: #f1f5f9;
+  }
+
+  select:not([multiple]) option::checkmark {
+    display: none;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
