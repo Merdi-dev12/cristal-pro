@@ -39,4 +39,22 @@ describe('Footer', () => {
     expect(emailLink).not.toBeNull();
     expect(emailLink?.textContent?.trim()).toBe('reh.tssimba@gmail.com');
   });
+
+  it('should link every public navigation item to its route', () => {
+    const expectedRoutes = [
+      '/annonces',
+      '/location-vente',
+      '/contact',
+      '/faq',
+      '/demenagement',
+      '/abonnement',
+    ];
+
+    for (const route of expectedRoutes) {
+      const link = fixture.nativeElement.querySelector(
+        `a[href="${route}"]`,
+      ) as HTMLAnchorElement | null;
+      expect(link, `Lien manquant pour ${route}`).not.toBeNull();
+    }
+  });
 });

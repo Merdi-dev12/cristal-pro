@@ -5,11 +5,13 @@ import { adminGuard } from './core/guards/admin.guard';
 export const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     loadComponent: () => import('./features/home/home').then((module) => module.Home),
     title: 'Accueil — RHEODYCE',
   },
   {
     path: 'annonces',
+    pathMatch: 'full',
     loadComponent: () =>
       import('./features/annonces/annonces').then((module) => module.AnnoncesPage),
     title: 'Annonces — RHEODYCE',
@@ -24,6 +26,7 @@ export const routes: Routes = [
   },
   {
     path: 'location-vente',
+    pathMatch: 'full',
     loadComponent: () =>
       import('./features/location-vente/location-vente').then((module) => module.LocationVentePage),
     title: 'Location & Vente — RHEODYCE',
@@ -51,6 +54,7 @@ export const routes: Routes = [
   },
   {
     path: 'services',
+    pathMatch: 'full',
     loadComponent: () =>
       import('./features/services/services').then((module) => module.ServicesPage),
     title: 'Services — RHEODYCE',
@@ -66,16 +70,19 @@ export const routes: Routes = [
   },
   {
     path: 'faq',
+    pathMatch: 'full',
     loadComponent: () => import('./features/faq/faq').then((module) => module.FaqPage),
     title: 'FAQ — RHEODYCE',
   },
   {
     path: 'contact',
+    pathMatch: 'full',
     loadComponent: () => import('./features/contact/contact').then((module) => module.ContactPage),
     title: 'Contact — RHEODYCE',
   },
   {
     path: 'abonnement',
+    pathMatch: 'full',
     loadComponent: () =>
       import('./features/subscription/subscription').then((module) => module.SubscriptionPage),
     title: 'Abonnement — RHEODYCE',
@@ -128,7 +135,6 @@ export const routes: Routes = [
     path: 'demenagement',
     loadComponent: () =>
       import('./features/demenagement/demenagement').then((module) => module.DemenagementPage),
-    canActivate: [authGuard],
     title: 'Déménagement — RHEODYCE',
   },
   {
