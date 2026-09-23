@@ -11,22 +11,14 @@
       @for (item of items; track item.title; let i = $index) {
         <article #galleryCard class="gallery-card" [class.gallery-card--tall]="item.size === 'tall'" [class.gallery-card--short]="item.size === 'short'" [style.--card-index]="i">
           <div class="gallery-image-wrap">
-            <img [src]="item.image" [alt]="item.title" loading="lazy" />
-            @if (item.kind === 'video') {
-              <span class="gallery-play" aria-label="Emplacement vidéo à compléter avec un clip Cristal Pro"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5-10-6.5Z"/></svg></span>
-              <span class="gallery-video-label">Vidéo à intégrer</span>
+            @if (item.kind === 'video' && item.videoUrl) {
+              <video [src]="item.videoUrl" [poster]="item.image" controls playsinline preload="none" [attr.aria-label]="item.title"></video>
+            } @else {
+              <img [src]="item.image" [alt]="item.title" loading="lazy" referrerpolicy="no-referrer" />
             }
-            <div class="gallery-overlay"></div>
-            <div class="gallery-caption"><span>{{ item.category }}</span><h2>{{ item.title }}</h2></div>
           </div>
         </article>
       }
-    </div>
-  </section>
-  <section class="mx-auto mt-20 max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col gap-6 rounded-[2rem] bg-[#123b47] p-8 text-white sm:flex-row sm:items-center sm:justify-between sm:p-10">
-      <div><p class="text-xs font-semibold uppercase tracking-[.18em] text-[#44CEE9]">Un projet à confier ?</p><h2 class="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">Parlons de vos espaces.</h2></div>
-      <a href="/devis" class="inline-flex w-fit items-center gap-3 rounded-full bg-[#44CEE9] px-6 py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#20B5D2]">Demander un devis <span aria-hidden="true">↗</span></a>
     </div>
   </section>
 </main>

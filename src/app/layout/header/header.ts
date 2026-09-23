@@ -1,8 +1,11 @@
-import { Component, HostListener, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, HostListener, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { filter } from 'rxjs';
 
 interface NavLink {
   readonly route: string;
+  readonly key: string;
   readonly fragment?: string;
   readonly label: string;
 }
@@ -14,19 +17,58 @@ interface NavLink {
   templateUrl: './header.html',
 })
 export class Header {
+  readonly #router = inject(Router);
   protected readonly isScrolled = signal(typeof window !== 'undefined' && window.location.pathname !== '/');
+  protected readonly activeNav = signal('');
   protected readonly isMenuOpen = signal(false);
   protected readonly navLinks: readonly NavLink[] = [
-    { route: '/', fragment: 'about', label: 'Qui sommes-nous ?' },
-    { route: '/', fragment: 'services', label: 'Nos Services' },
-    { route: '/prestations', label: 'Prestations' },
-    { route: '/', fragment: 'faq', label: 'FAQ' },
-    { route: '/contact', label: 'Contact' },
+    { route: '/', key: 'about', fragment: 'about', label: 'Qui sommes-nous ?' },
+    { route: '/', key: 'services', fragment: 'services', label: 'Nos Services' },
+    { route: '/prestations', key: 'prestations', label: 'Prestations' },
+    { route: '/', key: 'faq', fragment: 'faq', label: 'FAQ' },
+    { route: '/contact', key: 'contact', label: 'Contact' },
   ];
+
+  constructor() {
+    this.#router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.syncAppearance());
+  }
 
   @HostListener('window:scroll')
   protected onWindowScroll(): void {
+    this.syncAppearance();
+  }
+
+  protected isActive(link: NavLink): boolean {
+    return this.activeNav() === link.key;
+  }
+
+  private syncAppearance(): void {
     this.isScrolled.set(window.location.pathname !== '/' || window.scrollY > 32);
+
+    const path = this.#router.url.split(/[?#]/, 1)[0];
+    if (path === '/prestations') {
+      this.activeNav.set('prestations');
+      return;
+    }
+    if (path === '/contact' || path === '/devis') {
+      this.activeNav.set('contact');
+      return;
+    }
+
+    const fragment = this.#router.parseUrl(this.#router.url).fragment;
+    let active = ['about', 'services', 'faq'].includes(fragment ?? '') ? fragment ?? '' : '';
+    for (const section of ['about', 'services', 'faq']) {
+      const element = document.getElementById(section);
+      if (element && element.getBoundingClientRect().top <= Math.min(180, window.innerHeight * 0.3)) {
+        active = section;
+      }
+    }
+    this.activeNav.set(active);
   }
 
   protected closeMenu(): void {

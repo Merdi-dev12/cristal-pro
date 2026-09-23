@@ -6,14 +6,14 @@ export const CLEANING_SERVICE_FIXTURES: readonly CleaningService[] = [
     name: 'Nettoyage réguliers',
     category: 'Entretien courant',
     description: 'Des passages planifiés pour maintenir vos bureaux, copropriétés et locaux professionnels propres au quotidien.',
-    imageUrl: 'https://images.pexels.com/photos/33357392/pexels-photo-33357392.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    imageUrl: 'https://images.pexels.com/photos/18134199/pexels-photo-18134199.jpeg?auto=compress&cs=tinysrgb&w=1600',
   },
   {
     id: 'fin-de-chantier',
     name: 'Nettoyage fin de chantier',
     category: 'Après travaux',
     description: 'Un nettoyage approfondi pour retirer poussières et résidus et préparer vos espaces à leur utilisation.',
-    imageUrl: 'https://images.pexels.com/photos/4099085/pexels-photo-4099085.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    imageUrl: 'https://images.pexels.com/photos/3616756/pexels-photo-3616756.jpeg?auto=compress&cs=tinysrgb&w=1600',
   },
   {
     id: 'remise-en-etat',
