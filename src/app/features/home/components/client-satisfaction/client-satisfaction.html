@@ -1,107 +1,167 @@
-<section
-  id="about"
-  #sectionRoot
-  class="about-story scroll-mt-20 bg-[#f6fafb] text-rheo-dark lg:h-[400svh]"
-  aria-label="Cristal Pro, société de nettoyage francilienne depuis 2018"
->
-  <div class="about-story__viewport overflow-hidden lg:sticky lg:top-0 lg:h-svh">
-    <div
-      class="about-story__track lg:flex lg:h-full"
-      [style.transform]="'translate3d(-' + horizontalOffset() + 'px, 0, 0)'"
-    >
-      <article class="about-story__panel relative flex min-h-[90svh] items-center px-5 py-16 sm:px-10 lg:px-16">
-        <div aria-hidden="true" class="pointer-events-none absolute -right-36 top-8 size-[30rem] rounded-full bg-[#44CEE9]/10 blur-3xl"></div>
-        <div class="mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-[1.15fr_.85fr] lg:gap-16">
-          <div>
-            <p class="inline-flex items-center gap-2 rounded-full border border-[#d8e5e8] bg-white/80 px-3.5 py-2 text-xs font-semibold uppercase tracking-[.16em] text-[#168da3]">
-              <span class="size-2 rounded-full bg-[#44CEE9]"></span> Depuis 2018 · Île-de-France
+<section id="about" class="about-story" aria-labelledby="about-title">
+  <div class="story-stage">
+    <header class="story-heading">
+      <h2 id="about-title">
+        <span aria-hidden="true" class="story-spark">✳</span> Qui sommes-nous ?
+      </h2>
+      <p>
+        <span class="story-current">0{{ activeIndex() + 1 }}</span
+        ><span class="story-total"> / 06</span>
+      </p>
+    </header>
+    <div class="story-window">
+      <div class="story-track">
+        <article class="story-panel story-intro" aria-label="L’essentiel">
+          <div class="story-motif crystal" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="story-content">
+            <p class="story-eyebrow" data-reveal>La propreté. Une conviction.</p>
+            <h3 class="story-title" data-reveal>
+              Cristal Pro,<br />l’exigence <em>au quotidien.</em>
+            </h3>
+            <p class="story-lead" data-reveal>Société de nettoyage francilienne depuis 2018.</p>
+            <p class="story-copy" data-reveal>
+              Plongez dans l’histoire et les valeurs de notre entreprise, où chaque jour est une
+              nouvelle opportunité de rendre vos espaces plus propres et accueillants.
             </p>
-            <h2 class="mt-6 max-w-3xl text-[clamp(2.4rem,5vw,4.7rem)] font-semibold leading-[1.05] tracking-[-.055em]">
-              Cristal Pro, société de nettoyage <span class="text-[#168da3]">francilienne depuis 2018.</span>
-            </h2>
-            <p class="mt-6 max-w-2xl text-base leading-7 text-rheo-muted sm:text-lg sm:leading-8">
-              Plongez dans l’histoire et les valeurs de notre entreprise, où chaque jour est une nouvelle opportunité de rendre vos espaces plus propres et accueillants.
-            </p>
-            <div class="mt-7 grid gap-4 sm:grid-cols-2">
-              <div class="rounded-2xl border border-[#e2ecee] bg-white/75 p-5">
-                <p class="text-xs font-bold uppercase tracking-[.16em] text-[#168da3]">Notre histoire</p>
-                <p class="mt-3 text-sm leading-6 text-rheo-muted">Depuis sa création en 2018, Cristal Pro met son expérience et son savoir-faire au service de la satisfaction de ses clients.</p>
+            <span class="story-scroll-hint" aria-hidden="true"
+              >Défilez pour nous découvrir <span>↓</span></span
+            >
+          </div>
+        </article>
+        <article class="story-panel story-history" aria-label="Notre histoire et notre mission">
+          <div class="story-motif story-year" aria-hidden="true">2018</div>
+          <div class="story-content">
+            <p class="story-eyebrow" data-reveal>Notre histoire · Notre mission</p>
+            <h3 class="story-title" data-reveal>Une histoire de <em>confiance.</em></h3>
+            <div class="story-columns">
+              <div data-reveal>
+                <h4>Depuis le premier jour.</h4>
+                <p>
+                  Depuis sa création en 2018, Cristal Pro met son expérience et son savoir-faire au
+                  service de la satisfaction de ses clients.
+                </p>
               </div>
-              <div class="rounded-2xl border border-[#e2ecee] bg-white/75 p-5">
-                <p class="text-xs font-bold uppercase tracking-[.16em] text-[#168da3]">Notre mission</p>
-                <p class="mt-3 text-sm leading-6 text-rheo-muted">Accompagner nos clients avec des services et produits innovants, performants et adaptés à leurs attentes.</p>
+              <div data-reveal>
+                <h4>Toujours aller plus loin.</h4>
+                <p>
+                  Accompagner nos clients avec des services et produits innovants, performants et
+                  adaptés à leurs attentes.
+                </p>
               </div>
             </div>
-            <div class="mt-7 flex items-center gap-4 text-sm font-medium text-rheo-muted">
-              <span class="grid size-9 place-items-center rounded-full bg-[#e5f6f8] text-[#168da3]" aria-hidden="true">↓</span>
-              Faites défiler pour découvrir notre engagement
+            <p class="story-footnote" data-reveal>
+              Nous sommes fiers de proposer des prestations et des produits de qualité, tout en
+              faisant évoluer nos méthodes pour répondre aux besoins spécifiques de chaque site.
+            </p>
+          </div>
+        </article>
+        <article class="story-panel story-values" aria-label="Nos valeurs">
+          <div class="story-content">
+            <p class="story-eyebrow" data-reveal>Ce qui nous guide</p>
+            <h3 class="story-title" data-reveal>Des valeurs.<br /><em>Des actes.</em></h3>
+            <p class="story-value-intro" data-reveal>
+              Des engagements concrets orientent nos services et notre relation avec chaque client.
+            </p>
+            <div class="story-values-list">
+              @for (value of values; track value.number) {
+                <div class="story-value" data-reveal>
+                  <span>{{ value.number }}</span>
+                  <div>
+                    <h4>{{ value.title }}</h4>
+                    <p>{{ value.description }}</p>
+                  </div>
+                </div>
+              }
             </div>
           </div>
-          <figure class="relative mx-auto w-full max-w-[400px]">
-            <div class="overflow-hidden rounded-[2rem] bg-[#eaf1f3] shadow-[0_28px_70px_rgba(18,59,71,.15)]">
-              <img src="/assets/vincent-bourhis.jpg" alt="Vincent Bourhis, directeur général de Cristal Pro" class="aspect-[.94] w-full object-cover object-[center_28%]" loading="lazy" />
+        </article>
+        @for (group of [0, 1]; track group) {
+          <article
+            class="story-panel story-process"
+            [class.story-process-last]="group === 1"
+            [attr.aria-label]="
+              group === 0 ? 'Relation client : étapes 1 à 3' : 'Relation client : étapes 4 et 5'
+            "
+          >
+            <div class="story-motif story-orbit" aria-hidden="true"></div>
+            <div class="story-content">
+              <p class="story-eyebrow" data-reveal>Le processus de relation client</p>
+              <h3 class="story-title" data-reveal>
+                {{ group === 0 ? 'D’abord,' : 'Ensuite,' }}
+                <em>{{ group === 0 ? 'vous écouter.' : 'prendre soin.' }}</em>
+              </h3>
+              <ol class="story-steps" [attr.start]="group === 0 ? 1 : 4">
+                @for (step of group === 0 ? steps.slice(0, 3) : steps.slice(3); track step.number) {
+                  <li data-reveal>
+                    <span class="step-number">{{ step.number }}</span>
+                    <div>
+                      <h4>{{ step.title }}</h4>
+                      <p>{{ step.description }}</p>
+                    </div>
+                  </li>
+                }
+              </ol>
             </div>
-            <figcaption class="absolute inset-x-4 bottom-4 rounded-2xl border border-white/70 bg-white/90 px-5 py-4 shadow-lg backdrop-blur">
-              <span class="block font-semibold">Vincent Bourhis</span>
-              <span class="mt-1 block text-sm text-rheo-muted">Directeur Général</span>
+          </article>
+        }
+        <article class="story-panel story-quote" aria-label="Notre engagement">
+          <div class="story-motif story-orbit" aria-hidden="true"></div>
+          <figure class="story-content">
+            <p class="story-eyebrow" data-reveal>Notre engagement</p>
+            <blockquote data-reveal>
+              <span aria-hidden="true">“</span>Notre mission est de transformer chaque espace en un
+              lieu de pureté et de lumière, reflétant les valeurs de transparence et d’excellence de
+              Cristal Pro.
+            </blockquote>
+            <figcaption data-reveal>
+              <img
+                src="/assets/vincent-bourhis.jpg"
+                alt=""
+                width="48"
+                height="48"
+                loading="lazy"
+              /><span><strong>Vincent Bourhis</strong><small>Directeur Général</small></span>
             </figcaption>
+            <a routerLink="/devis" class="story-cta" data-reveal
+              >Demander un devis <span aria-hidden="true">↗</span></a
+            >
           </figure>
-        </div>
-      </article>
-
-      <article class="about-story__panel flex min-h-[90svh] items-center bg-white px-5 py-16 sm:px-10 lg:px-16">
-        <div class="mx-auto w-full max-w-7xl">
-          <p class="text-xs font-bold uppercase tracking-[.18em] text-[#168da3]">Ce qui nous guide</p>
-          <div class="mt-4 grid gap-6 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
-            <h3 class="max-w-xl text-4xl font-semibold leading-tight tracking-[-.045em] sm:text-5xl">Nos valeurs, au quotidien.</h3>
-            <p class="max-w-xl text-base leading-7 text-rheo-muted lg:justify-self-end">Des engagements concrets orientent nos services et notre relation avec chaque client.</p>
-          </div>
-          <div class="mt-10 grid gap-4 md:grid-cols-3 lg:mt-14 lg:gap-5">
-            @for (value of values; track value.number) {
-              <div class="rounded-[1.5rem] border border-[#e3ecee] bg-[#f8fbfc] p-6 sm:p-8">
-                <span class="text-sm font-semibold tracking-[.14em] text-[#168da3]/60">{{ value.number }}</span>
-                <h4 class="mt-8 text-2xl font-semibold tracking-tight">{{ value.title }}</h4>
-                <p class="mt-4 text-sm leading-7 text-rheo-muted sm:text-base">{{ value.description }}</p>
-              </div>
-            }
-          </div>
-          <p class="mt-8 max-w-3xl text-sm leading-7 text-rheo-muted sm:text-base">Nous sommes fiers de proposer des prestations et des produits de qualité, tout en faisant évoluer nos méthodes pour répondre aux besoins spécifiques de chaque site.</p>
-        </div>
-      </article>
-
-      <article class="about-story__panel flex min-h-[90svh] items-center bg-[#eef7f8] px-5 py-16 sm:px-10 lg:px-16">
-        <div class="mx-auto w-full max-w-7xl">
-          <p class="text-xs font-bold uppercase tracking-[.18em] text-[#168da3]">De la première demande au suivi</p>
-          <h3 class="mt-4 max-w-3xl text-4xl font-semibold leading-tight tracking-[-.045em] sm:text-5xl">Le processus de relation client</h3>
-          <ol class="mt-9 grid gap-3 sm:grid-cols-2 lg:mt-12 lg:grid-cols-5 lg:gap-4">
-            @for (step of steps; track step.number) {
-              <li class="rounded-[1.35rem] border border-[#dce9eb] bg-white p-5 sm:p-6">
-                <span class="text-3xl font-semibold tracking-[-.06em] text-[#168da3]/45">{{ step.number }}</span>
-                <h4 class="mt-5 text-base font-semibold leading-snug">{{ step.title }}</h4>
-                <p class="mt-2 text-sm leading-6 text-rheo-muted">{{ step.description }}</p>
-              </li>
-            }
-          </ol>
-        </div>
-      </article>
-
-      <article class="about-story__panel flex min-h-[90svh] items-center bg-rheo-primary px-5 py-16 text-white sm:px-10 lg:px-16">
-        <figure class="mx-auto w-full max-w-6xl">
-          <p class="text-xs font-bold uppercase tracking-[.18em] text-rheo-accent">Notre engagement</p>
-          <span class="mt-8 block text-7xl leading-none text-rheo-accent" aria-hidden="true">“</span>
-          <blockquote class="mt-3 max-w-5xl text-3xl font-medium leading-tight tracking-[-.04em] sm:text-5xl sm:leading-[1.18]">
-            Notre mission est de transformer chaque espace en un lieu de pureté et de lumière, reflétant les valeurs de transparence et d’excellence de Cristal Pro.
-          </blockquote>
-          <figcaption class="mt-9 flex items-center gap-3 border-t border-white/20 pt-6">
-            <span class="font-semibold">Vincent Bourhis</span>
-            <span class="size-1 rounded-full bg-rheo-accent" aria-hidden="true"></span>
-            <span class="text-sm text-white/65">Directeur Général</span>
-          </figcaption>
-          <a routerLink="/devis" class="mt-10 inline-flex min-h-12 items-center gap-3 rounded-full bg-white px-6 py-3 text-sm font-semibold text-rheo-primary transition hover:bg-[#e8f7f9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
-            Demander un devis <span aria-hidden="true">↗</span>
-          </a>
-        </figure>
-      </article>
+        </article>
+      </div>
     </div>
+    <footer class="story-controls">
+      <div class="story-progress" aria-hidden="true"><div class="story-progress-fill"></div></div>
+      <div class="story-controls-row">
+        <nav aria-label="Chapitres de notre histoire">
+          @for (chapter of chapters; track chapter; let i = $index) {
+            <button
+              type="button"
+              (click)="scrollTo(i)"
+              [attr.aria-label]="'Chapitre ' + (i + 1) + ' : ' + chapter"
+              [attr.aria-current]="activeIndex() === i ? 'step' : null"
+            >
+              <span class="chapter-dot"></span><span class="chapter-label">{{ chapter }}</span>
+            </button>
+          }
+        </nav>
+        <div class="story-arrows">
+          <button
+            type="button"
+            (click)="scrollTo(activeIndex() - 1)"
+            [disabled]="activeIndex() === 0"
+            aria-label="Chapitre précédent"
+          >
+            ←</button
+          ><button
+            type="button"
+            (click)="scrollTo(activeIndex() + 1)"
+            [disabled]="activeIndex() === chapters.length - 1"
+            aria-label="Chapitre suivant"
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </footer>
   </div>
 </section>

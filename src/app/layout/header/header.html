@@ -7,7 +7,7 @@
       <span class="text-base font-bold tracking-wide text-white sm:text-lg">Cristal Pro</span>
     </a>
 
-    <nav class="hidden items-center rounded-full border border-white/10 bg-white/10 px-1.5 py-1.5 shadow-[0_4px_30px_rgba(0,0,0,0.03)] backdrop-blur-md lg:flex" aria-label="Navigation principale">
+    <nav class="hidden items-center rounded-full border border-white/65 bg-transparent px-1.5 py-1.5 lg:flex" aria-label="Navigation principale">
       <ul class="flex items-center gap-1">
         @for (link of navLinks; track link.key) {
           <li><a [routerLink]="link.route" [fragment]="link.fragment" class="rounded-full px-4 py-1.5 text-sm transition-all duration-300 ease-out hover:bg-white/15 hover:text-white" [class.bg-white/20]="isActive(link)" [class.font-semibold]="isActive(link)" [class.font-medium]="!isActive(link)" [class.text-white]="isActive(link)" [class.text-white/90]="!isActive(link)" [attr.aria-current]="isActive(link) ? 'page' : null">{{ link.label }}</a></li>
@@ -16,7 +16,7 @@
     </nav>
 
     <div class="flex items-center gap-3">
-      <a routerLink="/devis" class="hidden rounded-full bg-rheo-primary px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-rheo-primary-hover sm:inline-flex">Demander un devis</a>
+      <a routerLink="/devis" class="hidden rounded-full border border-white/65 bg-transparent px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-300 hover:border-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:inline-flex">Demander un devis</a>
       <button type="button" class="inline-flex size-11 items-center justify-center rounded-full border border-white/25 text-white transition-colors hover:bg-white/10 lg:hidden" [attr.aria-expanded]="isMenuOpen()" aria-controls="mobile-navigation" [attr.aria-label]="isMenuOpen() ? 'Fermer le menu' : 'Ouvrir le menu'" (click)="toggleMenu()">
         @if (isMenuOpen()) {
           <span class="text-2xl leading-none" aria-hidden="true">&times;</span>
@@ -33,7 +33,7 @@
             <li><a [routerLink]="link.route" [fragment]="link.fragment" class="block rounded-2xl border-l-2 border-transparent px-4 py-3 text-sm font-medium text-rheo-dark transition-colors hover:bg-[#f1f8f9]" [class.border-[#168da3]]="isActive(link)" [class.bg-[#e9f7f9]]="isActive(link)" [attr.aria-current]="isActive(link) ? 'page' : null" (click)="closeMenu()">{{ link.label }}</a></li>
           }
           <li class="my-2 h-px bg-[#e5edef]"></li>
-          <li><a routerLink="/devis" class="block rounded-full bg-rheo-primary px-5 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-rheo-primary-hover" (click)="closeMenu()">Demander un devis</a></li>
+          <li><a routerLink="/devis" class="block rounded-full border border-rheo-primary/60 bg-transparent px-5 py-3 text-center text-sm font-semibold text-rheo-primary transition-colors hover:border-rheo-primary hover:bg-[#f1f8f9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rheo-primary" (click)="closeMenu()">Demander un devis</a></li>
         </ul>
       </nav>
     }
