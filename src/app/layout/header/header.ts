@@ -15,7 +15,7 @@ export class Header {
   protected readonly isMenuOpen = signal(false);
   protected readonly navLinks: readonly NavLink[] = [
     { href: '#services', label: 'Nos Services' },
-    { href: '#about', label: 'Qui sommes-nous' },
+    { href: '#about', label: 'Qui sommes-nous?' },
     { href: '#services', label: 'Nos Services' },
     { href: '#contact', label: 'Contact' },
   ];

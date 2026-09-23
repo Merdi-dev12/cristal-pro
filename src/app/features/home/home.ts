@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { Footer } from '../../layout/footer/footer';
 import { Header } from '../../layout/header/header';
+import { Benefits } from './components/benefits/benefits';
 import { Hero } from './components/hero/hero';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [Header, Footer, Hero],
+  imports: [Header, Footer, Hero, Benefits],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
