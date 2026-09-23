@@ -160,3 +160,7 @@ select:not([multiple]) option {
   }
 }
 
+.form-field { width: 100%; min-height: 3.15rem; border: 1px solid #dce5e9; border-radius: .9rem; background: #fff; padding: .8rem 1rem; color: #17313d; font: inherit; font-size: .9rem; outline: none; transition: border-color .2s, box-shadow .2s; }
+.form-field::placeholder { color: #99a8ae; }
+.form-field:focus { border-color: #44cee9; box-shadow: 0 0 0 3px rgb(68 206 233 / 15%); }
+textarea.form-field { min-height: 8rem; }

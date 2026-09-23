@@ -1,0 +1,32 @@
+<main class="min-h-screen bg-white pb-20 pt-28 sm:pt-36">
+  <header class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8">
+    <p class="inline-flex rounded-full border border-[#dce7eb] px-3.5 py-2 text-xs font-semibold uppercase tracking-[.16em] text-[#168da3]">Nos prestations · Île-de-France</p>
+    <div class="mt-6 grid gap-6 md:grid-cols-[1fr_.6fr] md:items-end">
+      <h1 class="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-.045em] text-rheo-dark sm:text-6xl lg:text-7xl">La propreté, en<br><span class="text-[#168da3]">images et en gestes.</span></h1>
+      <p class="max-w-lg text-base leading-7 text-rheo-muted md:justify-self-end">Découvrez notre quotidien : des espaces entretenus avec soin, des interventions adaptées et le souci du détail à chaque passage.</p>
+    </div>
+  </header>
+  <section aria-label="Galerie de nos prestations" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="prestations-masonry">
+      @for (item of items; track item.title; let i = $index) {
+        <article #galleryCard class="gallery-card" [class.gallery-card--tall]="item.size === 'tall'" [class.gallery-card--short]="item.size === 'short'" [style.--card-index]="i">
+          <div class="gallery-image-wrap">
+            <img [src]="item.image" [alt]="item.title" loading="lazy" />
+            @if (item.kind === 'video') {
+              <span class="gallery-play" aria-label="Emplacement vidéo à compléter avec un clip Cristal Pro"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5-10-6.5Z"/></svg></span>
+              <span class="gallery-video-label">Vidéo à intégrer</span>
+            }
+            <div class="gallery-overlay"></div>
+            <div class="gallery-caption"><span>{{ item.category }}</span><h2>{{ item.title }}</h2></div>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+  <section class="mx-auto mt-20 max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col gap-6 rounded-[2rem] bg-[#123b47] p-8 text-white sm:flex-row sm:items-center sm:justify-between sm:p-10">
+      <div><p class="text-xs font-semibold uppercase tracking-[.18em] text-[#44CEE9]">Un projet à confier ?</p><h2 class="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">Parlons de vos espaces.</h2></div>
+      <a href="/devis" class="inline-flex w-fit items-center gap-3 rounded-full bg-[#44CEE9] px-6 py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#20B5D2]">Demander un devis <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+</main>

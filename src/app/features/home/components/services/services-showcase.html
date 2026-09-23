@@ -1,0 +1,64 @@
+<div class="min-w-0" role="region" aria-label="Prestations de nettoyage" (mouseenter)="setPaused(true)" (mouseleave)="setPaused(false)" (focusin)="setPaused(true)" (focusout)="setPaused(false)">
+  @if (services().length) {
+    <div class="services-panels" aria-label="Nos prestations">
+      @for (service of services(); track service.id; let index = $index) {
+        <button
+          type="button"
+          class="service-panel group/panel relative min-w-0 overflow-hidden rounded-[24px] bg-[#cbd8d9] text-left outline-none transition-[flex,transform,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:ring-2 focus-visible:ring-[#087f8c]"
+          [attr.data-active]="activeIndex() === index"
+          [attr.aria-label]="'Afficher ' + service.name"
+          [attr.aria-pressed]="activeIndex() === index"
+          (click)="selectService(index)"
+        >
+          <img [src]="service.imageUrl" [alt]="service.name" class="absolute inset-0 size-full object-cover transition-transform duration-1000 group-hover/panel:scale-[1.025]" loading="lazy" />
+          <span class="service-panel-shade absolute inset-0"></span>
+
+          @if (activeIndex() === index) {
+            <span class="absolute right-4 top-4 rounded-full bg-[#102c31]/85 px-3.5 py-2 text-[10px] font-bold text-white shadow-sm backdrop-blur-md">{{ service.category }}</span>
+            <span class="service-panel-copy-glass absolute inset-x-0 bottom-0 h-52"></span>
+            <span class="service-panel-copy absolute inset-x-0 bottom-0 p-5 text-white sm:p-6">
+              <span class="flex items-end gap-3">
+                <span class="grid size-11 shrink-0 place-items-center rounded-[13px] bg-black/40 text-white backdrop-blur-md" aria-hidden="true">
+                  <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M5 7l1 13h12l1-13M9 7V4h6v3M9 11v5m6-5v5"/></svg>
+                </span>
+                <span class="min-w-0">
+                  <span class="block truncate text-lg font-semibold leading-tight sm:text-xl">{{ service.name }}</span>
+                  <span class="mt-1 block text-xs text-white/75">Cristal Pro · Île-de-France</span>
+                </span>
+              </span>
+              <span class="mt-4 block text-xs leading-5 text-white/85 sm:text-sm sm:leading-6">{{ service.description }}</span>
+            </span>
+          }
+        </button>
+      }
+    </div>
+
+    <div class="mt-5 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-1.5" aria-label="Sélectionner une prestation">
+        @for (service of services(); track service.id; let index = $index) {
+          <button
+            type="button"
+            class="h-[5px] rounded-full transition-all duration-300"
+            [class.w-7]="activeIndex() === index"
+            [class.bg-[#087f8c]]="activeIndex() === index"
+            [class.w-[6px]]="activeIndex() !== index"
+            [class.bg-[#b9cbce]]="activeIndex() !== index"
+            [attr.aria-label]="'Afficher ' + service.name"
+            [attr.aria-current]="activeIndex() === index ? 'true' : null"
+            (click)="selectService(index)"
+          ></button>
+        }
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button type="button" class="grid size-10 place-items-center rounded-full border border-[#c7d7d9] bg-white/70 text-[#18363b] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087f8c]" aria-label="Prestation précédente" (click)="previousService()">
+          <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="grid size-10 place-items-center rounded-full border border-[#c7d7d9] bg-white/70 text-[#18363b] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087f8c]" aria-label="Prestation suivante" (click)="nextService()">
+          <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+      <span class="sr-only" aria-live="polite">{{ activeService()?.name }} sélectionné</span>
+    </div>
+  }
+</div>

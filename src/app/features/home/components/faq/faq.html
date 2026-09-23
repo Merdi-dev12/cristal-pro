@@ -1,0 +1,18 @@
+<section id="faq" class="scroll-mt-24 bg-[#f5f8fa] py-20 sm:py-28">
+  <div class="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[.75fr_1.25fr] lg:px-8">
+    <div class="max-w-md">
+      <p class="text-xs font-bold uppercase tracking-[.2em] text-[#168da3]">FAQ</p>
+      <h2 class="mt-4 text-4xl font-semibold leading-tight tracking-tight text-rheo-dark sm:text-5xl">Vos questions,<br>nos réponses.</h2>
+      <p class="mt-5 text-base leading-7 text-rheo-muted">Les informations utiles pour organiser l’entretien de vos locaux.</p>
+      <a href="/contact" class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-rheo-dark transition hover:text-[#168da3]">Une autre question ? Contactez-nous <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="divide-y divide-[#dbe4e8] border-y border-[#dbe4e8]">
+      @for (item of items; track item.question; let i = $index) {
+        <details class="group py-5 sm:py-6" [attr.open]="i === 0 ? '' : null">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-5 text-base font-semibold text-rheo-dark marker:hidden sm:text-lg">{{ item.question }}<span class="grid size-8 shrink-0 place-items-center rounded-full border border-[#dbe4e8] text-[#168da3] transition-transform group-open:rotate-45" aria-hidden="true">+</span></summary>
+          <p class="max-w-2xl pt-4 pr-10 text-sm leading-7 text-rheo-muted">{{ item.answer }}</p>
+        </details>
+      }
+    </div>
+  </div>
+</section>

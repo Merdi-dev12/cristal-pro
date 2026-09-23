@@ -1,0 +1,71 @@
+<section id="satisfaction-clientele" #sectionRoot class="scroll-mt-24 bg-[#f2f5f7] py-14 sm:py-24 overflow-hidden">
+  <span id="about" class="block scroll-mt-24" aria-hidden="true"></span>
+
+  <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
+
+    <!-- Colonne image (originale) -->
+    <div class="relative min-h-[360px] overflow-hidden rounded-[2rem] bg-[#eaf2f5] sm:min-h-[480px]">
+      <img
+        src="/assets/hero_img_2.jpg"
+        alt="Locaux professionnels entretenus pour le confort de leurs occupants"
+        class="absolute inset-0 h-full w-full object-cover"
+        loading="lazy"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-[#102b3e]/60 via-transparent to-transparent"></div>
+      <p class="absolute bottom-6 left-6 rounded-full border border-white/30 bg-black/25 px-4 py-2 text-sm font-medium text-white backdrop-blur-md sm:bottom-8 sm:left-8">
+        Un partenaire à vos côtés
+      </p>
+    </div>
+
+    <!-- Colonne texte -->
+    <div class="relative -translate-y-2 py-2 sm:-translate-y-4 sm:py-6">
+      <span
+        aria-hidden="true"
+        class="pointer-events-none absolute -left-6 -top-8 h-24 w-24 rounded-full bg-rheo-accent/10 blur-3xl"
+      ></span>
+
+      <div
+        [class]="visible() ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-5 blur-sm'"
+        class="inline-flex items-center gap-2 rounded-full border border-rheo-border px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-rheo-muted transition-all duration-700 ease-out"
+      >
+        <span class="h-1.5 w-1.5 rounded-full bg-rheo-accent"></span>
+        Notre engagement
+      </div>
+
+      <h2
+        [class]="visible() ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-5 blur-sm'"
+        class="mt-6 text-4xl font-semibold leading-tight tracking-tight text-rheo-dark transition-all delay-150 duration-700 ease-out sm:text-5xl"
+      >
+        Satisfaction <span class="text-rheo-accent">clientèle</span>
+      </h2>
+
+      <p
+        [class]="visible() ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-5 blur-sm'"
+        class="mt-6 border-l-2 border-rheo-accent/30 pl-4 text-lg font-medium leading-8 text-rheo-dark transition-all delay-300 duration-700 ease-out sm:text-xl"
+      >
+        Notre ambition est de construire des relations durables, aussi bien avec nos clients qu'avec nos salariés.
+      </p>
+
+      <div
+        [class]="visible() ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-5 blur-sm'"
+        class="mt-5 space-y-4 text-base leading-7 text-rheo-muted transition-all delay-[450ms] duration-700 ease-out"
+      >
+        <p>Nous souhaitons être un véritable partenaire pour nos clients, à l'écoute de leurs besoins spécifiques et capable de les accompagner durablement dans l'entretien et la propreté de leurs sites.</p>
+        <p>Chaque salarié contribue à cette exigence par son expérience, son savoir-être, sa rigueur et son engagement, avec un objectif constant : assurer un travail soigné et la satisfaction de nos clients.</p>
+      </div>
+
+      <a
+        href="/#about"
+        [class]="visible() ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'"
+        class="group mt-8 inline-flex items-center gap-4 rounded-full bg-rheo-accent py-2 pl-6 pr-2 text-sm font-bold text-white shadow-md transition-all delay-[600ms] duration-700 ease-out hover:bg-rheo-accent-hover hover:shadow-lg hover:-translate-y-0.5"
+      >
+        Qui sommes-nous
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:rotate-45">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>

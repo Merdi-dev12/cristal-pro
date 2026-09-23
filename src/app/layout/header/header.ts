@@ -1,28 +1,32 @@
 import { Component, HostListener, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 interface NavLink {
-  readonly href: string;
+  readonly route: string;
+  readonly fragment?: string;
   readonly label: string;
 }
 
 @Component({
   selector: 'app-header',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './header.html',
 })
 export class Header {
-  protected readonly isScrolled = signal(false);
+  protected readonly isScrolled = signal(typeof window !== 'undefined' && window.location.pathname !== '/');
   protected readonly isMenuOpen = signal(false);
   protected readonly navLinks: readonly NavLink[] = [
-    { href: '#services', label: 'Nos Services' },
-    { href: '#about', label: 'Qui sommes-nous?' },
-    { href: '#services', label: 'Nos Services' },
-    { href: '#contact', label: 'Contact' },
+    { route: '/', fragment: 'about', label: 'Qui sommes-nous ?' },
+    { route: '/', fragment: 'services', label: 'Nos Services' },
+    { route: '/prestations', label: 'Prestations' },
+    { route: '/', fragment: 'faq', label: 'FAQ' },
+    { route: '/contact', label: 'Contact' },
   ];
 
   @HostListener('window:scroll')
   protected onWindowScroll(): void {
-    this.isScrolled.set(window.scrollY > 32);
+    this.isScrolled.set(window.location.pathname !== '/' || window.scrollY > 32);
   }
 
   protected closeMenu(): void {
