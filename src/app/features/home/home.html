@@ -14,7 +14,7 @@
     </div>
   </section>
 
-  <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+  <section id="properties" class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
     <div class="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
       <div>
         <p class="text-sm font-semibold uppercase tracking-[0.22em] text-rheo-muted">
@@ -26,19 +26,19 @@
       </div>
       <p class="max-w-xl text-sm leading-7 text-rheo-muted lg:justify-self-end">
         Une sélection pensée pour scanner vite : prix, ville, surface, chambres et niveau de
-        vérification. Les données sont temporaires, la structure est prête pour la connexion API.
+        vérification. Contactez notre équipe pour confirmer les disponibilités et organiser une visite.
       </p>
     </div>
 
     <div class="mt-10 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
-      @for (property of homeProperties(); track property.id) {
+      @for (property of homeProperties; track property.id) {
         <app-property-card [property]="property" (viewDetails)="onViewDetails($event)" />
       }
     </div>
 
     <div class="mt-10 flex justify-center">
       <a
-        routerLink="/annonces"
+        href="mailto:contact@rheodyce.com?subject=Recherche%20immobili%C3%A8re"
         class="rounded-full bg-black px-7 py-3 text-sm font-semibold text-white transition hover:bg-black/90"
       >
         Explorer toutes les annonces
@@ -46,7 +46,7 @@
     </div>
   </section>
 
-  <section class="services-scroll bg-[#151b16] text-white">
+  <section id="services" class="services-scroll bg-[#151b16] text-white">
     <div class="services-sticky">
       <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mb-8 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -77,7 +77,7 @@
             </button>
           </div>
           <a
-            routerLink="/services"
+            href="mailto:contact@rheodyce.com?subject=Services%20immobiliers"
             class="inline-flex items-center gap-2 text-sm font-bold text-white"
           >
             Explorer tout
@@ -121,7 +121,7 @@
                   {{ service.description }}
                 </p>
                 <a
-                  [routerLink]="serviceRequestLink(service.id)"
+                  href="mailto:contact@rheodyce.com?subject=Demande%20de%20service%20immobilier"
                   class="mt-6 rounded-[14px] bg-white px-5 py-2.5 text-sm font-bold text-black transition hover:bg-rheo-accent"
                 >
                   Créer une demande →
@@ -134,7 +134,7 @@
     </div>
   </section>
 
-  <section class="bg-white py-16">
+  <section id="faq" class="bg-white py-16">
     <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
       <div>
         <p class="text-sm font-semibold uppercase tracking-[0.22em] text-rheo-muted">FAQ</p>
@@ -142,10 +142,10 @@
           Les questions qui évitent les mauvaises surprises.
         </h2>
         <a
-          routerLink="/faq"
+          href="mailto:contact@rheodyce.com?subject=Question%20immobili%C3%A8re"
           class="mt-6 inline-flex rounded-full bg-rheo-accent px-6 py-3 text-sm font-semibold text-rheo-dark transition hover:bg-rheo-accent-hover"
         >
-          Voir toute la FAQ
+          Poser une question
         </a>
       </div>
 
