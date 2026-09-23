@@ -1,15 +1,16 @@
 /* IMPORTANT: avoid inlining fonts from the internet during build (offline/CI can fail). */
 /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap'); */
-@import 'tailwindcss';
+@import 'tailwindcss' source(none);
+@source './app';
 
 @theme {
-  --color-rheo-bg: #f5f7f4;
+  --color-rheo-bg: #f4f8fb;
   --color-rheo-surface: #ffffff;
-  --color-rheo-accent: #c5e84a;
-  --color-rheo-accent-hover: #b5d83a;
-  --color-rheo-dark: #1a1a1a;
-  --color-rheo-muted: #6b7280;
-  --color-rheo-border: #e8ebe6;
+  --color-rheo-accent: #44CEE9;
+  --color-rheo-accent-hover: #20B5D2;
+  --color-rheo-dark: #163a53;
+  --color-rheo-muted: #5c7181;
+  --color-rheo-border: #d9e4ec;
   --color-rheo-glass: rgb(255 255 255 / 0.72);
 
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
@@ -159,133 +160,3 @@ select:not([multiple]) option {
   }
 }
 
-.leaflet-container {
-  position: relative;
-  overflow: hidden;
-  background: #dfe8dc;
-  font-family: var(--font-sans);
-  z-index: 0;
-}
-
-/* Leaflet's CDN stylesheet can be blocked by an ad blocker or a strict CSP.
-   Keep the map layout intact even when that stylesheet is unavailable. */
-.leaflet-container img {
-  max-width: none !important;
-  max-height: none !important;
-}
-
-.leaflet-pane,
-.leaflet-tile,
-.leaflet-marker-icon,
-.leaflet-marker-shadow,
-.leaflet-overlay-pane,
-.leaflet-shadow-pane,
-.leaflet-marker-pane,
-.leaflet-tooltip-pane,
-.leaflet-popup-pane {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.leaflet-tile-pane {
-  z-index: 2;
-}
-
-.leaflet-tile-container,
-.leaflet-zoom-animated {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.leaflet-tile {
-  width: 256px;
-  height: 256px;
-  user-select: none;
-}
-
-.leaflet-overlay-pane {
-  z-index: 4;
-}
-
-.leaflet-shadow-pane {
-  z-index: 5;
-}
-
-.leaflet-marker-pane {
-  z-index: 6;
-}
-
-.leaflet-tooltip-pane {
-  z-index: 7;
-}
-
-.leaflet-control {
-  position: relative;
-  z-index: 800;
-  float: left;
-  clear: both;
-}
-
-.leaflet-top,
-.leaflet-bottom {
-  position: absolute;
-  z-index: 1000;
-  pointer-events: none;
-}
-
-.leaflet-top { top: 0; }
-.leaflet-bottom { bottom: 0; }
-.leaflet-left { left: 0; }
-.leaflet-right { right: 0; }
-.leaflet-top .leaflet-control,
-.leaflet-bottom .leaflet-control { pointer-events: auto; }
-
-.leaflet-right .leaflet-control { float: right; }
-.leaflet-bottom .leaflet-control { margin-bottom: 10px; }
-.leaflet-right .leaflet-control { margin-right: 10px; }
-
-.leaflet-control-zoom a {
-  display: block;
-  width: 30px;
-  height: 30px;
-  border-bottom: 1px solid #d8ded5;
-  background: #fff;
-  color: #1a1a1a;
-  font-size: 22px;
-  line-height: 28px;
-  text-align: center;
-  text-decoration: none;
-}
-
-.leaflet-control-zoom a:first-child { border-radius: 10px 10px 0 0; }
-.leaflet-control-zoom a:last-child { border-bottom: 0; border-radius: 0 0 10px 10px; }
-.leaflet-control-zoom { overflow: hidden; border-radius: 10px; box-shadow: 0 4px 14px rgb(0 0 0 / 0.14); }
-
-.leaflet-control-attribution {
-  padding: 2px 6px;
-  background: rgb(255 255 255 / 0.78);
-  color: #6b7280;
-  font-size: 10px;
-}
-
-.moving-map-marker {
-  display: flex;
-  width: 30px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid white;
-  border-radius: 999px 999px 999px 0;
-  background: var(--color-rheo-dark);
-  color: white;
-  font-size: 11px;
-  font-weight: 800;
-  transform: rotate(-45deg);
-  box-shadow: 0 5px 12px rgb(0 0 0 / 0.22);
-}
-
-.moving-map-marker span {
-  transform: rotate(45deg);
-}

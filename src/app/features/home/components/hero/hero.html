@@ -1,4 +1,4 @@
-<section class="relative flex min-h-screen w-full flex-col justify-end overflow-visible bg-black pb-10 shadow-2xl">
+<section id="accueil" class="relative flex h-[84vh] min-h-[680px] max-h-[840px] w-full flex-col justify-end overflow-hidden rounded-b-[36px] bg-black pb-5 shadow-2xl sm:rounded-b-[56px]">
   <div class="absolute inset-0 z-0 overflow-hidden">
     <div
       class="h-full w-full scale-105 bg-cover bg-center transition-all duration-700"
@@ -6,128 +6,24 @@
     ></div>
   </div>
 
-  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-end px-4 pt-32 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 gap-6 pb-8 lg:grid-cols-12 lg:items-end lg:gap-12">
+  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-end px-4 pt-8 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 gap-6 pb-12 lg:grid-cols-12 lg:items-end lg:gap-12">
       <div class="lg:col-span-8">
         <div class="mb-5 flex flex-wrap gap-2">
           @for (tag of heroTags; track tag) {
-            <button
-              type="button"
-              (click)="selectTag(tag)"
-              class="rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200"
-              [class]="
-                activeTag() === tag
-                  ? 'border border-slate-200 bg-white text-slate-950 shadow-sm'
-                  : 'border border-white/20 bg-white/10 text-white hover:bg-white/20'
-              "
-            >
-              {{ tag }}
-            </button>
+            <span class="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium text-white backdrop-blur-sm">{{ tag }}</span>
           }
         </div>
-
-        <h1 class="min-h-[156px] text-4xl font-light leading-[1.08] tracking-tight text-white sm:text-6xl lg:min-h-[174px] lg:text-[72px]">
-          Construisez votre avenir,<br />
-          <span class="border-r-2 border-rheo-accent pr-1 font-semibold text-rheo-accent">
-            {{ typedText() }}
-          </span>
+        <h1 class="max-w-4xl text-4xl font-light leading-[1.08] tracking-tight text-white sm:text-6xl lg:text-[72px]">
+          Cristal Pro,
+          <span class="mt-2 block whitespace-pre-line border-r-2 border-[#44CEE9] pr-1 text-[clamp(1.55rem,5vw,4rem)] font-semibold leading-tight text-[#44CEE9]">{{ typedText() }}</span>
         </h1>
       </div>
 
       <div class="lg:col-span-4 lg:pb-2">
-        <p class="max-w-md text-sm leading-relaxed text-white/82 sm:text-base">
-          RHEODYCE centralise des annonces immobilières vérifiées à Kinshasa, avec des services de maintenance,
-          décoration et assistance juridique pour sécuriser chaque étape.
-        </p>
-      </div>
-    </div>
-
-    <div class="w-full rounded-[28px] bg-white px-5 py-6 shadow-[0_20px_50px_rgba(0,0,0,0.4)] sm:px-8 sm:py-7 lg:px-9">
-      <h3 class="mb-4 text-xl font-bold text-slate-950">Trouvez le meilleur bien</h3>
-
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="relative flex flex-col gap-1.5">
-          <label class="text-xs font-bold uppercase tracking-wide text-slate-500">Je recherche</label>
-          <button type="button" (click)="toggleTypeDropdown($event)" class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5">
-            <span>{{ selectedType() }}</span>
-            <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="isTypeOpen()" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-          @if (isTypeOpen()) {
-            <ul class="absolute top-full z-[80] mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
-              @for (type of searchTypes; track type) {
-                <li (click)="selectType(type)" class="cursor-pointer rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100">{{ type }}</li>
-              }
-            </ul>
-          }
-        </div>
-
-        <div class="relative flex flex-col gap-1.5">
-          <label class="text-xs font-bold uppercase tracking-wide text-slate-500">Budget max</label>
-          <button type="button" (click)="toggleBudgetDropdown($event)" class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5">
-            <span>{{ selectedBudget() }}</span>
-            <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="isBudgetOpen()" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-          @if (isBudgetOpen()) {
-            <ul class="absolute top-full z-[80] mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
-              @for (budget of budgets; track budget) {
-                <li (click)="selectBudget(budget)" class="cursor-pointer rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100">{{ budget }}</li>
-              }
-            </ul>
-          }
-        </div>
-
-        <div class="relative flex flex-col gap-1.5">
-          <label class="text-xs font-bold uppercase tracking-wide text-slate-500">Localisation</label>
-          <button type="button" (click)="toggleLocationDropdown($event)" class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5">
-            <span>{{ selectedLocation() }}</span>
-            <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="isLocationOpen()" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-          @if (isLocationOpen()) {
-            <ul class="absolute top-full z-[80] mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
-              @for (loc of locations; track loc) {
-                <li (click)="selectLocation(loc)" class="cursor-pointer rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100">{{ loc }}</li>
-              }
-            </ul>
-          }
-        </div>
-
-        <div class="relative flex flex-col gap-1.5">
-          <label class="text-xs font-bold uppercase tracking-wide text-slate-500">Chambres</label>
-          <button type="button" (click)="toggleRoomsDropdown($event)" class="flex min-h-12 w-full items-center justify-between rounded-xl border border-[#d7e0ed] bg-white px-4 text-left text-sm font-semibold text-[#071d49] outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5">
-            <span>{{ selectedRooms() }}</span>
-            <svg class="h-4 w-4 text-[#8b98ad] transition-transform duration-200" [class.rotate-180]="isRoomsOpen()" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-          @if (isRoomsOpen()) {
-            <ul class="absolute top-full z-[80] mt-2 max-h-72 w-full overflow-y-auto rounded-[12px] border border-[#d7e0ed] bg-white p-1.5 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
-              @for (room of rooms; track room) {
-                <li (click)="selectRooms(room)" class="cursor-pointer rounded-[8px] px-3.5 py-2.5 text-sm font-medium text-[#071d49] transition hover:bg-slate-100">{{ room }}</li>
-              }
-            </ul>
-          }
-        </div>
-      </div>
-
-      <div class="mt-6 flex flex-col gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="mr-1 text-xs font-bold text-slate-900">Filtres :</span>
-          @for (chip of filterChips; track chip) {
-            <button type="button" (click)="selectQuickLocation(chip)" class="rounded-full border border-slate-200 px-4 py-1.5 text-xs font-medium text-slate-500 transition-all hover:border-slate-400 hover:text-slate-900">
-              {{ chip }}
-            </button>
-          }
-        </div>
-
-        <button type="button" (click)="onSearch()" class="rounded-full bg-slate-950 px-7 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:bg-slate-900 active:scale-95">
-          Rechercher
-        </button>
+        <p class="max-w-md text-sm leading-relaxed text-white/90 sm:text-base">Cristal Pro est une entreprise de nettoyage spécialisée dans l’entretien de bureaux, copropriétés et locaux professionnels.</p>
+        <p class="mt-3 max-w-md text-sm leading-relaxed text-white/80 sm:text-base">Nos équipes interviennent dans toute l’Île-de-France pour assurer des prestations de propreté régulières ou ponctuelles adaptées aux besoins des entreprises et des collectivités.</p>
+        <a href="#about" class="mt-6 inline-flex items-center gap-3 rounded-full bg-rheo-accent px-6 py-3 text-sm font-bold text-white transition hover:bg-rheo-accent-hover">En savoir plus <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>

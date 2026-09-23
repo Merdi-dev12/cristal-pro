@@ -38,7 +38,7 @@
   width: min(78vw, 568px);
   height: min(46vh, 320px);
   border-radius: 22px;
-  background: #111711;
+  background: #163a53;
   padding: clamp(20px, 3vw, 28px);
   display: flex;
   flex-direction: column;

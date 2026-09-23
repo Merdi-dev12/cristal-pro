@@ -1,0 +1,41 @@
+<header
+  [class]="'fixed inset-x-0 top-0 z-50 w-full transition-all duration-500 ' + (isScrolled() ? 'border-b border-white/15 bg-black/55 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.22)] backdrop-blur-xl' : 'bg-transparent py-5')"
+>
+  <div class="relative mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <a href="#accueil" class="flex shrink-0 items-center gap-2 transition-transform duration-300 hover:scale-105" aria-label="Cristal Pro — accueil" (click)="closeMenu()">
+      <img src="/assets/cristal-pro-logo.png" alt="" class="size-10 object-contain" />
+      <span class="text-base font-bold tracking-wide text-white sm:text-lg">Cristal Pro</span>
+    </a>
+
+    <nav class="hidden items-center rounded-full border border-white/10 bg-white/10 px-1.5 py-1.5 shadow-[0_4px_30px_rgba(0,0,0,0.03)] backdrop-blur-md lg:flex" aria-label="Navigation principale">
+      <ul class="flex items-center gap-1">
+        @for (link of navLinks; track link.href + link.label) {
+          <li><a [href]="link.href" class="rounded-full px-4 py-1.5 text-sm font-medium text-white/90 transition-all duration-300 ease-out hover:bg-white/15 hover:text-white">{{ link.label }}</a></li>
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="#contact" class="hidden rounded-full bg-rheo-accent px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-rheo-accent-hover hover:shadow-[0_0_20px_rgba(68,206,233,0.3)] sm:inline-flex">Demander un devis</a>
+      <button type="button" class="inline-flex size-11 items-center justify-center rounded-full border border-white/25 text-white transition-colors hover:bg-white/10 lg:hidden" [attr.aria-expanded]="isMenuOpen()" aria-controls="mobile-navigation" [attr.aria-label]="isMenuOpen() ? 'Fermer le menu' : 'Ouvrir le menu'" (click)="toggleMenu()">
+        @if (isMenuOpen()) {
+          <span class="text-2xl leading-none" aria-hidden="true">&times;</span>
+        } @else {
+          <span class="flex flex-col gap-1" aria-hidden="true"><span class="h-0.5 w-5 rounded-full bg-current"></span><span class="h-0.5 w-5 rounded-full bg-current"></span><span class="h-0.5 w-5 rounded-full bg-current"></span></span>
+        }
+      </button>
+    </div>
+
+    @if (isMenuOpen()) {
+      <nav id="mobile-navigation" class="absolute left-4 right-4 top-full z-[60] mt-3 rounded-3xl border border-white/10 bg-[#163a53]/95 p-3 shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-md lg:hidden" aria-label="Navigation mobile">
+        <ul class="grid gap-1">
+          @for (link of navLinks; track link.href + link.label) {
+            <li><a [href]="link.href" class="block rounded-2xl px-4 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white" (click)="closeMenu()">{{ link.label }}</a></li>
+          }
+          <li class="my-2 h-px bg-white/10"></li>
+          <li><a href="#contact" class="block rounded-2xl bg-rheo-accent px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-rheo-accent-hover" (click)="closeMenu()">Demander un devis</a></li>
+        </ul>
+      </nav>
+    }
+  </div>
+</header>
