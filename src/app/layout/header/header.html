@@ -1,5 +1,6 @@
 <header
   [class]="'fixed inset-x-0 top-0 z-50 w-full transition-all duration-500 ' + (isScrolled() ? 'border-b border-white/15 bg-black/55 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.22)] backdrop-blur-xl' : 'bg-transparent py-5')"
+  [style.padding-top]="isScrolled() ? 'calc(0.75rem + env(safe-area-inset-top))' : 'calc(1.25rem + env(safe-area-inset-top))'"
 >
   <div class="relative mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
     <a routerLink="/" fragment="accueil" class="flex shrink-0 items-center gap-2 transition-transform duration-300 hover:scale-105" aria-label="Cristal Pro — accueil" (click)="closeMenu()">
