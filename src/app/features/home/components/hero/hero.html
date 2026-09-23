@@ -1,4 +1,4 @@
-<section id="accueil" class="relative flex h-[84vh] min-h-[680px] max-h-[840px] w-full flex-col justify-end overflow-hidden rounded-b-[36px] bg-black pb-5 shadow-2xl sm:rounded-b-[56px]">
+<section id="accueil" class="relative flex min-h-[min(88svh,680px)] w-full flex-col justify-center overflow-hidden rounded-b-[28px] bg-black pb-4 shadow-2xl sm:h-[84vh] sm:min-h-[680px] sm:max-h-[840px] sm:justify-end sm:rounded-b-[56px] sm:pb-5">
   <div class="absolute inset-0 z-0 overflow-hidden">
     <div
       class="h-full w-full scale-105 bg-cover bg-center transition-all duration-700"
@@ -6,15 +6,15 @@
     ></div>
   </div>
 
-  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-end px-4 pt-8 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 gap-6 pb-12 lg:grid-cols-12 lg:items-end lg:gap-12">
+  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-end px-4 pb-2 pt-12 sm:px-6 sm:pt-8 lg:px-8">
+    <div class="grid grid-cols-1 gap-5 pb-5 sm:gap-6 sm:pb-12 lg:grid-cols-12 lg:items-end lg:gap-12">
       <div class="lg:col-span-8">
         <div class="mb-5 flex flex-wrap gap-2">
           @for (tag of heroTags; track tag) {
             <span class="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium text-white backdrop-blur-sm">{{ tag }}</span>
           }
         </div>
-        <h1 class="max-w-4xl text-4xl font-light leading-[1.08] tracking-tight text-white sm:text-6xl lg:text-[72px]">
+        <h1 class="max-w-4xl text-[clamp(2.25rem,10vw,3.75rem)] font-light leading-[1.08] tracking-tight text-white sm:text-6xl lg:text-[72px]">
           Cristal Pro,
           <span class="mt-2 block whitespace-pre-line border-r-2 border-[#44CEE9] pr-1 text-[clamp(1.55rem,5vw,4rem)] font-semibold leading-tight text-[#44CEE9]">{{ typedText() }}</span>
         </h1>
@@ -23,7 +23,7 @@
       <div class="lg:col-span-4 lg:pb-2">
         <p class="max-w-md text-sm leading-relaxed text-white/90 sm:text-base">Cristal Pro est une entreprise de nettoyage spécialisée dans l’entretien de bureaux, copropriétés et locaux professionnels.</p>
         <p class="mt-3 max-w-md text-sm leading-relaxed text-white/80 sm:text-base">Nos équipes interviennent dans toute l’Île-de-France pour assurer des prestations de propreté régulières ou ponctuelles adaptées aux besoins des entreprises et des collectivités.</p>
-        <a href="#about" class="mt-6 inline-flex items-center gap-3 rounded-full bg-rheo-accent px-6 py-3 text-sm font-bold text-white transition hover:bg-rheo-accent-hover">En savoir plus <span aria-hidden="true">→</span></a>
+        <a routerLink="/" fragment="about" class="mt-5 inline-flex min-h-11 items-center gap-3 rounded-full bg-rheo-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-rheo-primary-hover sm:mt-6">En savoir plus <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>

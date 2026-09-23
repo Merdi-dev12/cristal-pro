@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
@@ -18,6 +18,7 @@ interface NavLink {
 })
 export class Header {
   readonly #router = inject(Router);
+  readonly #host = inject<ElementRef<HTMLElement>>(ElementRef);
   protected readonly isScrolled = signal(typeof window !== 'undefined' && window.location.pathname !== '/');
   protected readonly activeNav = signal('');
   protected readonly isMenuOpen = signal(false);
@@ -41,6 +42,17 @@ export class Header {
   @HostListener('window:scroll')
   protected onWindowScroll(): void {
     this.syncAppearance();
+  }
+
+  @HostListener('document:click', ['$event'])
+  protected onDocumentClick(event: MouseEvent): void {
+    const target = event.target;
+    if (target instanceof Node && !this.#host.nativeElement.contains(target)) this.closeMenu();
+  }
+
+  @HostListener('document:keydown.escape')
+  protected onEscape(): void {
+    this.closeMenu();
   }
 
   protected isActive(link: NavLink): boolean {

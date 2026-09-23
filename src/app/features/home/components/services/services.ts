@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { CLEANING_SERVICE_FIXTURES } from './service-fixtures';
 import type { CleaningService } from './cleaning-service';
 import { ServicesShowcase } from './services-showcase';
@@ -6,7 +7,7 @@ import { ServicesShowcase } from './services-showcase';
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [ServicesShowcase],
+  imports: [RouterLink, ServicesShowcase],
   templateUrl: './services.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

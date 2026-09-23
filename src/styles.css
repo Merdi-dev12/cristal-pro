@@ -8,6 +8,8 @@
   --color-rheo-surface: #ffffff;
   --color-rheo-accent: #44CEE9;
   --color-rheo-accent-hover: #20B5D2;
+  --color-rheo-primary: #123B47;
+  --color-rheo-primary-hover: #0D303A;
   --color-rheo-dark: #163a53;
   --color-rheo-muted: #5c7181;
   --color-rheo-border: #d9e4ec;
@@ -31,6 +33,16 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {

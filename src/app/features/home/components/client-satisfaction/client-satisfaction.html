@@ -1,71 +1,107 @@
-<section id="satisfaction-clientele" #sectionRoot class="scroll-mt-24 bg-[#f2f5f7] py-14 sm:py-24 overflow-hidden">
-  <span id="about" class="block scroll-mt-24" aria-hidden="true"></span>
+<section
+  id="about"
+  #sectionRoot
+  class="about-story scroll-mt-20 bg-[#f6fafb] text-rheo-dark lg:h-[400svh]"
+  aria-label="Cristal Pro, société de nettoyage francilienne depuis 2018"
+>
+  <div class="about-story__viewport overflow-hidden lg:sticky lg:top-0 lg:h-svh">
+    <div
+      class="about-story__track lg:flex lg:h-full"
+      [style.transform]="'translate3d(-' + horizontalOffset() + 'px, 0, 0)'"
+    >
+      <article class="about-story__panel relative flex min-h-[90svh] items-center px-5 py-16 sm:px-10 lg:px-16">
+        <div aria-hidden="true" class="pointer-events-none absolute -right-36 top-8 size-[30rem] rounded-full bg-[#44CEE9]/10 blur-3xl"></div>
+        <div class="mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-[1.15fr_.85fr] lg:gap-16">
+          <div>
+            <p class="inline-flex items-center gap-2 rounded-full border border-[#d8e5e8] bg-white/80 px-3.5 py-2 text-xs font-semibold uppercase tracking-[.16em] text-[#168da3]">
+              <span class="size-2 rounded-full bg-[#44CEE9]"></span> Depuis 2018 · Île-de-France
+            </p>
+            <h2 class="mt-6 max-w-3xl text-[clamp(2.4rem,5vw,4.7rem)] font-semibold leading-[1.05] tracking-[-.055em]">
+              Cristal Pro, société de nettoyage <span class="text-[#168da3]">francilienne depuis 2018.</span>
+            </h2>
+            <p class="mt-6 max-w-2xl text-base leading-7 text-rheo-muted sm:text-lg sm:leading-8">
+              Plongez dans l’histoire et les valeurs de notre entreprise, où chaque jour est une nouvelle opportunité de rendre vos espaces plus propres et accueillants.
+            </p>
+            <div class="mt-7 grid gap-4 sm:grid-cols-2">
+              <div class="rounded-2xl border border-[#e2ecee] bg-white/75 p-5">
+                <p class="text-xs font-bold uppercase tracking-[.16em] text-[#168da3]">Notre histoire</p>
+                <p class="mt-3 text-sm leading-6 text-rheo-muted">Depuis sa création en 2018, Cristal Pro met son expérience et son savoir-faire au service de la satisfaction de ses clients.</p>
+              </div>
+              <div class="rounded-2xl border border-[#e2ecee] bg-white/75 p-5">
+                <p class="text-xs font-bold uppercase tracking-[.16em] text-[#168da3]">Notre mission</p>
+                <p class="mt-3 text-sm leading-6 text-rheo-muted">Accompagner nos clients avec des services et produits innovants, performants et adaptés à leurs attentes.</p>
+              </div>
+            </div>
+            <div class="mt-7 flex items-center gap-4 text-sm font-medium text-rheo-muted">
+              <span class="grid size-9 place-items-center rounded-full bg-[#e5f6f8] text-[#168da3]" aria-hidden="true">↓</span>
+              Faites défiler pour découvrir notre engagement
+            </div>
+          </div>
+          <figure class="relative mx-auto w-full max-w-[400px]">
+            <div class="overflow-hidden rounded-[2rem] bg-[#eaf1f3] shadow-[0_28px_70px_rgba(18,59,71,.15)]">
+              <img src="/assets/vincent-bourhis.jpg" alt="Vincent Bourhis, directeur général de Cristal Pro" class="aspect-[.94] w-full object-cover object-[center_28%]" loading="lazy" />
+            </div>
+            <figcaption class="absolute inset-x-4 bottom-4 rounded-2xl border border-white/70 bg-white/90 px-5 py-4 shadow-lg backdrop-blur">
+              <span class="block font-semibold">Vincent Bourhis</span>
+              <span class="mt-1 block text-sm text-rheo-muted">Directeur Général</span>
+            </figcaption>
+          </figure>
+        </div>
+      </article>
 
-  <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
+      <article class="about-story__panel flex min-h-[90svh] items-center bg-white px-5 py-16 sm:px-10 lg:px-16">
+        <div class="mx-auto w-full max-w-7xl">
+          <p class="text-xs font-bold uppercase tracking-[.18em] text-[#168da3]">Ce qui nous guide</p>
+          <div class="mt-4 grid gap-6 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
+            <h3 class="max-w-xl text-4xl font-semibold leading-tight tracking-[-.045em] sm:text-5xl">Nos valeurs, au quotidien.</h3>
+            <p class="max-w-xl text-base leading-7 text-rheo-muted lg:justify-self-end">Des engagements concrets orientent nos services et notre relation avec chaque client.</p>
+          </div>
+          <div class="mt-10 grid gap-4 md:grid-cols-3 lg:mt-14 lg:gap-5">
+            @for (value of values; track value.number) {
+              <div class="rounded-[1.5rem] border border-[#e3ecee] bg-[#f8fbfc] p-6 sm:p-8">
+                <span class="text-sm font-semibold tracking-[.14em] text-[#168da3]/60">{{ value.number }}</span>
+                <h4 class="mt-8 text-2xl font-semibold tracking-tight">{{ value.title }}</h4>
+                <p class="mt-4 text-sm leading-7 text-rheo-muted sm:text-base">{{ value.description }}</p>
+              </div>
+            }
+          </div>
+          <p class="mt-8 max-w-3xl text-sm leading-7 text-rheo-muted sm:text-base">Nous sommes fiers de proposer des prestations et des produits de qualité, tout en faisant évoluer nos méthodes pour répondre aux besoins spécifiques de chaque site.</p>
+        </div>
+      </article>
 
-    <!-- Colonne image (originale) -->
-    <div class="relative min-h-[360px] overflow-hidden rounded-[2rem] bg-[#eaf2f5] sm:min-h-[480px]">
-      <img
-        src="/assets/hero_img_2.jpg"
-        alt="Locaux professionnels entretenus pour le confort de leurs occupants"
-        class="absolute inset-0 h-full w-full object-cover"
-        loading="lazy"
-      />
-      <div class="absolute inset-0 bg-gradient-to-t from-[#102b3e]/60 via-transparent to-transparent"></div>
-      <p class="absolute bottom-6 left-6 rounded-full border border-white/30 bg-black/25 px-4 py-2 text-sm font-medium text-white backdrop-blur-md sm:bottom-8 sm:left-8">
-        Un partenaire à vos côtés
-      </p>
-    </div>
+      <article class="about-story__panel flex min-h-[90svh] items-center bg-[#eef7f8] px-5 py-16 sm:px-10 lg:px-16">
+        <div class="mx-auto w-full max-w-7xl">
+          <p class="text-xs font-bold uppercase tracking-[.18em] text-[#168da3]">De la première demande au suivi</p>
+          <h3 class="mt-4 max-w-3xl text-4xl font-semibold leading-tight tracking-[-.045em] sm:text-5xl">Le processus de relation client</h3>
+          <ol class="mt-9 grid gap-3 sm:grid-cols-2 lg:mt-12 lg:grid-cols-5 lg:gap-4">
+            @for (step of steps; track step.number) {
+              <li class="rounded-[1.35rem] border border-[#dce9eb] bg-white p-5 sm:p-6">
+                <span class="text-3xl font-semibold tracking-[-.06em] text-[#168da3]/45">{{ step.number }}</span>
+                <h4 class="mt-5 text-base font-semibold leading-snug">{{ step.title }}</h4>
+                <p class="mt-2 text-sm leading-6 text-rheo-muted">{{ step.description }}</p>
+              </li>
+            }
+          </ol>
+        </div>
+      </article>
 
-    <!-- Colonne texte -->
-    <div class="relative -translate-y-2 py-2 sm:-translate-y-4 sm:py-6">
-      <span
-        aria-hidden="true"
-        class="pointer-events-none absolute -left-6 -top-8 h-24 w-24 rounded-full bg-rheo-accent/10 blur-3xl"
-      ></span>
-
-      <div
-        [class]="visible() ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-5 blur-sm'"
-        class="inline-flex items-center gap-2 rounded-full border border-rheo-border px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-rheo-muted transition-all duration-700 ease-out"
-      >
-        <span class="h-1.5 w-1.5 rounded-full bg-rheo-accent"></span>
-        Notre engagement
-      </div>
-
-      <h2
-        [class]="visible() ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-5 blur-sm'"
-        class="mt-6 text-4xl font-semibold leading-tight tracking-tight text-rheo-dark transition-all delay-150 duration-700 ease-out sm:text-5xl"
-      >
-        Satisfaction <span class="text-rheo-accent">clientèle</span>
-      </h2>
-
-      <p
-        [class]="visible() ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-5 blur-sm'"
-        class="mt-6 border-l-2 border-rheo-accent/30 pl-4 text-lg font-medium leading-8 text-rheo-dark transition-all delay-300 duration-700 ease-out sm:text-xl"
-      >
-        Notre ambition est de construire des relations durables, aussi bien avec nos clients qu'avec nos salariés.
-      </p>
-
-      <div
-        [class]="visible() ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-5 blur-sm'"
-        class="mt-5 space-y-4 text-base leading-7 text-rheo-muted transition-all delay-[450ms] duration-700 ease-out"
-      >
-        <p>Nous souhaitons être un véritable partenaire pour nos clients, à l'écoute de leurs besoins spécifiques et capable de les accompagner durablement dans l'entretien et la propreté de leurs sites.</p>
-        <p>Chaque salarié contribue à cette exigence par son expérience, son savoir-être, sa rigueur et son engagement, avec un objectif constant : assurer un travail soigné et la satisfaction de nos clients.</p>
-      </div>
-
-      <a
-        href="/#about"
-        [class]="visible() ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'"
-        class="group mt-8 inline-flex items-center gap-4 rounded-full bg-rheo-accent py-2 pl-6 pr-2 text-sm font-bold text-white shadow-md transition-all delay-[600ms] duration-700 ease-out hover:bg-rheo-accent-hover hover:shadow-lg hover:-translate-y-0.5"
-      >
-        Qui sommes-nous
-        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:rotate-45">
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </span>
-      </a>
+      <article class="about-story__panel flex min-h-[90svh] items-center bg-rheo-primary px-5 py-16 text-white sm:px-10 lg:px-16">
+        <figure class="mx-auto w-full max-w-6xl">
+          <p class="text-xs font-bold uppercase tracking-[.18em] text-rheo-accent">Notre engagement</p>
+          <span class="mt-8 block text-7xl leading-none text-rheo-accent" aria-hidden="true">“</span>
+          <blockquote class="mt-3 max-w-5xl text-3xl font-medium leading-tight tracking-[-.04em] sm:text-5xl sm:leading-[1.18]">
+            Notre mission est de transformer chaque espace en un lieu de pureté et de lumière, reflétant les valeurs de transparence et d’excellence de Cristal Pro.
+          </blockquote>
+          <figcaption class="mt-9 flex items-center gap-3 border-t border-white/20 pt-6">
+            <span class="font-semibold">Vincent Bourhis</span>
+            <span class="size-1 rounded-full bg-rheo-accent" aria-hidden="true"></span>
+            <span class="text-sm text-white/65">Directeur Général</span>
+          </figcaption>
+          <a routerLink="/devis" class="mt-10 inline-flex min-h-12 items-center gap-3 rounded-full bg-white px-6 py-3 text-sm font-semibold text-rheo-primary transition hover:bg-[#e8f7f9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+            Demander un devis <span aria-hidden="true">↗</span>
+          </a>
+        </figure>
+      </article>
     </div>
   </div>
 </section>

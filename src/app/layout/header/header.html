@@ -16,7 +16,7 @@
     </nav>
 
     <div class="flex items-center gap-3">
-      <a routerLink="/devis" class="hidden rounded-full bg-rheo-accent px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-rheo-accent-hover hover:shadow-[0_0_20px_rgba(68,206,233,0.3)] sm:inline-flex">Demander un devis</a>
+      <a routerLink="/devis" class="hidden rounded-full bg-rheo-primary px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-rheo-primary-hover sm:inline-flex">Demander un devis</a>
       <button type="button" class="inline-flex size-11 items-center justify-center rounded-full border border-white/25 text-white transition-colors hover:bg-white/10 lg:hidden" [attr.aria-expanded]="isMenuOpen()" aria-controls="mobile-navigation" [attr.aria-label]="isMenuOpen() ? 'Fermer le menu' : 'Ouvrir le menu'" (click)="toggleMenu()">
         @if (isMenuOpen()) {
           <span class="text-2xl leading-none" aria-hidden="true">&times;</span>
@@ -27,13 +27,13 @@
     </div>
 
     @if (isMenuOpen()) {
-      <nav id="mobile-navigation" class="absolute left-4 right-4 top-full z-[60] mt-3 rounded-3xl border border-white/10 bg-[#163a53]/95 p-3 shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-md lg:hidden" aria-label="Navigation mobile">
+      <nav id="mobile-navigation" class="absolute left-4 right-4 top-full z-[60] mt-3 max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain rounded-3xl border border-[#dce7eb] bg-white p-3 shadow-[0_12px_40px_rgba(10,35,45,0.18)] lg:hidden" aria-label="Navigation mobile">
         <ul class="grid gap-1">
           @for (link of navLinks; track link.key) {
-            <li><a [routerLink]="link.route" [fragment]="link.fragment" class="block rounded-2xl border-l-2 border-transparent px-4 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white" [class.border-[#44CEE9]]="isActive(link)" [class.bg-white/10]="isActive(link)" [class.text-white]="isActive(link)" [attr.aria-current]="isActive(link) ? 'page' : null" (click)="closeMenu()">{{ link.label }}</a></li>
+            <li><a [routerLink]="link.route" [fragment]="link.fragment" class="block rounded-2xl border-l-2 border-transparent px-4 py-3 text-sm font-medium text-rheo-dark transition-colors hover:bg-[#f1f8f9]" [class.border-[#168da3]]="isActive(link)" [class.bg-[#e9f7f9]]="isActive(link)" [attr.aria-current]="isActive(link) ? 'page' : null" (click)="closeMenu()">{{ link.label }}</a></li>
           }
-          <li class="my-2 h-px bg-white/10"></li>
-          <li><a routerLink="/devis" class="block rounded-2xl bg-rheo-accent px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-rheo-accent-hover" (click)="closeMenu()">Demander un devis</a></li>
+          <li class="my-2 h-px bg-[#e5edef]"></li>
+          <li><a routerLink="/devis" class="block rounded-full bg-rheo-primary px-5 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-rheo-primary-hover" (click)="closeMenu()">Demander un devis</a></li>
         </ul>
       </nav>
     }

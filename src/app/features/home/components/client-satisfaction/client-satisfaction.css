@@ -1,0 +1,42 @@
+.about-story__track {
+  transition: transform 120ms linear;
+  will-change: transform;
+}
+
+.about-story__panel {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .about-story__panel {
+    width: 100vw;
+    height: 100%;
+    flex: 0 0 100vw;
+  }
+}
+
+@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+  .about-story {
+    height: auto;
+  }
+
+  .about-story__viewport {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+
+  .about-story__track {
+    display: block;
+    transform: none !important;
+    transition: none;
+    will-change: auto;
+  }
+
+  .about-story__panel {
+    width: 100%;
+    height: auto;
+    flex-basis: auto;
+    min-height: auto;
+  }
+}
